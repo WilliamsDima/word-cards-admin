@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"useDefineForClassFields": true,
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"esModuleInterop": true,
+		"lib": ["DOM", "DOM.Iterable", "ESNext"],
+		"jsx": "react-jsx",
+		"baseUrl": "src",
+		"paths": {
+			"@assets/*": ["assets/*"],
+			"@app/*": ["app/*"],
+			"@shared/*": ["shared/*"],
+			"@features/*": ["features/*"],
+			"@entities/*": ["entities/*"],
+			"@pages/*": ["pages/*"],
+			"@widgets/*": ["widgets/*"]
+		}
+	}
+}
