@@ -1,7 +1,11 @@
-// import.meta.env нужен для Vite
 import { initializeApp } from "firebase/app"
-import { getAuth } from "firebase/auth"
-import { getFirestore } from "firebase/firestore"
+import {
+	getAuth,
+	GoogleAuthProvider,
+	signInWithPopup,
+	signOut,
+} from "firebase/auth"
+import { doc, getDoc, getFirestore } from "firebase/firestore"
 
 const firebaseConfig = {
 	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -16,3 +20,19 @@ const app = initializeApp(firebaseConfig)
 
 export const auth = getAuth(app)
 export const db = getFirestore(app)
+
+export const loginAndCheckAdmin = async () => {
+	const provider = new GoogleAuthProvider()
+	const result = await signInWithPopup(auth, provider)
+	const user = result.user
+
+	const adminDoc = await getDoc(doc(db, "admins", user.uid))
+
+	if (!adminDoc.exists()) {
+		auth.signOut()
+	}
+}
+
+export const logout = async () => {
+	await signOut(auth)
+}

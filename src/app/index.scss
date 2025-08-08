@@ -1,0 +1,31 @@
+@use "../assets/styles/reset.css";
+@use "../assets/styles/colors.scss" as colors;
+@use "../assets/styles/globalStyles.scss" as global;
+
+html {
+	font-size: 62.5%;
+	height: 100vh;
+}
+
+label {
+	font-size: 1.4rem !important;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+body {
+	@extend %scroll;
+}
+
+body {
+	background-color: colors.$color-bg;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe\UI, Roboto,
+		Helvetica\Neue, Arial, Noto\Sans, sans-serif, Gilroy-Medium, Gilroy-Bold;
+	color: colors.$color-white;
+	font-size: 1.4rem;
+	overflow: hidden;
+	overflow-y: hidden;
+	overflow-x: hidden;
+	//position: fixed;
+	width: 100vw;
+	height: 100vh;
+}
