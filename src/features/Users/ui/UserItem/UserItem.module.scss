@@ -1,0 +1,55 @@
+@use "../../../../assets/styles/colors.scss" as colors;
+@use "../../../../assets/styles/globalStyles.scss" as global;
+
+.item {
+	list-style: none;
+	display: flex;
+	flex-direction: row;
+	border-bottom: 1px solid #fff;
+	padding: 1rem;
+	cursor: pointer;
+
+	&:last-child {
+		margin-bottom: 150px;
+	}
+
+	&:hover {
+		background-color: colors.$color-text-disabled;
+	}
+
+	.image {
+		width: 70px;
+		height: auto;
+		border-radius: 50%;
+	}
+
+	.content {
+		width: 100%;
+		display: grid;
+		grid-template-columns: 35% max-content;
+		grid-template-rows: 1fr;
+		grid-column-gap: 0px;
+		grid-row-gap: 0px;
+
+		.info {
+			margin-left: 1rem;
+			display: flex;
+			flex-direction: column;
+
+			.infoItem {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				gap: 5px;
+
+				p {
+					color: colors.$color-primary;
+				}
+
+				.name {
+					font-size: 1.6rem;
+				}
+			}
+		}
+	}
+}

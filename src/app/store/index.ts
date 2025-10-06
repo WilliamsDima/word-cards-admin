@@ -1,10 +1,19 @@
-import { configureStore } from "@reduxjs/toolkit"
+import { baseRTK } from "@app/api/BaseRTK"
+import { combineReducers, configureStore } from "@reduxjs/toolkit"
 // import someReducer from 'features/someFeature'
 
+const rootReducer = combineReducers({
+	// main: mainReducer,
+	[baseRTK.reducerPath]: baseRTK.reducer,
+})
+
 export const store = configureStore({
-	reducer: {
-		// some: someReducer
-	},
+	reducer: rootReducer,
+
+	middleware: getDefaultMiddleware =>
+		getDefaultMiddleware({
+			serializableCheck: false,
+		}).concat(baseRTK.middleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>

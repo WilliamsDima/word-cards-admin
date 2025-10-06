@@ -1,0 +1,11 @@
+@use "../../assets/styles/colors.scss" as colors;
+@use "../../assets/styles/globalStyles.scss" as global;
+
+.link {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	color: colors.$color-info;
+	text-decoration: none;
+	gap: 10px;
+}
