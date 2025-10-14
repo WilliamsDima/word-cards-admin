@@ -5,6 +5,7 @@ export const AppRoutes = {
 	users: "/users",
 	userProfile: "/user/:id",
 	aplication: "/aplication",
+	translation: `/aplication/translation`,
 	chats: "/chats",
 } as const
 
@@ -19,4 +20,5 @@ export interface RouteParams {
 	[AppRoutes.aplication]: undefined
 	[AppRoutes.notFount]: undefined
 	[AppRoutes.chats]: undefined
+	[AppRoutes.translation]: undefined
 }

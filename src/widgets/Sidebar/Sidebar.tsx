@@ -66,7 +66,7 @@ const Sidebar: React.FC = () => {
 						<button
 							key={it.route}
 							className={cn(styles.navItem, {
-								[styles.navItemActive]: it.route === currentRoute,
+								[styles.navItemActive]: currentRoute.includes(it.route),
 							})}
 							onClick={() => navigation(it.route)}
 						>

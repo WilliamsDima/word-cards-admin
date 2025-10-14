@@ -1,0 +1,98 @@
+@use "../../assets/styles/colors.scss" as colors;
+@use "../../assets/styles/globalStyles.scss" as global;
+
+.dropdown {
+	width: 200px;
+	font-family: sans-serif;
+	position: relative;
+
+	user-select: none;
+}
+
+.selected {
+	background-color: colors.$color-surface;
+	color: colors.$color-text-primary;
+	padding: 10px 12px;
+	border: 1px solid colors.$color-border;
+	border-radius: 6px;
+	cursor: pointer;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	transition: border-color 0.2s;
+
+	&:hover {
+		border-color: colors.$color-primary;
+	}
+}
+
+.arrow {
+	border: solid colors.$color-text-secondary;
+	border-width: 0 2px 2px 0;
+	display: inline-block;
+	padding: 4px;
+	transform: rotate(45deg);
+	transition: transform 0.2s;
+
+	&.open {
+		transform: rotate(-135deg);
+	}
+}
+
+.options {
+	position: absolute;
+
+	top: calc(100% + 6px);
+	left: 0;
+	width: 100%;
+	background-color: colors.$color-surface;
+	border: 1px solid colors.$color-border;
+	border-radius: 6px;
+	max-height: 250px;
+	overflow-y: auto;
+	z-index: 1000;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	animation: fadeIn 0.2s ease;
+
+	.option {
+		padding: 10px 12px;
+		cursor: pointer;
+		color: colors.$color-text-primary;
+		transition: background 0.2s, color 0.2s;
+
+		&:hover {
+			background-color: colors.$color-primary-dark;
+		}
+
+		&.active {
+			background-color: colors.$color-primary-dark;
+		}
+	}
+
+	%scroll {
+		&::-webkit-scrollbar {
+			width: 2px;
+			background-color: transparent;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background-color: colors.$color-text-disabled;
+			border-radius: 5px;
+		}
+	}
+}
+
+// Анимация появления
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-4px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

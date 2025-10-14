@@ -1,0 +1,62 @@
+@use "../../assets/styles/colors.scss" as colors;
+@use "../../assets/styles/globalStyles.scss" as global;
+
+.json {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	position: relative;
+	margin-bottom: 1rem;
+
+	.loader {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: absolute;
+		z-index: 10;
+		width: 100%;
+		height: 100%;
+		border-radius: 0.5em;
+		background-color: rgba($color: colors.$color-text-disabled, $alpha: 0.5);
+	}
+
+	.editor {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		height: 100%;
+		position: relative;
+		border-radius: 0.5em;
+
+		&.error {
+			border: 1px solid colors.$color-error;
+		}
+
+		.language {
+			position: absolute;
+			z-index: 5;
+			right: 1rem;
+			bottom: 1rem;
+
+			color: colors.$color-text-primary;
+			font-size: 16px;
+		}
+
+		.error {
+			color: colors.$color-error;
+		}
+
+		.dropdown {
+			position: absolute;
+			z-index: 100;
+			right: 1rem;
+			top: 1rem;
+		}
+	}
+}
+
+.btn {
+	background-color: colors.$color-primary;
+}

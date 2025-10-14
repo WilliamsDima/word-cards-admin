@@ -36,3 +36,15 @@ export const loginAndCheckAdmin = async () => {
 export const logout = async () => {
 	await signOut(auth)
 }
+
+// export async function uploadData() {
+// 	const ref = doc(db, "app", "info")
+// 	await setDoc(
+// 		ref,
+// 		{
+// 			appLanguages,
+// 		},
+// 		{ merge: true } // чтобы не потерять другие данные в data
+// 	)
+// 	console.log("✅ data uploaded")
+// }

@@ -1,9 +1,9 @@
 import { baseRTK } from "@app/api/BaseRTK"
 import { combineReducers, configureStore } from "@reduxjs/toolkit"
-// import someReducer from 'features/someFeature'
+import appReducer from "./slice/appSlice"
 
 const rootReducer = combineReducers({
-	// main: mainReducer,
+	app: appReducer,
 	[baseRTK.reducerPath]: baseRTK.reducer,
 })
 

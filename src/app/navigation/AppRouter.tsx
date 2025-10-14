@@ -11,10 +11,17 @@ import UsersPage from "@pages/UsersPage/UsersPage"
 import AdminLayout from "@pages/AdminLayout/AdminLayout"
 import AplicationPage from "@pages/AplicationPage/AplicationPage"
 import ChatsPage from "@pages/ChatsPage/ChatsPage"
+import TranslationPage from "@pages/TranslationPage/TranslationPage"
+import { useActions } from "@shared/hooks/useActions"
+import { useAppSelector } from "@shared/hooks/useStore"
+import { useGlobalData } from "@shared/hooks/useGlobalData"
 
 const AppRouter = () => {
+	useGlobalData()
+	const { setIsAdmin } = useActions()
 	const [loading, setLoading] = useState(true)
-	const [isAdmin, setIsAdmin] = useState(false)
+
+	const isAdmin = useAppSelector(store => store.app.isAdmin)
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, async user => {
@@ -46,6 +53,7 @@ const AppRouter = () => {
 						<Route index element={<MainPage />} />
 						<Route path={AppRoutes.users} element={<UsersPage />} />
 						<Route path={AppRoutes.aplication} element={<AplicationPage />} />
+						<Route path={AppRoutes.translation} element={<TranslationPage />} />
 						<Route path={AppRoutes.chats} element={<ChatsPage />} />
 
 						<Route path={AppRoutes.notFount} element={<NotFoundPage />} />
