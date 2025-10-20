@@ -90,6 +90,8 @@ function TranslationPage() {
 							[styles.error]: isError,
 						})}
 					>
+						<span className={styles.fileName}>{language?.code + ".json"} </span>
+
 						<JsonEditor
 							showArrayIndices={false}
 							showCollectionCount={false}
@@ -97,6 +99,7 @@ function TranslationPage() {
 							data={jsonData.json}
 							maxWidth={"100%"}
 							minWidth={"100%"}
+							className={styles.jsonEditor}
 							setData={e => {
 								setIsEdit(true)
 								setJsonData(prev => {
@@ -120,7 +123,7 @@ function TranslationPage() {
 						</div>
 
 						<span className={styles.language}>
-							{language?.name}, {language?.code + ".json"}{" "}
+							{language?.name}{" "}
 							{isError && <span className={styles.error}>Error</span>}
 						</span>
 					</div>
