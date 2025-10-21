@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import {
+	createLanguageJson,
 	getLanguageJson,
 	JsonData,
 	updateLanguageJson,
@@ -12,12 +13,16 @@ import styles from "./TranslationPage.module.scss"
 import Dropdown from "@shared/Dropdown/Dropdown"
 import type { AppLanguageType } from "@shared/api/types"
 import cn from "classnames"
+import { useAddKeyTranslateMutation } from "./api/JsonServices"
 
 function TranslationPage() {
 	const [jsonData, setJsonData] = useState<JsonData | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [isEdit, setIsEdit] = useState(false)
 	const [isError, setIsError] = useState(false)
+	const [fileNotFound, setFileNotFound] = useState(false)
+
+	const [addKeyTranslate] = useAddKeyTranslateMutation()
 
 	const [language, setLanguage] = useState<AppLanguageType>()
 
@@ -32,10 +37,27 @@ function TranslationPage() {
 		if (res && "json" in res) {
 			setJsonData(res)
 		} else {
-			setIsError(true)
+			if (res.status === 404) {
+				setFileNotFound(true)
+			} else {
+				setIsError(true)
+			}
 		}
 		setLoading(false)
 	}
+
+	const onCreateJson = useCallback(async () => {
+		if (!firebaseApp || !language) return
+
+		setLoading(true)
+
+		await createLanguageJson({}, `${language.code}.json`)
+		setTimeout(async () => {
+			await getJson(`${language.code}.json`)
+			await addKeyTranslate({ langCode: language.code })
+			setFileNotFound(false)
+		}, 1000)
+	}, [firebaseApp, language, addKeyTranslate])
 
 	const saveJson = async () => {
 		setIsError(false)
@@ -70,10 +92,10 @@ function TranslationPage() {
 	}, [firebaseApp, language])
 
 	useEffect(() => {
-		if (firebaseApp) {
+		if (firebaseApp && !language) {
 			setLanguage(firebaseApp.appLanguages.ru)
 		}
-	}, [firebaseApp])
+	}, [firebaseApp, language])
 
 	return (
 		<div>
@@ -84,7 +106,19 @@ function TranslationPage() {
 					</span>
 				)}
 
-				{!!jsonData && (
+				{fileNotFound && (
+					<h1 className={styles.fileNotFound}>
+						Файл {language?.code + ".json"} не найден
+					</h1>
+				)}
+
+				{fileNotFound && (
+					<Button className={styles.btn} onClick={onCreateJson}>
+						Создать файл {language?.code + ".json"}
+					</Button>
+				)}
+
+				{!!jsonData && !fileNotFound && (
 					<div
 						className={cn(styles.editor, {
 							[styles.error]: isError,
@@ -123,14 +157,14 @@ function TranslationPage() {
 						</div>
 
 						<span className={styles.language}>
-							{language?.name}{" "}
+							{language?.nativeName}{" "}
 							{isError && <span className={styles.error}>Error</span>}
 						</span>
 					</div>
 				)}
 			</div>
 
-			{isEdit && (
+			{isEdit && !fileNotFound && (
 				<Button className={styles.btn} onClick={saveJson}>
 					сохранить
 				</Button>

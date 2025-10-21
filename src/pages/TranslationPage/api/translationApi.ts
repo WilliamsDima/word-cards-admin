@@ -4,7 +4,7 @@ import { Base64 } from "js-base64"
 
 export type JsonData = {
 	json: IJSONLanguage
-	sha: string
+	sha?: string
 }
 
 export type GitResponse = {
@@ -81,9 +81,9 @@ export const getLanguageJson = async (path: string) => {
 		const json = JSON.parse(jsonStr)
 		const sha = res.data.sha // нужен для PUT
 		return { json, sha } as JsonData
-	} catch (error) {
+	} catch (error: any) {
 		console.log("getLanguageJson error", error)
-		return { error: true }
+		return { error: true, status: error?.status as number }
 	}
 }
 
@@ -114,6 +114,38 @@ export const updateLanguageJson = async (jsonData: JsonData, path: string) => {
 		return res.data as GitResponse
 	} catch (error) {
 		console.log("updateLanguageJson error", error)
+		return { error: true }
+	}
+}
+
+export const createLanguageJson = async (json: any, path: string) => {
+	try {
+		const jsonStr = JSON.stringify(json, null, 2)
+		const content = Base64.encode(jsonStr)
+
+		const res = await axios.put(
+			`https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
+			{
+				message: "Создание нового файла перевода",
+				content,
+				branch: "main",
+			},
+			{
+				headers: {
+					Authorization: `token ${token}`,
+					Accept: "application/vnd.github.v3+json",
+				},
+			}
+		)
+
+		return res.data as GitResponse
+	} catch (error: any) {
+		// GitHub вернет 422 если файл уже существует
+		if (axios.isAxiosError(error) && error.response?.status === 422) {
+			console.warn("Файл уже существует:", path)
+		} else {
+			console.error("createLanguageJson error:", error)
+		}
 		return { error: true }
 	}
 }
