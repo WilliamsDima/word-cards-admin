@@ -72,6 +72,7 @@ export type AppLanguageType = {
 	name: string
 	nativeName: string
 	code: TranslationKeys
+	id: number
 }
 export type AppLanguagesType = Record<TranslationKeys, AppLanguageType>
 

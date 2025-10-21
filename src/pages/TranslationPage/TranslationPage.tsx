@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
 	createLanguageJson,
 	getLanguageJson,
@@ -27,7 +27,11 @@ function TranslationPage() {
 	const [language, setLanguage] = useState<AppLanguageType>()
 
 	const firebaseApp = useAppSelector(store => store.app.firebaseApp)
-	const options = firebaseApp ? Object.values(firebaseApp.appLanguages) : []
+	const options = useMemo(() => {
+		return firebaseApp
+			? Object.values(firebaseApp.appLanguages).sort((a, b) => a.id - b.id)
+			: []
+	}, [firebaseApp])
 
 	const getJson = async (path: string) => {
 		setLoading(true)
