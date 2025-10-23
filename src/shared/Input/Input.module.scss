@@ -1,0 +1,21 @@
+@use "../../assets/styles/colors.scss" as colors;
+@use "../../assets/styles/globalStyles.scss" as global;
+
+.inputWrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+
+	.input {
+		margin: 0;
+		padding: 5px;
+		border: none;
+		background-color: colors.$color-text-secondary;
+		border-radius: 5px;
+		color: colors.$color-surface;
+
+		&:focus {
+			outline: none;
+		}
+	}
+}

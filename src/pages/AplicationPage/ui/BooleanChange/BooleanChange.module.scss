@@ -1,0 +1,21 @@
+@use "../../../../assets/styles/colors.scss" as colors;
+@use "../../../../assets/styles/globalStyles.scss" as global;
+
+.nameApp {
+	margin-bottom: 5px;
+}
+
+.loader {
+	width: 30px;
+}
+
+.inputWrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 1rem;
+}
+
+.option {
+	background-color: red;
+}

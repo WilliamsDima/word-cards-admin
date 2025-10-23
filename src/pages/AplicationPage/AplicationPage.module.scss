@@ -1,0 +1,12 @@
+@use "../../assets/styles/colors.scss" as colors;
+@use "../../assets/styles/globalStyles.scss" as global;
+
+.container {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+
+	.translate {
+		max-width: max-content;
+	}
+}

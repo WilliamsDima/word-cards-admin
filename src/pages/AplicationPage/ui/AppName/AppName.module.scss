@@ -1,0 +1,20 @@
+@use "../../../../assets/styles/colors.scss" as colors;
+@use "../../../../assets/styles/globalStyles.scss" as global;
+
+.inputWrapper {
+	display: flex;
+	flex-direction: "row";
+	gap: 1rem;
+
+	svg {
+		cursor: pointer;
+	}
+}
+
+.nameApp {
+	margin-bottom: 5px;
+}
+
+.loader {
+	width: 30px;
+}
