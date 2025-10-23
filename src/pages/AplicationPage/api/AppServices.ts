@@ -33,6 +33,19 @@ export const appAPI = baseRTK.injectEndpoints({
 			},
 			invalidatesTags: ["firebaseApp"],
 		}),
+		// изменение версии приложения
+		changeAppVersion: builder.mutation<void, { version: string }>({
+			async queryFn({ version }) {
+				const appRef = doc(db, "app", "info")
+
+				await updateDoc(appRef, {
+					version,
+				})
+
+				return { data: undefined }
+			},
+			invalidatesTags: ["firebaseApp"],
+		}),
 		// пока аввторизации через вк
 		changeShowVkAuth: builder.mutation<void, { showVKAuth: boolean }>({
 			async queryFn({ showVKAuth }) {
@@ -53,4 +66,5 @@ export const {
 	useChangeAppNameMutation,
 	useChangeShowVkAuthMutation,
 	useChangePrivacyPolicyLinkMutation,
+	useChangeAppVersionMutation,
 } = appAPI

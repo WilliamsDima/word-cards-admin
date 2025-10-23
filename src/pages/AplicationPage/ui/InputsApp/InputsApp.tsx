@@ -6,6 +6,7 @@ import DoneIcon from "@assets/icons/done-green-48.svg?react"
 import Loading from "@shared/Loading/Loading"
 import {
 	useChangeAppNameMutation,
+	useChangeAppVersionMutation,
 	useChangePrivacyPolicyLinkMutation,
 } from "../../api/AppServices"
 
@@ -18,11 +19,17 @@ function InputsApp() {
 	const [privacyPolicy, setPrivacyPolicy] = useState("")
 	const [privacyPolicyIsChange, setPrivacyPolicyIsChange] = useState(false)
 
+	const [appVersion, setAppVersion] = useState("")
+	const [appVersionIsChange, setAppVersionIsChange] = useState(false)
+
 	const [changeAppName, { isLoading: isLoadingAppName }] =
 		useChangeAppNameMutation()
 
-	const [changePrivacyPolicyLink, { isLoading: isLoadingpPivacyPolicy }] =
+	const [changePrivacyPolicyLink, { isLoading: isLoadingPrivacyPolicy }] =
 		useChangePrivacyPolicyLinkMutation()
+
+	const [changeAppVersion, { isLoading: isLoadingAppVersion }] =
+		useChangeAppVersionMutation()
 
 	const onChangeNameApp = (e: ChangeEvent<HTMLInputElement>) => {
 		setAppName(e.target.value)
@@ -32,6 +39,11 @@ function InputsApp() {
 	const onChangePrivacyPolicy = (e: ChangeEvent<HTMLInputElement>) => {
 		setPrivacyPolicy(e.target.value)
 		setPrivacyPolicyIsChange(true)
+	}
+
+	const onChangeAppVersion = (e: ChangeEvent<HTMLInputElement>) => {
+		setAppVersion(e.target.value)
+		setAppVersionIsChange(true)
 	}
 
 	const saveAppName = useCallback(() => {
@@ -44,9 +56,15 @@ function InputsApp() {
 		changePrivacyPolicyLink({ privacy_policy_link: privacyPolicy })
 	}, [privacyPolicy, changePrivacyPolicyLink])
 
+	const saveAppVersion = useCallback(() => {
+		setAppVersionIsChange(false)
+		changeAppVersion({ version: appVersion })
+	}, [appVersion, changeAppVersion])
+
 	useEffect(() => {
 		setAppName(firebaseApp?.appName || "")
 		setPrivacyPolicy(firebaseApp?.privacy_policy_link || "")
+		setAppVersion(firebaseApp?.version || "")
 	}, [firebaseApp])
 
 	return (
@@ -75,7 +93,19 @@ function InputsApp() {
 					{privacyPolicyIsChange && (
 						<DoneIcon onClick={savePrivacyPolicy} width={28} height={28} />
 					)}
-					{isLoadingpPivacyPolicy && <Loading className={styles.loader} />}
+					{isLoadingPrivacyPolicy && <Loading className={styles.loader} />}
+				</div>
+			</div>
+
+			<div>
+				<p className={styles.nameApp}>Версия приложения</p>
+
+				<div className={styles.inputWrapper}>
+					<Input type='link' value={appVersion} onChange={onChangeAppVersion} />
+					{appVersionIsChange && (
+						<DoneIcon onClick={saveAppVersion} width={28} height={28} />
+					)}
+					{isLoadingAppVersion && <Loading className={styles.loader} />}
 				</div>
 			</div>
 		</div>
