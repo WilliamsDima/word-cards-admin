@@ -3,7 +3,7 @@ import Button from "@shared/Button/Button"
 import { useAppNavigate } from "@shared/hooks/useAppNavigate"
 import styles from "./AplicationPage.module.scss"
 import { useAppSelector } from "@shared/hooks/useStore"
-import AppName from "./ui/AppName/AppName"
+import InputsApp from "./ui/InputsApp/InputsApp"
 import BooleanChange from "./ui/BooleanChange/BooleanChange"
 
 function AplicationPage() {
@@ -17,7 +17,7 @@ function AplicationPage() {
 
 	return (
 		<div className={styles.container}>
-			<AppName />
+			<InputsApp />
 
 			<BooleanChange />
 

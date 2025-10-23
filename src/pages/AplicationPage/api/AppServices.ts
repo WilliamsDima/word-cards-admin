@@ -17,6 +17,22 @@ export const appAPI = baseRTK.injectEndpoints({
 			},
 			invalidatesTags: ["firebaseApp"],
 		}),
+		// изменение ссылки Политика конфиденциальности
+		changePrivacyPolicyLink: builder.mutation<
+			void,
+			{ privacy_policy_link: string }
+		>({
+			async queryFn({ privacy_policy_link }) {
+				const appRef = doc(db, "app", "info")
+
+				await updateDoc(appRef, {
+					privacy_policy_link,
+				})
+
+				return { data: undefined }
+			},
+			invalidatesTags: ["firebaseApp"],
+		}),
 		// пока аввторизации через вк
 		changeShowVkAuth: builder.mutation<void, { showVKAuth: boolean }>({
 			async queryFn({ showVKAuth }) {
@@ -33,4 +49,8 @@ export const appAPI = baseRTK.injectEndpoints({
 	}),
 })
 
-export const { useChangeAppNameMutation, useChangeShowVkAuthMutation } = appAPI
+export const {
+	useChangeAppNameMutation,
+	useChangeShowVkAuthMutation,
+	useChangePrivacyPolicyLinkMutation,
+} = appAPI
