@@ -33,6 +33,22 @@ export const appAPI = baseRTK.injectEndpoints({
 			},
 			invalidatesTags: ["firebaseApp"],
 		}),
+		// изменение гугл плей
+		changeGooglePlay: builder.mutation<void, { icon: string; link: string }>({
+			async queryFn({ icon, link }) {
+				const appRef = doc(db, "app", "info")
+
+				await updateDoc(appRef, {
+					developer: {
+						icon,
+						link,
+					},
+				})
+
+				return { data: undefined }
+			},
+			invalidatesTags: ["firebaseApp"],
+		}),
 		// изменение версии приложения
 		changeAppVersion: builder.mutation<void, { version: string }>({
 			async queryFn({ version }) {
@@ -67,4 +83,5 @@ export const {
 	useChangeShowVkAuthMutation,
 	useChangePrivacyPolicyLinkMutation,
 	useChangeAppVersionMutation,
+	useChangeGooglePlayMutation,
 } = appAPI

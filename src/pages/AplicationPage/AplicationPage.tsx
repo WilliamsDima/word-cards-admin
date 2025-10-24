@@ -11,6 +11,8 @@ function AplicationPage() {
 
 	const { firebaseApp } = useAppSelector(store => store.app)
 
+	console.log("firebaseApp", firebaseApp)
+
 	const toTranslation = () => {
 		navigation(AppRoutes.translation)
 	}

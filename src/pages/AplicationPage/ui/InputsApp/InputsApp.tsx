@@ -1,111 +1,118 @@
 import Input from "@shared/Input/Input"
-import React, { ChangeEvent, useCallback, useEffect, useState } from "react"
+import React from "react"
 import styles from "./InputsApp.module.scss"
-import { useAppSelector } from "@shared/hooks/useStore"
 import DoneIcon from "@assets/icons/done-green-48.svg?react"
 import Loading from "@shared/Loading/Loading"
-import {
-	useChangeAppNameMutation,
-	useChangeAppVersionMutation,
-	useChangePrivacyPolicyLinkMutation,
-} from "../../api/AppServices"
+import { INPUTS, useInputsApp } from "./useInputsApp"
 
 function InputsApp() {
-	const { firebaseApp } = useAppSelector(store => store.app)
-
-	const [appName, setAppName] = useState("")
-	const [appNameIsChange, setAppNameIsChange] = useState(false)
-
-	const [privacyPolicy, setPrivacyPolicy] = useState("")
-	const [privacyPolicyIsChange, setPrivacyPolicyIsChange] = useState(false)
-
-	const [appVersion, setAppVersion] = useState("")
-	const [appVersionIsChange, setAppVersionIsChange] = useState(false)
-
-	const [changeAppName, { isLoading: isLoadingAppName }] =
-		useChangeAppNameMutation()
-
-	const [changePrivacyPolicyLink, { isLoading: isLoadingPrivacyPolicy }] =
-		useChangePrivacyPolicyLinkMutation()
-
-	const [changeAppVersion, { isLoading: isLoadingAppVersion }] =
-		useChangeAppVersionMutation()
-
-	const onChangeNameApp = (e: ChangeEvent<HTMLInputElement>) => {
-		setAppName(e.target.value)
-		setAppNameIsChange(true)
-	}
-
-	const onChangePrivacyPolicy = (e: ChangeEvent<HTMLInputElement>) => {
-		setPrivacyPolicy(e.target.value)
-		setPrivacyPolicyIsChange(true)
-	}
-
-	const onChangeAppVersion = (e: ChangeEvent<HTMLInputElement>) => {
-		setAppVersion(e.target.value)
-		setAppVersionIsChange(true)
-	}
-
-	const saveAppName = useCallback(() => {
-		setAppNameIsChange(false)
-		changeAppName({ appName })
-	}, [appName, changeAppName])
-
-	const savePrivacyPolicy = useCallback(() => {
-		setPrivacyPolicyIsChange(false)
-		changePrivacyPolicyLink({ privacy_policy_link: privacyPolicy })
-	}, [privacyPolicy, changePrivacyPolicyLink])
-
-	const saveAppVersion = useCallback(() => {
-		setAppVersionIsChange(false)
-		changeAppVersion({ version: appVersion })
-	}, [appVersion, changeAppVersion])
-
-	useEffect(() => {
-		setAppName(firebaseApp?.appName || "")
-		setPrivacyPolicy(firebaseApp?.privacy_policy_link || "")
-		setAppVersion(firebaseApp?.version || "")
-	}, [firebaseApp])
+	const {
+		isLoadingAppName,
+		isLoadingAppVersion,
+		isLoadingPrivacyPolicy,
+		isLoadingChangeGooglePlay,
+		inputData,
+		onChangeHandler,
+		onSaveHandler,
+	} = useInputsApp()
 
 	return (
 		<div className={styles.inputs}>
 			<div>
-				<p className={styles.nameApp}>Название приложения</p>
+				<p className={styles.blockName}>Название приложения</p>
 
 				<div className={styles.inputWrapper}>
-					<Input value={appName} onChange={onChangeNameApp} />
-					{appNameIsChange && (
-						<DoneIcon onClick={saveAppName} width={28} height={28} />
+					<Input
+						value={inputData[INPUTS.appName].value}
+						onChange={e => onChangeHandler(INPUTS.appName, e)}
+					/>
+					{inputData[INPUTS.appName].change && (
+						<DoneIcon
+							onClick={() => onSaveHandler(INPUTS.appName)}
+							width={28}
+							height={28}
+						/>
 					)}
 					{isLoadingAppName && <Loading className={styles.loader} />}
 				</div>
 			</div>
 
 			<div>
-				<p className={styles.nameApp}>Политика конфиденциальности</p>
+				<p className={styles.blockName}>Политика конфиденциальности</p>
 
 				<div className={styles.inputWrapper}>
 					<Input
 						type='link'
-						value={privacyPolicy}
-						onChange={onChangePrivacyPolicy}
+						value={inputData[INPUTS.privacyPolicy].value}
+						onChange={e => onChangeHandler(INPUTS.privacyPolicy, e)}
 					/>
-					{privacyPolicyIsChange && (
-						<DoneIcon onClick={savePrivacyPolicy} width={28} height={28} />
+					{inputData[INPUTS.privacyPolicy].change && (
+						<DoneIcon
+							onClick={() => onSaveHandler(INPUTS.privacyPolicy)}
+							width={28}
+							height={28}
+						/>
 					)}
 					{isLoadingPrivacyPolicy && <Loading className={styles.loader} />}
 				</div>
 			</div>
 
 			<div>
-				<p className={styles.nameApp}>Версия приложения</p>
+				<p className={styles.blockName}>Версия приложения</p>
 
 				<div className={styles.inputWrapper}>
-					<Input type='link' value={appVersion} onChange={onChangeAppVersion} />
-					{appVersionIsChange && (
-						<DoneIcon onClick={saveAppVersion} width={28} height={28} />
+					<Input
+						type='link'
+						value={inputData[INPUTS.appVersion].value}
+						onChange={e => onChangeHandler(INPUTS.appVersion, e)}
+					/>
+					{inputData[INPUTS.appVersion].change && (
+						<DoneIcon
+							onClick={() => onSaveHandler(INPUTS.appVersion)}
+							width={28}
+							height={28}
+						/>
 					)}
 					{isLoadingAppVersion && <Loading className={styles.loader} />}
+				</div>
+			</div>
+
+			<div>
+				<p className={styles.nameApp}>Блок developer:</p>
+				<p className={styles.nameApp}>Иконка гугл плей</p>
+
+				<div className={styles.inputWrapper}>
+					<Input
+						type='link'
+						value={inputData[INPUTS.googlePlayIcon].value}
+						onChange={e => onChangeHandler(INPUTS.googlePlayIcon, e)}
+					/>
+					{inputData[INPUTS.googlePlayIcon].change && (
+						<DoneIcon
+							onClick={() => onSaveHandler(INPUTS.googlePlayIcon)}
+							width={28}
+							height={28}
+						/>
+					)}
+					{isLoadingChangeGooglePlay && <Loading className={styles.loader} />}
+				</div>
+
+				<p className={styles.nameApp}>Ссылка на гугл плей</p>
+
+				<div className={styles.inputWrapper}>
+					<Input
+						type='link'
+						value={inputData[INPUTS.googlePlayLink].value}
+						onChange={e => onChangeHandler(INPUTS.googlePlayLink, e)}
+					/>
+					{inputData[INPUTS.googlePlayLink].change && (
+						<DoneIcon
+							onClick={() => onSaveHandler(INPUTS.googlePlayLink)}
+							width={28}
+							height={28}
+						/>
+					)}
+					{isLoadingChangeGooglePlay && <Loading className={styles.loader} />}
 				</div>
 			</div>
 		</div>
