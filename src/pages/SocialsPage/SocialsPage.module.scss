@@ -1,0 +1,48 @@
+@use "../../assets/styles/colors.scss" as colors;
+@use "../../assets/styles/globalStyles.scss" as global;
+
+.inputs {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+
+.inputWrapper {
+	display: flex;
+	flex-direction: "row";
+	gap: 1rem;
+
+	svg {
+		cursor: pointer;
+	}
+}
+
+.group {
+	border-bottom: 1px solid colors.$color-text-secondary;
+	padding-bottom: 1rem;
+
+	.groupNameBlock {
+		display: flex;
+		align-items: flex-end;
+		margin-bottom: 5px;
+		color: colors.$color-primary;
+		gap: 5px;
+
+		.index {
+			font-size: 1.6rem;
+		}
+
+		.blockName {
+			font-size: 1.6rem;
+		}
+	}
+}
+
+.loader {
+	width: 30px;
+}
+
+.addBtn {
+	cursor: pointer;
+}

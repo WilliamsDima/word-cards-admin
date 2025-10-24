@@ -15,6 +15,7 @@ import TranslationPage from "@pages/TranslationPage/TranslationPage"
 import { useActions } from "@shared/hooks/useActions"
 import { useAppSelector } from "@shared/hooks/useStore"
 import { useGlobalData } from "@shared/hooks/useGlobalData"
+import SocialsPage from "@pages/SocialsPage/SocialsPage"
 
 const AppRouter = () => {
 	useGlobalData()
@@ -54,6 +55,7 @@ const AppRouter = () => {
 						<Route path={AppRoutes.users} element={<UsersPage />} />
 						<Route path={AppRoutes.aplication} element={<AplicationPage />} />
 						<Route path={AppRoutes.translation} element={<TranslationPage />} />
+						<Route path={AppRoutes.socials} element={<SocialsPage />} />
 						<Route path={AppRoutes.chats} element={<ChatsPage />} />
 
 						<Route path={AppRoutes.notFount} element={<NotFoundPage />} />

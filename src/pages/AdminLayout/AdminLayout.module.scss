@@ -1,0 +1,16 @@
+@use "../../assets/styles/colors.scss" as colors;
+@use "../../assets/styles/globalStyles.scss" as global;
+
+.wrapper {
+	display: flex;
+	height: 100vh;
+
+	.main {
+		flex-grow: 1;
+		padding: 20px;
+
+		height: 100%;
+		overflow-y: auto;
+		@extend %scroll;
+	}
+}

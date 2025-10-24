@@ -10,12 +10,17 @@ export type SelectOption = {
 	iconUrl?: string
 }
 
+export type SocialKey = "site" | "vk" | "Instagram" | "Telegram" | "GitHub"
+
 export interface ISocial {
 	id: number
 	link: string
 	icon: string
 	name: string
+	key: SocialKey
 }
+
+export type SocialKeys = keyof ISocial
 
 export interface IBlock {
 	id: number

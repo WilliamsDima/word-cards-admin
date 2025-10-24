@@ -1,12 +1,13 @@
 import React from "react"
 import Sidebar from "@widgets/Sidebar/Sidebar"
 import { Outlet } from "react-router-dom"
+import styles from "./AdminLayout.module.scss"
 
 const AdminLayout: React.FC = () => {
 	return (
-		<div style={{ display: "flex", height: "100vh" }}>
+		<div className={styles.wrapper}>
 			<Sidebar />
-			<main style={{ flexGrow: 1, padding: 20 }}>
+			<main className={styles.main}>
 				<Outlet />
 			</main>
 		</div>

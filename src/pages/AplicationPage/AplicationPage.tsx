@@ -17,11 +17,19 @@ function AplicationPage() {
 		navigation(AppRoutes.translation)
 	}
 
+	const toSocials = () => {
+		navigation(AppRoutes.socials)
+	}
+
 	return (
 		<div className={styles.container}>
 			<InputsApp />
 
 			<BooleanChange />
+
+			<Button className={styles.translate} onClick={toSocials}>
+				Соц. сети
+			</Button>
 
 			<Button className={styles.translate} onClick={toTranslation}>
 				Переводы

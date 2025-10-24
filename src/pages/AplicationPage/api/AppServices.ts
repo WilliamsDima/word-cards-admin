@@ -1,6 +1,7 @@
 import { doc, updateDoc } from "firebase/firestore"
 import { baseRTK } from "@app/api/BaseRTK"
 import { db } from "@shared/config/firebase"
+import type { ISocial } from "@shared/api/types"
 
 export const appAPI = baseRTK.injectEndpoints({
 	endpoints: builder => ({
@@ -75,6 +76,19 @@ export const appAPI = baseRTK.injectEndpoints({
 			},
 			invalidatesTags: ["firebaseApp"],
 		}),
+		// изменение соц сетей
+		changeSocials: builder.mutation<void, { socials: ISocial[] }>({
+			async queryFn({ socials }) {
+				const appRef = doc(db, "app", "info")
+
+				await updateDoc(appRef, {
+					socials,
+				})
+
+				return { data: undefined }
+			},
+			invalidatesTags: ["firebaseApp"],
+		}),
 	}),
 })
 
@@ -84,4 +98,5 @@ export const {
 	useChangePrivacyPolicyLinkMutation,
 	useChangeAppVersionMutation,
 	useChangeGooglePlayMutation,
+	useChangeSocialsMutation,
 } = appAPI
