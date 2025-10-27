@@ -8,54 +8,6 @@
 	margin-bottom: 1rem;
 }
 
-.inputWrapper {
-	display: flex;
-	flex-direction: "row";
-	gap: 1rem;
-
-	svg {
-		cursor: pointer;
-	}
-}
-
-.group {
-	border-bottom: 1px solid colors.$color-text-secondary;
-	padding-bottom: 1rem;
-
-	.groupNameBlock {
-		display: flex;
-		align-items: flex-end;
-		margin-bottom: 5px;
-		color: colors.$color-primary;
-		gap: 5px;
-
-		svg {
-			cursor: pointer;
-		}
-
-		.index {
-			font-size: 1.6rem;
-		}
-
-		.blockName {
-			font-size: 1.6rem;
-		}
-	}
-}
-
-.loader {
-	width: 30px;
-}
-
-.save {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	cursor: pointer;
-	gap: 5px;
-	margin-top: 1rem;
-}
-
 .addBtn {
 	svg {
 		cursor: pointer;
