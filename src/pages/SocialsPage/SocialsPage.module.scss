@@ -29,6 +29,10 @@
 		color: colors.$color-primary;
 		gap: 5px;
 
+		svg {
+			cursor: pointer;
+		}
+
 		.index {
 			font-size: 1.6rem;
 		}
@@ -43,6 +47,17 @@
 	width: 30px;
 }
 
-.addBtn {
+.save {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 	cursor: pointer;
+	gap: 5px;
+	margin-top: 1rem;
+}
+
+.addBtn {
+	svg {
+		cursor: pointer;
+	}
 }
