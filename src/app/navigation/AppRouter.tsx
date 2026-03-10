@@ -1,12 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { useEffect, useState } from "react"
-import { onAuthStateChanged } from "firebase/auth"
-import { doc, getDoc } from "firebase/firestore"
 import LoginPage from "@pages/LoginPage/LoginPage"
 import { AppRoutes } from "./routes"
 import MainPage from "@pages/MainPage/MainPage"
 import NotFoundPage from "@pages/NotFoundPage/NotFoundPage"
-import { auth, db } from "@shared/config/firebase"
 import UsersPage from "@pages/UsersPage/UsersPage"
 import AdminLayout from "@pages/AdminLayout/AdminLayout"
 import AplicationPage from "@pages/AplicationPage/AplicationPage"
@@ -14,28 +11,43 @@ import ChatsPage from "@pages/ChatsPage/ChatsPage"
 import TranslationPage from "@pages/TranslationPage/TranslationPage"
 import { useActions } from "@shared/hooks/useActions"
 import { useAppSelector } from "@shared/hooks/useStore"
-import { useGlobalData } from "@shared/hooks/useGlobalData"
+import { useMeQuery } from "@shared/api/AuthServices"
+import { getAuthToken } from "@shared/lib/authToken"
 import SocialsPage from "@pages/SocialsPage/SocialsPage"
 
 const AppRouter = () => {
-	useGlobalData()
 	const { setIsAdmin } = useActions()
 	const [loading, setLoading] = useState(true)
 
 	const isAdmin = useAppSelector(store => store.app.isAdmin)
+	const token = getAuthToken()
+	const { data, isLoading, isError } = useMeQuery(undefined, {
+		skip: !token,
+	})
+
+	console.log("data", data)
+	console.log("isAdmin", isAdmin)
 
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, async user => {
-			if (user) {
-				const adminDoc = await getDoc(doc(db, "admins", user.uid))
-				setIsAdmin(adminDoc.exists())
-			} else {
-				setIsAdmin(false)
-			}
+		if (!token) {
+			setIsAdmin(false)
 			setLoading(false)
-		})
-		return () => unsubscribe()
-	}, [])
+			return
+		}
+
+		if (isLoading) return
+
+		if (isError) {
+			setIsAdmin(false)
+			setLoading(false)
+			return
+		}
+
+		const adminFlag = data?.isAdmin ?? data?.user?.isAdmin
+
+		setIsAdmin(Boolean(adminFlag ?? data))
+		setLoading(false)
+	}, [token, isLoading, isError, data, setIsAdmin])
 
 	if (loading) return <p>Загрузка...</p>
 

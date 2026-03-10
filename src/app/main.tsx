@@ -4,6 +4,9 @@ import "./index.scss"
 import App from "./App"
 import { Provider } from "react-redux"
 import { store } from "./store"
+import { initFirebaseAuthTokenSync } from "@shared/lib/firebaseAuth"
+
+initFirebaseAuthTokenSync()
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>

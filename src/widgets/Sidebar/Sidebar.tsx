@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from "react"
 import styles from "./Sidebar.module.scss"
-import { logout } from "@shared/config/firebase"
+import { useLogoutMutation } from "@shared/api/AuthServices"
+import { clearAuthToken } from "@shared/lib/authToken"
+import { useActions } from "@shared/hooks/useActions"
 import { useAppNavigate } from "@shared/hooks/useAppNavigate"
 import { AppRoutes } from "@app/navigation/routes"
 import { useLocation } from "react-router-dom"
@@ -34,6 +36,8 @@ const Sidebar: React.FC = () => {
 	const navigation = useAppNavigate()
 	const location = useLocation()
 	const [hidden, setHidden] = useState(false)
+	const { setIsAdmin } = useActions()
+	const [logoutRequest] = useLogoutMutation()
 
 	const currentRoute = useMemo(() => {
 		return location?.pathname
@@ -78,7 +82,19 @@ const Sidebar: React.FC = () => {
 				})}
 			</nav>
 			<div className={styles.footer}>
-				<Button className={styles.logoutBtn} onClick={logout}>
+				<Button
+					className={styles.logoutBtn}
+					onClick={async () => {
+						try {
+							await logoutRequest().unwrap()
+						} catch {
+							// ignore network errors on logout
+						} finally {
+							clearAuthToken()
+							setIsAdmin(false)
+						}
+					}}
+				>
 					<span>Выйти</span>
 
 					<LogoutIcon />
