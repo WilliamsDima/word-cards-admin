@@ -6,7 +6,7 @@ import {
 } from "firebase/auth"
 import { getFirebaseApp, getFirebaseMissingEnv } from "./firebase"
 import { setAuthToken } from "../lib/authToken"
-import { authService } from "@shared/api/auth/service"
+import { authService } from "@shared/api/services/auth/service"
 
 let tokenListenerReady = false
 let lastSyncedToken: string | null = null

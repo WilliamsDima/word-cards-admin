@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { useGoogleLoginMutation } from "@shared/api/auth/AuthServices"
+import { useGoogleLoginMutation } from "@shared/api/services/auth/AuthServices"
 import { useActions } from "@shared/hooks/useActions"
 import { signInWithGoogle } from "@shared/config/firebaseAuth"
 

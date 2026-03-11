@@ -11,7 +11,7 @@ import ChatsPage from "@pages/ChatsPage/ChatsPage"
 // import TranslationPage from "@pages/TranslationPage/TranslationPage"
 import { useActions } from "@shared/hooks/useActions"
 import { useAppSelector } from "@shared/hooks/useStore"
-import { useMeQuery } from "@shared/api/auth/AuthServices"
+import { useMeQuery } from "@shared/api/services/auth/AuthServices"
 import { getAuthToken } from "@shared/lib/authToken"
 import SocialsPage from "@pages/SocialsPage/SocialsPage"
 

@@ -1,14 +1,7 @@
 import { request } from "@shared/api/request"
-import type { AuthLoginRequest, AuthLoginResponse, AuthMeResponse } from "./types"
+import type { AuthMeResponse } from "./types"
 
 class AuthService {
-	login(body: AuthLoginRequest) {
-		return request<AuthLoginResponse>("/auth/login", {
-			method: "POST",
-			json: body,
-		})
-	}
-
 	me() {
 		return request<AuthMeResponse>("/auth/me", { method: "GET" })
 	}

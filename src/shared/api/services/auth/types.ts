@@ -5,11 +5,6 @@ export type AuthUser = {
 	isAdmin?: boolean
 }
 
-export type AuthLoginRequest = {
-	login: string
-	password: string
-}
-
 export type AuthLoginResponse = {
 	token: string
 	user?: AuthUser
