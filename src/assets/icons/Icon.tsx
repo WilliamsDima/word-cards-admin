@@ -1,4 +1,4 @@
-import { FC } from "react"
+import type { ImgHTMLAttributes, SVGAttributes } from "react"
 import AddSquareGreen64Icon from "@assets/icons/svg/add-square-green-64.svg?react"
 import AppIcon from "@assets/icons/svg/app.svg?react"
 import ArrowExpandLeftIcon from "@assets/icons/svg/arrow-expand-left.svg?react"
@@ -11,52 +11,94 @@ import LogoutIcon from "@assets/icons/svg/logout.svg?react"
 import SearchIcon from "@assets/icons/svg/search.svg?react"
 import SupportIcon from "@assets/icons/svg/support.svg?react"
 import UserIcon from "@assets/icons/svg/user.svg?react"
+import LogoWebp from "@assets/icons/webp/logo.webp"
 
-export type SVGName = "add-square-green-64" | "app" | "arrow-expand-left" | "arrow-expand-right" | "delete-red-64" | "done-green-48" | "google-play-icon" | "google" | "logout" | "search" | "support" | "user"
+export type SvgName =
+	| "add-square-green-64"
+	| "app"
+	| "arrow-expand-left"
+	| "arrow-expand-right"
+	| "delete-red-64"
+	| "done-green-48"
+	| "google-play-icon"
+	| "google"
+	| "logout"
+	| "search"
+	| "support"
+	| "user"
+export type WebpName = "logo"
 
-export type IconProps = {
-	name: SVGName
-	width: number | string | undefined
-	height: number | string | undefined
+type KindMap = {
+	svg: {
+		name: SvgName
+	} & SVGAttributes<SVGSVGElement>
+	webp: {
+		name: WebpName
+		width: number
+		height: number
+	} & ImgHTMLAttributes<HTMLImageElement>
 }
 
-export const Icon: FC<IconProps> = ({ name, height, width }) => {
+export function Icon<K extends keyof KindMap>(props: { kind: K } & KindMap[K]) {
+	if (props.kind === "webp") {
+		const webpProps = props as { kind: "webp" } & KindMap["webp"]
+		const { name, width, height, alt } = webpProps
+		switch (name) {
+			case "logo":
+				return (
+					<img
+						src={LogoWebp}
+						alt={alt ?? name}
+						{...webpProps}
+						width={width}
+						height={height}
+					/>
+				)
+
+			default:
+				return <></>
+		}
+	}
+
+	const svgProps = props as { kind: "svg" } & KindMap["svg"]
+	const { name, width, height } = svgProps
+
 	switch (name) {
 		case "add-square-green-64":
-			return <AddSquareGreen64Icon width={width} height={height} />
+			return <AddSquareGreen64Icon width={width} height={height} {...svgProps} />
 
 		case "app":
-			return <AppIcon width={width} height={height} />
+			return <AppIcon width={width} height={height} {...svgProps} />
 
 		case "arrow-expand-left":
-			return <ArrowExpandLeftIcon width={width} height={height} />
+			return <ArrowExpandLeftIcon width={width} height={height} {...svgProps} />
 
 		case "arrow-expand-right":
-			return <ArrowExpandRightIcon width={width} height={height} />
+			return <ArrowExpandRightIcon width={width} height={height} {...svgProps} />
 
 		case "delete-red-64":
-			return <DeleteRed64Icon width={width} height={height} />
+			return <DeleteRed64Icon width={width} height={height} {...svgProps} />
 
 		case "done-green-48":
-			return <DoneGreen48Icon width={width} height={height} />
+			return <DoneGreen48Icon width={width} height={height} {...svgProps} />
 
 		case "google-play-icon":
-			return <GooglePlayIconIcon width={width} height={height} />
+			return <GooglePlayIconIcon width={width} height={height} {...svgProps} />
 
 		case "google":
-			return <GoogleIcon width={width} height={height} />
+			return <GoogleIcon width={width} height={height} {...svgProps} />
 
 		case "logout":
-			return <LogoutIcon width={width} height={height} />
+			return <LogoutIcon width={width} height={height} {...svgProps} />
 
 		case "search":
-			return <SearchIcon width={width} height={height} />
+			return <SearchIcon width={width} height={height} {...svgProps} />
 
 		case "support":
-			return <SupportIcon width={width} height={height} />
+			return <SupportIcon width={width} height={height} {...svgProps} />
 
 		case "user":
-			return <UserIcon width={width} height={height} />
+			return <UserIcon width={width} height={height} {...svgProps} />
 
 		default:
 			return <></>

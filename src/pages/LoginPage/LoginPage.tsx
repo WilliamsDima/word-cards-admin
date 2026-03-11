@@ -31,7 +31,7 @@ function LoginPage() {
 		<div>
 			<h2>Login</h2>
 			<Button>
-				<Icon name='google' width={64} height={64} />
+				<Icon kind='webp' name='logo' width={64} height={64} />
 			</Button>
 			<button type='button' onClick={onGoogleLogin} disabled={googleLoading}>
 				{googleLoading ? "Loading..." : "Sign in with Google"}
