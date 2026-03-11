@@ -1,0 +1,26 @@
+@use "../../assets/styles/colors.scss" as colors;
+@use "../../assets/styles/globalStyles.scss" as global;
+
+.page {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: calc(100vh - 160px);
+}
+
+.card {
+	@extend %glassCard;
+	padding: 32px;
+	max-width: 420px;
+	text-align: center;
+}
+
+.title {
+	margin: 0 0 8px;
+	font-size: 32px;
+}
+
+.subtitle {
+	margin: 0;
+	color: colors.$color-text-secondary;
+}

@@ -5,17 +5,22 @@
 	position: relative;
 	display: flex;
 	align-items: center;
+	width: 100%;
 
 	.input {
+		width: 100%;
 		margin: 0;
-		padding: 5px;
-		border: none;
-		background-color: colors.$color-text-secondary;
-		border-radius: 5px;
-		color: colors.$color-surface;
+		padding: 10px 12px;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		background: rgba(255, 255, 255, 0.06);
+		border-radius: 12px;
+		color: colors.$color-text-primary;
+		transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
 		&:focus {
 			outline: none;
+			border-color: colors.$color-primary;
+			box-shadow: 0 0 0 3px rgba(31, 177, 65, 0.15);
 		}
 	}
 }

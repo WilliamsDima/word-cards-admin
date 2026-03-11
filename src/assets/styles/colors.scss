@@ -19,3 +19,21 @@ $color-info: #2196f3;
 $color-success: #4caf50;
 
 $color-white: #ffffff;
+
+// Extended palette for glass UI
+$color-bg-1: #0b0f0d;
+$color-bg-2: #121212;
+$color-surface-2: #161a18;
+$color-surface-3: #1b211e;
+$color-border-soft: rgba(255, 255, 255, 0.08);
+$color-glass: rgba(18, 18, 18, 0.78);
+$color-shadow: rgba(0, 0, 0, 0.45);
+$color-accent-2: #2196f3;
+$gradient-app: radial-gradient(
+		900px 500px at 10% 10%,
+		rgba(31, 177, 65, 0.22),
+		transparent 70%
+	),
+	radial-gradient(600px 600px at 90% 20%, rgba(33, 150, 243, 0.16), transparent
+			 60%),
+	linear-gradient(160deg, #0b0f0d 0%, #121212 40%, #0d1110 100%);

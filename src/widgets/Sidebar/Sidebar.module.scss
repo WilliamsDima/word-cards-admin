@@ -1,39 +1,76 @@
 @use "../../assets/styles/colors.scss" as colors;
+@use "../../assets/styles/globalStyles.scss" as global;
 
 .sidebar {
 	display: flex;
 	flex-direction: column;
-	width: 240px;
-	height: 100vh;
-	background-color: colors.$color-text-disabled;
+	width: 260px;
+	height: calc(100vh - 48px);
+	@extend %glassPanel;
 	color: colors.$color-white;
 	box-sizing: border-box;
-	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 	transition: 0.3s;
 
 	.header {
-		border-bottom: 1px solid colors.$color-primary;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 		display: flex;
-		padding: 10px;
+		padding: 16px;
 		align-items: center;
 		justify-content: space-between;
 
 		.title {
-			color: colors.$color-primary;
-			font-size: 24px;
+			color: colors.$color-primary-light;
+			font-size: 16px;
 			font-weight: 700;
 			cursor: pointer;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			transition: gap 0.2s ease;
+		}
+
+		.brandMark {
+			width: 36px;
+			height: 36px;
+			border-radius: 12px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			background: linear-gradient(
+				135deg,
+				rgba(31, 177, 65, 0.85),
+				rgba(19, 130, 46, 0.95)
+			);
+			color: colors.$color-white;
+			font-size: 14px;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			box-shadow: 0 10px 24px rgba(31, 177, 65, 0.25);
+		}
+
+		.brandText {
+			color: colors.$color-text-primary;
+			letter-spacing: 0.02em;
+			font-size: 20px;
+			white-space: nowrap;
+			transition: opacity 0.2s ease, transform 0.2s ease, max-width 0.2s ease;
+			opacity: 1;
+			transform: translateX(0);
+			max-width: 160px;
+			overflow: hidden;
 		}
 
 		.arrow {
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			background-color: rgba(colors.$color-white, 0.3);
-			padding: 5px;
-			border-radius: 5px;
-			width: 44px;
-			height: 44px;
+			background-color: rgba(colors.$color-white, 0.06);
+			border: 1px solid rgba(255, 255, 255, 0.06);
+			padding: 6px;
+			border-radius: 10px;
+			width: 40px;
+			height: 40px;
+			color: colors.$color-text-secondary;
 		}
 	}
 
@@ -41,56 +78,98 @@
 		flex-grow: 1;
 		display: flex;
 		flex-direction: column;
+		gap: 8px;
+		padding: 16px;
 	}
 
 	.navItem {
 		display: flex;
 		align-items: center;
-		background: transparent;
+		background: rgba(255, 255, 255, 0.04);
 		gap: 10px;
-		border: none;
+		border: 1px solid rgba(255, 255, 255, 0.06);
 		color: colors.$color-white;
-		font-size: 16px;
+		font-size: 18px;
 		text-align: left;
 		padding: 10px 12px;
+		border-radius: 12px;
 		cursor: pointer;
-		transition: background-color 0.2s ease;
+		transition:
+			background-color 0.2s ease,
+			transform 0.2s ease;
+
+		span {
+			transition: opacity 0.2s ease, transform 0.2s ease, max-width 0.2s ease;
+			opacity: 1;
+			transform: translateX(0);
+			max-width: 160px;
+			overflow: hidden;
+			white-space: nowrap;
+		}
 
 		&:hover {
-			background-color: colors.$color-surface;
+			background-color: rgba(31, 177, 65, 0.12);
+			transform: translateX(2px);
 		}
 
 		&.navItemActive {
-			background-color: colors.$color-primary;
+			background: linear-gradient(
+				135deg,
+				rgba(31, 177, 65, 0.8),
+				rgba(19, 130, 46, 0.9)
+			);
+			box-shadow: 0 12px 24px rgba(31, 177, 65, 0.2);
 		}
 	}
 
 	.footer {
-		padding: 10px;
+		padding: 16px;
 	}
 
 	.logoutBtn {
 		width: 100%;
-		background-color: rgba(colors.$color-white, 0.1);
+		background: rgba(255, 255, 255, 0.06);
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		box-shadow: none;
 		display: flex;
 		gap: 10px;
+		font-size: 1.8rem;
+
+		span {
+			transition: opacity 0.2s ease, transform 0.2s ease, max-width 0.2s ease;
+			opacity: 1;
+			transform: translateX(0);
+			max-width: 160px;
+			overflow: hidden;
+			white-space: nowrap;
+		}
 	}
 
 	&.hidden {
-		width: auto;
+		width: 84px;
 
 		.nav {
-			margin-top: 10px;
-			gap: 10px;
+			margin-top: 0;
+			gap: 12px;
 			align-items: center;
 			.navItem {
-				width: 44px;
-				height: 44px;
-				background-color: rgba(colors.$color-white, 0.3);
-				border-radius: 5px;
+				width: 48px;
+				height: 48px;
+				padding: 0;
+				justify-content: center;
+				align-items: center;
+				gap: 0;
+				background-color: rgba(colors.$color-white, 0.06);
+				border-radius: 14px;
+
+				svg {
+					display: block;
+				}
 
 				span {
-					display: none;
+					opacity: 0;
+					transform: translateX(-6px);
+					max-width: 0;
 				}
 
 				&.navItemActive {
@@ -108,25 +187,65 @@
 				width: 44px;
 				height: 44px;
 				padding: 0;
+				justify-content: center;
+				align-items: center;
+				gap: 0;
 
 				span {
-					display: none;
+					opacity: 0;
+					transform: translateX(-6px);
+					max-width: 0;
+				}
+
+				svg {
+					display: block;
 				}
 			}
 		}
 
 		.header {
 			justify-content: center;
-			flex-direction: column;
 			gap: 5px;
 
 			.title {
-				font-size: 20px;
+				font-size: 0;
+				gap: 0;
+			}
+
+			.brandText {
+				opacity: 0;
+				transform: translateX(-6px);
+				max-width: 0;
 			}
 		}
 
 		.arrow {
 			transform: rotate(-180deg);
+		}
+	}
+}
+
+@media screen and (max-width: 900px) {
+	.sidebar {
+		width: 100%;
+		height: auto;
+		flex-direction: row;
+		align-items: center;
+		gap: 12px;
+
+		.header {
+			border-bottom: none;
+			border-right: 1px solid rgba(255, 255, 255, 0.06);
+		}
+
+		.nav {
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: flex-start;
+		}
+
+		.footer {
+			margin-left: auto;
 		}
 	}
 }

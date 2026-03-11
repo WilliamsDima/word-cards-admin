@@ -1,6 +1,7 @@
 import cn from "classnames"
 import React, { FC, memo, InputHTMLAttributes } from "react"
 import styles from "./Search.module.scss"
+import { Icon } from "@assets/icons/Icon"
 
 interface ISearch extends InputHTMLAttributes<HTMLInputElement> {
 	children?: React.ReactNode
@@ -15,7 +16,7 @@ const Search: FC<ISearch> = memo(props => {
 	return (
 		<div className={cn(styles.inputWrapper, classnames?.inputWrapper)}>
 			<span className={styles.icon}>
-				<SearchIcon />
+				<Icon kind='svg' name='search' width={10} height={10} />
 			</span>
 
 			<input

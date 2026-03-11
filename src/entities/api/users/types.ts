@@ -43,13 +43,10 @@ export interface IUserActivity {
 }
 
 export interface IUser {
-	name: string
-	uid: string
-	dateRegistration: Date
-	showVariantList: null | ShowVariantList
+	created_at: string
 	email: string
-	languages: ILanguage[]
-	native_language: ILanguage | null
+	google_uid: string
+	id: number
 	image: string
-	activity?: IUserActivity
+	name: string
 }

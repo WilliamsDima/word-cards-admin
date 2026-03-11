@@ -1,15 +1,53 @@
 @use "../../assets/styles/colors.scss" as colors;
 @use "../../assets/styles/globalStyles.scss" as global;
 
+.page {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.header {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.title {
+	margin: 0;
+	font-size: 26px;
+}
+
+.subtitle {
+	margin: 0;
+	color: colors.$color-text-secondary;
+}
+
+.card {
+	@extend %glassCard;
+	padding: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.cardTitle {
+	margin: 0 0 8px;
+	font-size: 18px;
+}
+
 .inputs {
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
-	margin-bottom: 1rem;
 }
 
 .addBtn {
+	display: flex;
+	justify-content: flex-end;
+
 	svg {
 		cursor: pointer;
+		filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.35));
 	}
 }

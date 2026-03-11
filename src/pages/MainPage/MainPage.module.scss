@@ -1,11 +1,44 @@
 @use "../../assets/styles/colors.scss" as colors;
 @use "../../assets/styles/globalStyles.scss" as global;
 
-.link {
+.page {
 	display: flex;
-	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	min-height: calc(100vh - 160px);
+}
+
+.card {
+	width: min(720px, 100%);
+	padding: 32px;
+	@extend %glassCard;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.header {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.title {
+	margin: 0;
+	font-size: 28px;
+}
+
+.subtitle {
+	margin: 0;
+	color: colors.$color-text-secondary;
+	font-size: 14px;
+}
+
+.link {
+	display: inline-flex;
 	align-items: center;
 	color: colors.$color-info;
 	text-decoration: none;
 	gap: 10px;
+	font-weight: 600;
 }

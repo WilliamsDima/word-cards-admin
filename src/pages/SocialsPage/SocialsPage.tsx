@@ -96,32 +96,41 @@ function SocialsPage() {
 	}, [firebaseApp])
 
 	return (
-		<div>
-			<div className={styles.inputs}>
-				<h1 className={styles.title}>Социальные сети</h1>
-
-				{inputs.map((it, i) => {
-					const prevIt = firebaseApp?.socials.find(item => item.id === it.id)
-					return (
-						<SocialItem
-							key={it.id}
-							index={i}
-							item={it}
-							prevIt={prevIt}
-							isLoading={false}
-							onChangeInput={onChangeInput}
-							onDelete={onDelete}
-							onSaveHandler={onSaveHandler}
-						/>
-					)
-				})}
+		<div className={styles.page}>
+			<div className={styles.header}>
+				<h1 className={styles.title}>Social links</h1>
+				<p className={styles.subtitle}>
+					Manage external profiles and store badges.
+				</p>
 			</div>
 
-			{!socialsData?.["add"] && (
-				<div className={styles.addBtn}>
-					<AddIcon onClick={onAdd} />
+			<div className={styles.card}>
+				<div className={styles.inputs}>
+					<h1 className={styles.cardTitle}>Социальные сети</h1>
+
+					{inputs.map((it, i) => {
+						const prevIt = firebaseApp?.socials.find(item => item.id === it.id)
+						return (
+							<SocialItem
+								key={it.id}
+								index={i}
+								item={it}
+								prevIt={prevIt}
+								isLoading={false}
+								onChangeInput={onChangeInput}
+								onDelete={onDelete}
+								onSaveHandler={onSaveHandler}
+							/>
+						)
+					})}
 				</div>
-			)}
+
+				{!socialsData?.["add"] && (
+					<div className={styles.addBtn}>
+						<AddIcon onClick={onAdd} />
+					</div>
+				)}
+			</div>
 		</div>
 	)
 }

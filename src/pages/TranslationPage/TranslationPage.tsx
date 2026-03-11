@@ -95,77 +95,90 @@ function TranslationPage() {
 	}, [firebaseApp, language])
 
 	return (
-		<div>
-			<div className={styles.json}>
-				{loading && (
-					<span className={styles.loader}>
-						<Loading />
-					</span>
-				)}
+		<div className={styles.page}>
+			<div className={styles.header}>
+				<h1 className={styles.title}>Translations</h1>
+				<p className={styles.subtitle}>
+					Edit localized strings and publish updates.
+				</p>
+			</div>
 
-				{fileNotFound && (
-					<h1 className={styles.fileNotFound}>
-						Файл {language?.code + ".json"} не найден
-					</h1>
-				)}
-
-				{fileNotFound && (
-					<Button className={styles.btn} onClick={onCreateJson}>
-						Создать файл {language?.code + ".json"}
-					</Button>
-				)}
-
-				{!!jsonData && !fileNotFound && (
-					<div
-						className={cn(styles.editor, {
-							[styles.error]: isError,
-						})}
-					>
-						<span className={styles.fileName}>{language?.code + ".json"} </span>
-
-						<JsonEditor
-							showArrayIndices={false}
-							showCollectionCount={false}
-							theme={[githubDarkTheme]}
-							data={jsonData.json}
-							maxWidth={"100%"}
-							minWidth={"100%"}
-							className={styles.jsonEditor}
-							setData={e => {
-								setIsEdit(true)
-								setJsonData(prev => {
-									return {
-										...prev!,
-										json: e!,
-									}
-								})
-							}}
-							rootName=''
-						/>
-
-						<div className={styles.dropdown}>
-							<Dropdown
-								options={options}
-								labelKey='nativeName'
-								valueKey='code'
-								selected={language}
-								onSelect={setLanguage}
-							/>
-						</div>
-
-						<span className={styles.language}>
-							{language?.nativeName}{" "}
-							{isError && <span className={styles.error}>Error</span>}
+			<div className={styles.card}>
+				<div className={styles.json}>
+					{loading && (
+						<span className={styles.loader}>
+							<Loading />
 						</span>
+					)}
+
+					{fileNotFound && (
+						<h1 className={styles.fileNotFound}>
+							Файл {language?.code + ".json"} не найден
+						</h1>
+					)}
+
+					{fileNotFound && (
+						<Button className={styles.btn} onClick={onCreateJson}>
+							Создать файл {language?.code + ".json"}
+						</Button>
+					)}
+
+					{!!jsonData && !fileNotFound && (
+						<div
+							className={cn(styles.editor, {
+								[styles.error]: isError,
+							})}
+						>
+							<span className={styles.fileName}>
+								{language?.code + ".json"}{" "}
+							</span>
+
+							<JsonEditor
+								showArrayIndices={false}
+								showCollectionCount={false}
+								theme={[githubDarkTheme]}
+								data={jsonData.json}
+								maxWidth={"100%"}
+								minWidth={"100%"}
+								className={styles.jsonEditor}
+								setData={e => {
+									setIsEdit(true)
+									setJsonData(prev => {
+										return {
+											...prev!,
+											json: e!,
+										}
+									})
+								}}
+								rootName=''
+							/>
+
+							<div className={styles.dropdown}>
+								<Dropdown
+									options={options}
+									labelKey='nativeName'
+									valueKey='code'
+									selected={language}
+									onSelect={setLanguage}
+								/>
+							</div>
+
+							<span className={styles.language}>
+								{language?.nativeName}{" "}
+								{isError && <span className={styles.error}>Error</span>}
+							</span>
+						</div>
+					)}
+				</div>
+
+				{isEdit && !fileNotFound && (
+					<div className={styles.actions}>
+						<Button className={styles.btn} onClick={saveJson}>
+							сохранить
+						</Button>
 					</div>
 				)}
 			</div>
-
-			{isEdit && !fileNotFound && (
-				<Button className={styles.btn} onClick={saveJson}>
-					сохранить
-				</Button>
-			)}
 		</div>
 	)
 }

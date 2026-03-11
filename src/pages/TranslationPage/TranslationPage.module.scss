@@ -1,6 +1,33 @@
 @use "../../assets/styles/colors.scss" as colors;
 @use "../../assets/styles/globalStyles.scss" as global;
 
+.page {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.header {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.title {
+	margin: 0;
+	font-size: 26px;
+}
+
+.subtitle {
+	margin: 0;
+	color: colors.$color-text-secondary;
+}
+
+.card {
+	@extend %glassCard;
+	padding: 24px;
+}
+
 .json {
 	display: flex;
 	justify-content: flex-start;
@@ -10,7 +37,7 @@
 	width: 100%;
 	position: relative;
 	margin-bottom: 1rem;
-	height: calc(100vh - 200px); // или под нужную высоту страницы
+	min-height: 420px;
 
 	.fileNotFound {
 		margin-bottom: 1rem;
@@ -36,8 +63,10 @@
 		height: auto;
 		min-height: 100%;
 		position: relative;
-		border-radius: 0.5rem;
+		border-radius: 0.8rem;
 		overflow: auto;
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		background: rgba(255, 255, 255, 0.02);
 
 		.jsonEditor {
 			height: 100%;
@@ -82,9 +111,15 @@
 			position: absolute;
 			z-index: 100;
 			left: 1rem;
-			top: 0rem;
+			top: 0.5rem;
+			color: colors.$color-text-secondary;
 		}
 	}
+}
+
+.actions {
+	display: flex;
+	justify-content: flex-end;
 }
 
 .btn {

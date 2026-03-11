@@ -2,18 +2,24 @@
 @use "../../assets/styles/globalStyles.scss" as global;
 
 .btn {
-	background-color: rgba(colors.$color-white, 0.4);
-	border: none;
-	font-size: 18px;
+	background: linear-gradient(
+		135deg,
+		rgba(31, 177, 65, 0.85),
+		rgba(19, 130, 46, 0.95)
+	);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	font-size: 1.4rem;
 	cursor: pointer;
 	color: colors.$color-white;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 1rem 2rem;
+	gap: 10px;
+	padding: 1.1rem 1.8rem;
 	text-align: center;
-	transition: 0.3s;
-	border-radius: 5px;
+	transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+	border-radius: 14px;
+	box-shadow: 0 14px 30px rgba(31, 177, 65, 0.25);
 
 	@media screen and (max-width: 570px) {
 		font-size: 10px;
@@ -30,7 +36,7 @@
 	}
 
 	&:active {
-		transform: translateY(4px);
+		transform: translateY(2px);
 		/* Moving button 4px to y-axis */
 	}
 
@@ -41,6 +47,13 @@
 	}
 
 	&:hover {
-		background-color: rgba(colors.$color-white, 0.1);
+		filter: brightness(1.05);
+	}
+
+	&:disabled {
+		opacity: 0.7;
+		cursor: not-allowed;
+		box-shadow: none;
+		filter: none;
 	}
 }

@@ -22,18 +22,29 @@ function AplicationPage() {
 	}
 
 	return (
-		<div className={styles.container}>
-			{/* <InputsApp /> */}
+		<div className={styles.page}>
+			<div className={styles.header}>
+				<h1 className={styles.title}>Application</h1>
+				<p className={styles.subtitle}>
+					Manage app settings, links, and integrations.
+				</p>
+			</div>
 
-			{/* <BooleanChange /> */}
+			<div className={styles.card}>
+				{/* <InputsApp /> */}
 
-			<Button className={styles.translate} onClick={toSocials}>
-				Соц. сети
-			</Button>
+				{/* <BooleanChange /> */}
 
-			<Button className={styles.translate} onClick={toTranslation}>
-				Переводы
-			</Button>
+				<div className={styles.actions}>
+					<Button className={styles.actionBtn} onClick={toSocials}>
+						Соц. сети
+					</Button>
+
+					<Button className={styles.actionBtn} onClick={toTranslation}>
+						Переводы
+					</Button>
+				</div>
+			</div>
 		</div>
 	)
 }

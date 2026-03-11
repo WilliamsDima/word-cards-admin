@@ -4,16 +4,17 @@
 .inputs {
 	display: flex;
 	flex-direction: column;
-	gap: 1rem;
+	gap: 1.6rem;
 	margin-bottom: 1rem;
-	border-bottom: 1px solid colors.$color-text-secondary;
-	padding-bottom: 1rem;
+	padding: 20px;
+	@extend %glassPanel;
 }
 
 .inputWrapper {
 	display: flex;
-	flex-direction: "row";
+	flex-direction: row;
 	gap: 1rem;
+	align-items: center;
 
 	svg {
 		cursor: pointer;
@@ -21,7 +22,8 @@
 }
 
 .blockName {
-	margin-bottom: 5px;
+	margin-bottom: 6px;
+	color: colors.$color-text-secondary;
 }
 
 .loader {

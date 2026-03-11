@@ -1,7 +1,8 @@
 @use "../../assets/styles/colors.scss" as colors;
+@use "../../assets/styles/globalStyles.scss" as global;
 
 .usersFilter {
-	margin-bottom: 20px;
+	width: 100%;
 }
 
 .inputWrapper {

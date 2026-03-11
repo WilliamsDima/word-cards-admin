@@ -2,13 +2,19 @@
 @use "../../../../assets/styles/globalStyles.scss" as global;
 
 .group {
-	border-bottom: 1px solid colors.$color-text-secondary;
-	padding-bottom: 1rem;
+	padding: 16px;
+	border-radius: 16px;
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
 
 	.inputWrapper {
 		display: flex;
-		flex-direction: "row";
+		flex-direction: row;
 		gap: 1rem;
+		align-items: center;
 
 		svg {
 			cursor: pointer;
@@ -17,21 +23,23 @@
 
 	.groupNameBlock {
 		display: flex;
-		align-items: flex-end;
-		margin-bottom: 5px;
+		align-items: center;
+		margin-bottom: 2px;
 		color: colors.$color-primary;
-		gap: 5px;
+		gap: 8px;
 
 		svg {
 			cursor: pointer;
 		}
 
 		.index {
-			font-size: 1.6rem;
+			font-size: 1.4rem;
+			margin: 0;
 		}
 
 		.blockName {
-			font-size: 1.6rem;
+			font-size: 1.4rem;
+			margin: 0;
 		}
 	}
 }
@@ -41,12 +49,13 @@
 }
 
 .save {
-	display: flex;
+	display: inline-flex;
 	flex-direction: row;
 	align-items: center;
 	cursor: pointer;
-	gap: 5px;
-	margin-top: 1rem;
+	gap: 6px;
+	margin-top: 6px;
+	color: colors.$color-primary-light;
 }
 
 .addBtn {

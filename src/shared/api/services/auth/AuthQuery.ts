@@ -1,6 +1,6 @@
 import { baseRTK } from "@app/api/BaseRTK"
 import { clearAuthToken, setAuthToken } from "@shared/lib/authToken"
-import { authService } from "@shared/api/services/auth/service"
+import { authService } from "@shared/api/services/auth/AuthService"
 import { toRtkQueryResult } from "@shared/api/RTK/rtk"
 import type { AuthMeResponse } from "@shared/api/services/auth/types"
 

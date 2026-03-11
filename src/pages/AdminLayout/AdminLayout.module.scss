@@ -3,14 +3,28 @@
 
 .wrapper {
 	display: flex;
-	height: 100vh;
+	min-height: 100vh;
+	gap: 24px;
+	padding: 24px;
 
 	.main {
 		flex-grow: 1;
-		padding: 20px;
-
-		height: 100%;
+		padding: 28px;
+		@extend %glassPanel;
+		height: calc(100vh - 48px);
 		overflow-y: auto;
 		@extend %scroll;
+	}
+}
+
+@media screen and (max-width: 900px) {
+	.wrapper {
+		flex-direction: column;
+		padding: 20px;
+
+		.main {
+			height: auto;
+			min-height: calc(100vh - 220px);
+		}
 	}
 }

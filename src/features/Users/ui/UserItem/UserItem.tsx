@@ -1,8 +1,7 @@
 import React, { FC } from "react"
 import styles from "./UserItem.module.scss"
-import { IUser } from "@features/Users/model/user"
 import cn from "classnames"
-import { getLastActiveDay } from "@features/Users/helpers/user"
+import { IUser } from "@entities/api/users/types"
 
 type Props = {
 	user: IUser
@@ -11,13 +10,16 @@ type Props = {
 export const UserItem: FC<Props> = ({ user }) => {
 	return (
 		<li className={styles.item}>
-			<img className={styles.image} src={user.image} />
+			<div className={styles.avatar}>
+				<img className={styles.image} src={user.image} />
+				<span className={styles.idBadge}>ID {user.id}</span>
+			</div>
 
 			<div className={styles.content}>
 				<div className={styles.info}>
 					<div className={styles.infoItem}>
 						<p>uid:</p>
-						<h3 className={styles.name}>{user.uid}</h3>
+						<h3 className={styles.name}>{user.google_uid}</h3>
 					</div>
 
 					<div className={styles.infoItem}>
@@ -37,7 +39,7 @@ export const UserItem: FC<Props> = ({ user }) => {
 						<h3 className={styles.name}>
 							{new Intl.DateTimeFormat("ru-RU", {
 								dateStyle: "medium",
-							}).format(user.dateRegistration)}
+							}).format(new Date(user.created_at))}
 						</h3>
 					</div>
 
@@ -48,7 +50,7 @@ export const UserItem: FC<Props> = ({ user }) => {
 
 					<div className={styles.infoItem}>
 						<p>последняя активность: </p>
-						<h3 className={styles.name}>{getLastActiveDay(user) || "---"}</h3>
+						<h3 className={styles.name}>{"---"}</h3>
 					</div>
 				</div>
 			</div>

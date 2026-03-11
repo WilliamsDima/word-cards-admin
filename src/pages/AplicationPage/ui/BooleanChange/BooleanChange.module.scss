@@ -2,7 +2,8 @@
 @use "../../../../assets/styles/globalStyles.scss" as global;
 
 .nameApp {
-	margin-bottom: 5px;
+	margin-bottom: 6px;
+	color: colors.$color-text-secondary;
 }
 
 .loader {

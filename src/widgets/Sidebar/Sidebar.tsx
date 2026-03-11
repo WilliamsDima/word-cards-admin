@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react"
 import styles from "./Sidebar.module.scss"
-import { useLogoutMutation } from "@shared/api/services/auth/AuthServices"
+import { useLogoutMutation } from "@shared/api/services/auth/AuthQuery"
 import { clearAuthToken } from "@shared/lib/authToken"
 import { useActions } from "@shared/hooks/useActions"
 import { useAppNavigate } from "@shared/hooks/useAppNavigate"
@@ -14,17 +14,17 @@ const routesNav = [
 	{
 		name: "Пользователи",
 		route: AppRoutes.users,
-		icon: <Icon name='user' width={32} height={32} />,
+		icon: <Icon kind='svg' name='user' width={20} height={20} />,
 	},
 	{
 		name: "Приложение",
 		route: AppRoutes.aplication,
-		icon: <Icon name='app' width={32} height={32} />,
+		icon: <Icon kind='svg' name='app' width={20} height={20} />,
 	},
 	{
 		name: "Поддержка",
 		route: AppRoutes.chats,
-		icon: <Icon name='support' width={32} height={32} />,
+		icon: <Icon kind='svg' name='support' width={20} height={20} />,
 	},
 ]
 
@@ -39,25 +39,38 @@ const Sidebar: React.FC = () => {
 		return location?.pathname
 	}, [location])
 
-	return (
-		<aside
-			className={cn(styles.sidebar, {
+	const toMain = () => navigation(AppRoutes.main)
+	const toggleShow = () => setHidden(prev => !prev)
+
+	const onLogout = async () => {
+		try {
+			await logoutRequest().unwrap()
+		} catch {
+			// ignore network errors on logout
+		} finally {
+			clearAuthToken()
+			setIsAdmin(false)
+		}
+	}
+
+	const sidebarStyles = useMemo(
+		() =>
+			cn(styles.sidebar, {
 				[styles.hidden]: hidden,
-			})}
-		>
+			}),
+		[hidden],
+	)
+
+	return (
+		<aside className={sidebarStyles}>
 			<div className={styles.header}>
-				<div
-					className={styles.title}
-					onClick={() => navigation(AppRoutes.main)}
-				>
-					{hidden ? "<A />" : "<Admin />"}
+				<div className={styles.title} onClick={toMain}>
+					<span className={styles.brandMark}>WC</span>
+					{!hidden && <span className={styles.brandText}>Word Cards</span>}
 				</div>
 
-				<button
-					className={styles.arrow}
-					onClick={() => setHidden(prev => !prev)}
-				>
-					<Icon name='arrow-expand-left' width={32} height={32} />
+				<button className={styles.arrow} onClick={toggleShow}>
+					<Icon kind='svg' name='arrow-expand-left' width={20} height={20} />
 				</button>
 			</div>
 			<nav className={styles.nav}>
@@ -78,22 +91,10 @@ const Sidebar: React.FC = () => {
 				})}
 			</nav>
 			<div className={styles.footer}>
-				<Button
-					className={styles.logoutBtn}
-					onClick={async () => {
-						try {
-							await logoutRequest().unwrap()
-						} catch {
-							// ignore network errors on logout
-						} finally {
-							clearAuthToken()
-							setIsAdmin(false)
-						}
-					}}
-				>
+				<Button className={styles.logoutBtn} onClick={onLogout}>
 					<span>Выйти</span>
 
-					<Icon name='logout' width={32} height={32} />
+					<Icon kind='svg' name='logout' width={20} height={20} />
 				</Button>
 			</div>
 		</aside>
