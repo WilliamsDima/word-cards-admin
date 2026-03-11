@@ -2,6 +2,8 @@ import React, { useState } from "react"
 import { useGoogleLoginMutation } from "@shared/api/services/auth/AuthServices"
 import { useActions } from "@shared/hooks/useActions"
 import { signInWithGoogle } from "@shared/config/firebaseAuth"
+import Button from "@shared/Button/Button"
+import { Icon } from "@assets/icons/Icon"
 
 function LoginPage() {
 	const { setIsAdmin } = useActions()
@@ -26,13 +28,16 @@ function LoginPage() {
 	}
 
 	return (
-		<form>
+		<div>
 			<h2>Login</h2>
+			<Button>
+				<Icon name='google' width={64} height={64} />
+			</Button>
 			<button type='button' onClick={onGoogleLogin} disabled={googleLoading}>
 				{googleLoading ? "Loading..." : "Sign in with Google"}
 			</button>
 			{googleError ? <p>{googleError}</p> : null}
-		</form>
+		</div>
 	)
 }
 

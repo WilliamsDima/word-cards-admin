@@ -1,7 +1,6 @@
 import Input from "@shared/Input/Input"
 import React from "react"
 import styles from "./InputsApp.module.scss"
-import DoneIcon from "@assets/icons/done-green-48.svg?react"
 import Loading from "@shared/Loading/Loading"
 import { INPUTS, useInputsApp } from "./useInputsApp"
 

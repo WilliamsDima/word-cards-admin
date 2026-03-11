@@ -5,7 +5,6 @@ import React, {
 	useMemo,
 	useState,
 } from "react"
-import AddIcon from "@assets/icons/add-square-green-64.svg?react"
 import styles from "./SocialsPage.module.scss"
 import { useAppSelector } from "@shared/hooks/useStore"
 import type { ISocial, SocialKey, SocialKeys } from "@shared/api/types"

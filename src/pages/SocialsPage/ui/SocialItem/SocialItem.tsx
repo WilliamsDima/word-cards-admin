@@ -1,7 +1,5 @@
 import React, { FC, memo } from "react"
-import DoneIcon from "@assets/icons/done-green-48.svg?react"
 import Loading from "@shared/Loading/Loading"
-import DeleteIcon from "@assets/icons/delete-red-64.svg?react"
 import styles from "./SocialItem.module.scss"
 import type { ISocial, SocialKeys } from "@shared/api/types"
 import Input from "@shared/Input/Input"
@@ -13,7 +11,7 @@ type Props = {
 	onChangeInput: (
 		e: React.ChangeEvent<HTMLInputElement>,
 		it: ISocial,
-		fieldName: SocialKeys
+		fieldName: SocialKeys,
 	) => void
 	index: number
 	isLoading: boolean
@@ -108,7 +106,7 @@ const SocialItem: FC<Props> = memo(
 				)}
 			</div>
 		)
-	}
+	},
 )
 
 export default SocialItem

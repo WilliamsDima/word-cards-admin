@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react"
 import styles from "./BooleanChange.module.scss"
 import { useAppSelector } from "@shared/hooks/useStore"
-import { useChangeShowVkAuthMutation } from "../../api/AppServices"
 import Select, { type SingleValue } from "react-select"
-import DoneIcon from "@assets/icons/done-green-48.svg?react"
 
 type OptionVk = {
 	value: boolean
@@ -65,9 +63,9 @@ function BooleanChange() {
 						}}
 						onChange={onChangeVk}
 					/>
-					{firebaseApp?.showVKAuth !== undefined &&
+					{/* {firebaseApp?.showVKAuth !== undefined &&
 						firebaseApp?.showVKAuth !== showVKAuth?.value &&
-						!isLoading && <DoneIcon onClick={save} width={28} height={28} />}
+						!isLoading && <DoneIcon onClick={save} width={28} height={28} />} */}
 				</div>
 			</div>
 		</div>

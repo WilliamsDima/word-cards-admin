@@ -1,5 +1,4 @@
 import React from "react"
-import GooglePlay from "@assets/icons/google-play-icon.svg?react"
 import styles from "./MainPage.module.scss"
 
 function MainPage() {

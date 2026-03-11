@@ -8,27 +8,23 @@ import { AppRoutes } from "@app/navigation/routes"
 import { useLocation } from "react-router-dom"
 import cn from "classnames"
 import Button from "@shared/Button/Button"
-import ArrowIcon from "@assets/icons/arrow-expand-left.svg?react"
-import LogoutIcon from "@assets/icons/logout.svg?react"
-import UserIcon from "@assets/icons/user.svg?react"
-import AppIcon from "@assets/icons/app.svg?react"
-import SupportIcon from "@assets/icons/support.svg?react"
+import { Icon } from "@assets/icons/Icon"
 
 const routesNav = [
 	{
 		name: "Пользователи",
 		route: AppRoutes.users,
-		icon: <UserIcon />,
+		icon: <Icon name='user' width={32} height={32} />,
 	},
 	{
 		name: "Приложение",
 		route: AppRoutes.aplication,
-		icon: <AppIcon />,
+		icon: <Icon name='app' width={32} height={32} />,
 	},
 	{
 		name: "Поддержка",
 		route: AppRoutes.chats,
-		icon: <SupportIcon />,
+		icon: <Icon name='support' width={32} height={32} />,
 	},
 ]
 
@@ -61,7 +57,7 @@ const Sidebar: React.FC = () => {
 					className={styles.arrow}
 					onClick={() => setHidden(prev => !prev)}
 				>
-					<ArrowIcon />
+					<Icon name='arrow-expand-left' width={32} height={32} />
 				</button>
 			</div>
 			<nav className={styles.nav}>
@@ -97,7 +93,7 @@ const Sidebar: React.FC = () => {
 				>
 					<span>Выйти</span>
 
-					<LogoutIcon />
+					<Icon name='logout' width={32} height={32} />
 				</Button>
 			</div>
 		</aside>
