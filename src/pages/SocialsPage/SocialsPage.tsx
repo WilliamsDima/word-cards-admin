@@ -9,7 +9,6 @@ import AddIcon from "@assets/icons/add-square-green-64.svg?react"
 import styles from "./SocialsPage.module.scss"
 import { useAppSelector } from "@shared/hooks/useStore"
 import type { ISocial, SocialKey, SocialKeys } from "@shared/api/types"
-import { useChangeSocialsMutation } from "@pages/AplicationPage/api/AppServices"
 import SocialItem from "./ui/SocialItem/SocialItem"
 
 type SocialsDataType = Record<SocialKey, ISocial>
@@ -19,21 +18,18 @@ function SocialsPage() {
 
 	const [socialsData, setSocialsData] = useState<SocialsDataType | null>(null)
 
-	const [changeSocials, { isLoading }] = useChangeSocialsMutation()
-
 	const inputs = useMemo(() => {
 		return socialsData ? Object.values(socialsData) : []
 	}, [socialsData])
 
 	const onDelete = useCallback(
 		(id: number) => {
-			const socials = socialsData
-				? Object.values(socialsData).filter(it => it.id !== id)
-				: []
-
-			if (socials.length) changeSocials({ socials })
+			// const socials = socialsData
+			// 	? Object.values(socialsData).filter(it => it.id !== id)
+			// 	: []
+			// if (socials.length) changeSocials({ socials })
 		},
-		[socialsData, changeSocials]
+		[socialsData],
 	)
 
 	const onAdd = useCallback(() => {
@@ -48,7 +44,7 @@ function SocialsPage() {
 							name: "",
 							key: "",
 						},
-				  }
+					}
 				: null
 		})
 	}, [])
@@ -63,11 +59,11 @@ function SocialsPage() {
 								...prev[it.id === 10 ? "add" : it.key],
 								[fieldName]: e.target.value,
 							},
-					  }
+						}
 					: prev
 			})
 		},
-		[]
+		[],
 	)
 
 	const onSaveHandler = useCallback(() => {
@@ -87,8 +83,8 @@ function SocialsPage() {
 
 		const socials = newSocialsData ? Object.values(newSocialsData) : []
 
-		if (socials.length) changeSocials({ socials })
-	}, [changeSocials, socialsData])
+		// if (socials.length) changeSocials({ socials })
+	}, [socialsData])
 
 	useEffect(() => {
 		if (firebaseApp?.socials) {
@@ -113,7 +109,7 @@ function SocialsPage() {
 							index={i}
 							item={it}
 							prevIt={prevIt}
-							isLoading={isLoading}
+							isLoading={false}
 							onChangeInput={onChangeInput}
 							onDelete={onDelete}
 							onSaveHandler={onSaveHandler}

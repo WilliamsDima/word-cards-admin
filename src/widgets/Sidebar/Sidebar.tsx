@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react"
 import styles from "./Sidebar.module.scss"
-import { useLogoutMutation } from "@shared/api/AuthServices"
+import { useLogoutMutation } from "@shared/api/auth/AuthServices"
 import { clearAuthToken } from "@shared/lib/authToken"
 import { useActions } from "@shared/hooks/useActions"
 import { useAppNavigate } from "@shared/hooks/useAppNavigate"

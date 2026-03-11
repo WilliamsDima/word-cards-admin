@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import { useGoogleLoginMutation } from "@shared/api/AuthServices"
+import { useGoogleLoginMutation } from "@shared/api/auth/AuthServices"
 import { useActions } from "@shared/hooks/useActions"
-import { signInWithGoogle } from "@shared/lib/firebaseAuth"
+import { signInWithGoogle } from "@shared/config/firebaseAuth"
 
 function LoginPage() {
 	const { setIsAdmin } = useActions()

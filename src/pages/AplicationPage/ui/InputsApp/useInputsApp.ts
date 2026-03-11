@@ -1,9 +1,3 @@
-import {
-	useChangeAppNameMutation,
-	useChangeAppVersionMutation,
-	useChangeGooglePlayMutation,
-	useChangePrivacyPolicyLinkMutation,
-} from "@pages/AplicationPage/api/AppServices"
 import { useAppSelector } from "@shared/hooks/useStore"
 import { ChangeEvent, useCallback, useEffect, useState } from "react"
 
@@ -67,7 +61,7 @@ export const useInputsApp = () => {
 				}
 			})
 		},
-		[]
+		[],
 	)
 
 	const onSaveHandler = useCallback(
@@ -110,7 +104,7 @@ export const useInputsApp = () => {
 			changePrivacyPolicyLink,
 			changeGooglePlay,
 			inputData,
-		]
+		],
 	)
 
 	useEffect(() => {

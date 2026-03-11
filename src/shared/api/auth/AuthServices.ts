@@ -1,36 +1,19 @@
 import { baseRTK } from "@app/api/BaseRTK"
 import { clearAuthToken, setAuthToken } from "@shared/lib/authToken"
-
-export type AuthUser = {
-	id?: string
-	email?: string
-	name?: string
-	isAdmin?: boolean
-}
-
-export type AuthLoginRequest = {
-	login: string
-	password: string
-}
-
-export type AuthLoginResponse = {
-	token: string
-	user?: AuthUser
-}
-
-export type AuthMeResponse = {
-	user?: AuthUser
-	isAdmin?: boolean
-}
+import { authService } from "@shared/api/auth/service"
+import { toRtkQueryResult } from "@shared/api/RTK/rtk"
+import type {
+	AuthLoginRequest,
+	AuthLoginResponse,
+	AuthMeResponse,
+} from "@shared/api/auth/types"
 
 export const authAPI = baseRTK.injectEndpoints({
 	endpoints: builder => ({
 		login: builder.mutation<AuthLoginResponse, AuthLoginRequest>({
-			query: body => ({
-				url: "/auth/login",
-				method: "POST",
-				body,
-			}),
+			async queryFn(body) {
+				return toRtkQueryResult(await authService.login(body))
+			},
 			async onQueryStarted(_arg, { queryFulfilled }) {
 				try {
 					const { data } = await queryFulfilled
@@ -41,19 +24,14 @@ export const authAPI = baseRTK.injectEndpoints({
 			},
 		}),
 		me: builder.query<AuthMeResponse, void>({
-			query: () => ({
-				url: "/auth/me",
-				method: "GET",
-			}),
+			async queryFn() {
+				return toRtkQueryResult(await authService.me())
+			},
 		}),
 		googleLogin: builder.mutation<AuthMeResponse, { idToken: string }>({
-			query: ({ idToken }) => ({
-				url: "/users/sync",
-				method: "POST",
-				headers: {
-					Authorization: `Bearer ${idToken}`,
-				},
-			}),
+			async queryFn({ idToken }) {
+				return toRtkQueryResult(await authService.googleSync(idToken))
+			},
 			async onQueryStarted({ idToken }, { queryFulfilled }) {
 				try {
 					await queryFulfilled
@@ -63,11 +41,11 @@ export const authAPI = baseRTK.injectEndpoints({
 				}
 			},
 		}),
+		// TODO: mock
 		logout: builder.mutation<void, void>({
-			query: () => ({
-				url: "/auth/logout",
-				method: "POST",
-			}),
+			async queryFn() {
+				return toRtkQueryResult(await authService.logout())
+			},
 			async onQueryStarted(_arg, { queryFulfilled }) {
 				try {
 					await queryFulfilled

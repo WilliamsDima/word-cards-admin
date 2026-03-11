@@ -1,24 +1,24 @@
-import { getAuth, GoogleAuthProvider, onIdTokenChanged, signInWithPopup } from "firebase/auth"
+import {
+	getAuth,
+	GoogleAuthProvider,
+	onIdTokenChanged,
+	signInWithPopup,
+} from "firebase/auth"
 import { getFirebaseApp, getFirebaseMissingEnv } from "./firebase"
-import { setAuthToken } from "./authToken"
+import { setAuthToken } from "../lib/authToken"
+import { authService } from "@shared/api/auth/service"
 
 let tokenListenerReady = false
 let lastSyncedToken: string | null = null
 
-const getApiBaseUrl = () =>
-	import.meta.env.VITE_API_BASE_URL ?? "http://192.168.31.205:8080"
-
 const syncUserWithBackend = async (idToken: string) => {
-	const res = await fetch(`${getApiBaseUrl()}/users/sync`, {
-		method: "POST",
-		headers: {
-			Authorization: `Bearer ${idToken}`,
-		},
-	})
-	if (!res.ok) {
-		throw new Error(`users/sync failed: ${res.status}`)
+	const result = await authService.googleSync(idToken)
+	if (!result.ok) {
+		throw new Error(
+			`users/sync failed: ${result.error.status} ${result.error.message}`,
+		)
 	}
-	return res.json()
+	return result.data
 }
 
 const getAuthClient = () => {

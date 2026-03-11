@@ -1,10 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import {
-	createLanguageJson,
-	getLanguageJson,
-	JsonData,
-	updateLanguageJson,
-} from "./api/translationApi"
 import { useAppSelector } from "@shared/hooks/useStore"
 import Button from "@shared/Button/Button"
 import { githubDarkTheme, JsonEditor } from "json-edit-react"
@@ -13,7 +7,6 @@ import styles from "./TranslationPage.module.scss"
 import Dropdown from "@shared/Dropdown/Dropdown"
 import type { AppLanguageType } from "@shared/api/types"
 import cn from "classnames"
-import { useAddKeyTranslateMutation } from "./api/JsonServices"
 
 function TranslationPage() {
 	const [jsonData, setJsonData] = useState<JsonData | null>(null)
@@ -71,7 +64,7 @@ function TranslationPage() {
 
 			const res = await updateLanguageJson(
 				jsonData,
-				firebaseApp.translations[language.code]
+				firebaseApp.translations[language.code],
 			)
 
 			if ("content" in res && res?.content?.sha) {

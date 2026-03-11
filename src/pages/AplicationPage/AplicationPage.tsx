@@ -23,9 +23,9 @@ function AplicationPage() {
 
 	return (
 		<div className={styles.container}>
-			<InputsApp />
+			{/* <InputsApp /> */}
 
-			<BooleanChange />
+			{/* <BooleanChange /> */}
 
 			<Button className={styles.translate} onClick={toSocials}>
 				Соц. сети

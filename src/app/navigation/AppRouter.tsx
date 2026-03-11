@@ -8,10 +8,10 @@ import UsersPage from "@pages/UsersPage/UsersPage"
 import AdminLayout from "@pages/AdminLayout/AdminLayout"
 import AplicationPage from "@pages/AplicationPage/AplicationPage"
 import ChatsPage from "@pages/ChatsPage/ChatsPage"
-import TranslationPage from "@pages/TranslationPage/TranslationPage"
+// import TranslationPage from "@pages/TranslationPage/TranslationPage"
 import { useActions } from "@shared/hooks/useActions"
 import { useAppSelector } from "@shared/hooks/useStore"
-import { useMeQuery } from "@shared/api/AuthServices"
+import { useMeQuery } from "@shared/api/auth/AuthServices"
 import { getAuthToken } from "@shared/lib/authToken"
 import SocialsPage from "@pages/SocialsPage/SocialsPage"
 
@@ -24,9 +24,6 @@ const AppRouter = () => {
 	const { data, isLoading, isError } = useMeQuery(undefined, {
 		skip: !token,
 	})
-
-	console.log("data", data)
-	console.log("isAdmin", isAdmin)
 
 	useEffect(() => {
 		if (!token) {
@@ -66,7 +63,7 @@ const AppRouter = () => {
 						<Route index element={<MainPage />} />
 						<Route path={AppRoutes.users} element={<UsersPage />} />
 						<Route path={AppRoutes.aplication} element={<AplicationPage />} />
-						<Route path={AppRoutes.translation} element={<TranslationPage />} />
+						{/* <Route path={AppRoutes.translation} element={<TranslationPage />} /> */}
 						<Route path={AppRoutes.socials} element={<SocialsPage />} />
 						<Route path={AppRoutes.chats} element={<ChatsPage />} />
 
