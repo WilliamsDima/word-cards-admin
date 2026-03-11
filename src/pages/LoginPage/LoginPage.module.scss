@@ -1,0 +1,207 @@
+@use "../../assets/styles/colors.scss" as colors;
+@use "../../assets/styles/globalStyles.scss" as global;
+
+.container {
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 48px 24px;
+	background:
+		radial-gradient(900px 500px at 10% 10%, rgba(31, 177, 65, 0.25), transparent 70%),
+		radial-gradient(600px 600px at 90% 20%, rgba(33, 150, 243, 0.18), transparent 60%),
+		linear-gradient(160deg, #0b0f0d 0%, #121212 40%, #0d1110 100%);
+	color: colors.$color-text-primary;
+	position: relative;
+	overflow: hidden;
+	font-family: "Manrope", "Segoe UI", "Roboto", sans-serif;
+}
+
+.glow {
+	position: absolute;
+	inset: auto -10% -30% auto;
+	width: 420px;
+	height: 420px;
+	background: radial-gradient(circle, rgba(60, 211, 87, 0.35), transparent 70%);
+	filter: blur(10px);
+	z-index: 0;
+}
+
+.card {
+	position: relative;
+	z-index: 1;
+	width: min(980px, 100%);
+	display: grid;
+	grid-template-columns: 1.2fr 0.8fr;
+	gap: 0;
+	background: rgba(18, 18, 18, 0.78);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 24px;
+	backdrop-filter: blur(18px);
+	box-shadow:
+		0 25px 60px rgba(0, 0, 0, 0.45),
+		0 0 0 1px rgba(255, 255, 255, 0.04);
+	overflow: hidden;
+}
+
+.brand {
+	padding: 40px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	background:
+		linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.brandTop {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.badge {
+	font-size: 12px;
+	letter-spacing: 0.3em;
+	text-transform: uppercase;
+	padding: 6px 12px;
+	border-radius: 999px;
+	background: rgba(31, 177, 65, 0.18);
+	color: colors.$color-primary-light;
+}
+
+.version {
+	font-size: 12px;
+	color: colors.$color-text-secondary;
+}
+
+.title {
+	font-size: clamp(28px, 4vw, 40px);
+	font-weight: 700;
+	margin: 0;
+}
+
+.subtitle {
+	margin: 0;
+	color: colors.$color-text-secondary;
+	font-size: 16px;
+	line-height: 1.6;
+}
+
+.benefits {
+	list-style: none;
+	padding: 0;
+	margin: 8px 0 0;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+
+	li {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		color: colors.$color-text-primary;
+		font-size: 14px;
+	}
+
+	li::before {
+		content: "";
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: colors.$color-primary;
+		box-shadow: 0 0 0 4px rgba(31, 177, 65, 0.2);
+	}
+}
+
+.login {
+	padding: 40px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	background: rgba(18, 18, 18, 0.9);
+	border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.loginTitle {
+	margin: 0;
+	font-size: 24px;
+	font-weight: 600;
+}
+
+.loginHint {
+	margin: 0;
+	color: colors.$color-text-secondary;
+	font-size: 14px;
+	line-height: 1.5;
+}
+
+.btn {
+	margin-top: 8px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 14px 20px;
+	border-radius: 14px;
+	background: linear-gradient(135deg, rgba(31, 177, 65, 0.8), rgba(19, 130, 46, 0.9));
+	color: colors.$color-white;
+	font-weight: 600;
+	letter-spacing: 0.01em;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+	&:hover {
+		transform: translateY(-1px);
+		box-shadow: 0 14px 30px rgba(31, 177, 65, 0.25);
+	}
+
+	&:disabled {
+		opacity: 0.7;
+		cursor: not-allowed;
+		transform: none;
+		box-shadow: none;
+	}
+
+	span {
+		text-align: left;
+	}
+}
+
+.error {
+	margin: 0;
+	color: colors.$color-error;
+	font-size: 13px;
+}
+
+.footerNote {
+	margin: 8px 0 0;
+	color: colors.$color-text-secondary;
+	font-size: 12px;
+}
+
+@media screen and (max-width: 900px) {
+	.card {
+		grid-template-columns: 1fr;
+	}
+
+	.login {
+		border-left: none;
+		border-top: 1px solid rgba(255, 255, 255, 0.06);
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.container {
+		padding: 32px 16px;
+	}
+
+	.brand,
+	.login {
+		padding: 28px 24px;
+	}
+
+	.btn {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}

@@ -9,7 +9,7 @@ function MainPage() {
 				target='_blank'
 				className={styles.link}
 			>
-				<GooglePlay />
+				{/* <GooglePlay /> */}
 				приложение
 			</a>
 		</div>
