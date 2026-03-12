@@ -8,6 +8,7 @@ import Dropdown from "@shared/Dropdown/Dropdown"
 import type { AppLanguageType } from "@shared/api/types"
 import cn from "classnames"
 import PageHeader from "@shared/PageHeader/PageHeader"
+import Card from "@shared/Card/Card"
 
 function TranslationPage() {
 	const [jsonData, setJsonData] = useState<JsonData | null>(null)
@@ -102,7 +103,7 @@ function TranslationPage() {
 				subtitle='Edit localized strings and publish updates.'
 			/>
 
-			<div className={styles.card}>
+			<Card className={styles.card}>
 				<div className={styles.json}>
 					{loading && (
 						<span className={styles.loader}>
@@ -177,7 +178,7 @@ function TranslationPage() {
 						</Button>
 					</div>
 				)}
-			</div>
+			</Card>
 		</div>
 	)
 }

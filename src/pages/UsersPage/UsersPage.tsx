@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import styles from "./UsersPage.module.scss"
 import { useDebounce } from "@shared/hooks/useDebounce"
 import PageHeader from "@shared/PageHeader/PageHeader"
+import Card from "@shared/Card/Card"
 
 function UsersPage() {
 	const [search, setSearch] = useState("")
@@ -27,9 +28,9 @@ function UsersPage() {
 			<div className={styles.toolbar}>
 				<UsersListFilter value={search} onChange={onSearchChange} />
 			</div>
-			<div className={styles.panel}>
+			<Card className={styles.panel}>
 				<UsersList search={debouncedSearch.trim()} />
-			</div>
+			</Card>
 		</div>
 	)
 }

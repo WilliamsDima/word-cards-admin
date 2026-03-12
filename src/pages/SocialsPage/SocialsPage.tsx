@@ -11,6 +11,7 @@ import SocialItem from "./ui/SocialItem/SocialItem"
 import { useGetAppConfigQuery } from "@shared/api/services/appConfig/AppConfigQuery"
 import { Icon } from "@assets/icons/Icon"
 import PageHeader from "@shared/PageHeader/PageHeader"
+import Card from "@shared/Card/Card"
 
 type SocialsDataType = Record<SocialKey, ISocial>
 
@@ -104,7 +105,7 @@ function SocialsPage() {
 				subtitle='Manage external profiles and store badges.'
 			/>
 
-			<div className={styles.card}>
+			<Card className={styles.card}>
 				<div className={styles.inputs}>
 					<h1 className={styles.cardTitle}>Социальные сети</h1>
 
@@ -136,7 +137,7 @@ function SocialsPage() {
 						/>
 					</div>
 				)}
-			</div>
+			</Card>
 		</div>
 	)
 }

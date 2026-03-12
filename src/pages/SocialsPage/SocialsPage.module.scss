@@ -8,7 +8,6 @@
 }
 
 .card {
-	@extend %glassCard;
 	padding: 24px;
 	display: flex;
 	flex-direction: column;

@@ -1,15 +1,16 @@
 import React from "react"
 import styles from "./ChatsPage.module.scss"
+import Card from "@shared/Card/Card"
 
 function ChatsPage() {
 	return (
 		<div className={styles.page}>
-			<div className={styles.card}>
+			<Card className={styles.card}>
 				<h1 className={styles.title}>Support chats</h1>
 				<p className={styles.subtitle}>
 					Incoming support conversations will appear here.
 				</p>
-			</div>
+			</Card>
 		</div>
 	)
 }

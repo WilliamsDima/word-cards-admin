@@ -1,0 +1,5 @@
+@use "../../assets/styles/globalStyles.scss" as global;
+
+.card {
+	@extend %glassCard;
+}

@@ -1,5 +1,6 @@
 import React, { FC, memo } from "react"
 import styles from "../UserProfilePage.module.scss"
+import Card from "@shared/Card/Card"
 
 type ProfileGridItemRowType = {
 	label: string
@@ -17,7 +18,7 @@ type UserProfileGridItemProps = {
 
 const UserProfileGridItem: FC<UserProfileGridItemProps> = memo(({ item }) => {
 	return (
-		<div className={styles.card}>
+		<Card className={styles.card}>
 			<h3 className={styles.cardTitle}>{item.title}</h3>
 
 			{item.rows.map((it, i) => (
@@ -26,7 +27,7 @@ const UserProfileGridItem: FC<UserProfileGridItemProps> = memo(({ item }) => {
 					<span className={styles.value}>{it.value ?? "N/A"}</span>
 				</div>
 			))}
-		</div>
+		</Card>
 	)
 })
 

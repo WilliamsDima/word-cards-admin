@@ -5,6 +5,7 @@ import styles from "./AplicationPage.module.scss"
 import InputsApp from "./ui/InputsApp/InputsApp"
 import BooleanChange from "./ui/BooleanChange/BooleanChange"
 import PageHeader from "@shared/PageHeader/PageHeader"
+import Card from "@shared/Card/Card"
 
 function AplicationPage() {
 	const navigation = useAppNavigate()
@@ -24,7 +25,7 @@ function AplicationPage() {
 				subtitle='Управление настройками приложения, ссылками и интеграциями.'
 			/>
 
-			<div className={styles.card}>
+			<Card className={styles.card}>
 				<InputsApp />
 
 				<BooleanChange />
@@ -38,7 +39,7 @@ function AplicationPage() {
 						Переводы
 					</Button>
 				</div>
-			</div>
+			</Card>
 		</div>
 	)
 }
