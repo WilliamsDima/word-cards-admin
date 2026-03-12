@@ -6,7 +6,8 @@ import { useGetUserByIdQuery } from "@entities/api/users/UsersQuery"
 import UserProfileGridItem, {
 	ProfileGridItemType,
 } from "./ui/UserProfileGridItem"
-import Skeleton from "@shared/Skeleton/Skeleton"
+import UserProfilePageGridsSkeleton from "./UserProfilePageGridsSkeleton"
+import UserProfilePageSkeleton from "./UserProfilePageSkeleton"
 
 const buildGrids = (
 	user: IUser | undefined,
@@ -70,13 +71,7 @@ const UserProfilePage = () => {
 		<div className={styles.page}>
 			<div className={styles.header}>
 				{showSkeleton ? (
-					<>
-						<Skeleton className={styles.avatarSkeleton} circle />
-						<div className={styles.titleBlock}>
-							<Skeleton className={styles.titleSkeleton} />
-							<Skeleton className={styles.subtitleSkeleton} />
-						</div>
-					</>
+					<UserProfilePageSkeleton />
 				) : (
 					<>
 						<div className={styles.avatar}>
@@ -102,16 +97,11 @@ const UserProfilePage = () => {
 			</div>
 
 			<div className={styles.grid}>
-				{showSkeleton
-					? Array.from({ length: 3 }).map((_, i) => (
-							<div className={styles.card} key={i}>
-								<Skeleton className={styles.cardTitleSkeleton} />
-								<Skeleton className={styles.rowSkeleton} />
-								<Skeleton className={styles.rowSkeletonShort} />
-								<Skeleton className={styles.rowSkeleton} />
-							</div>
-						))
-					: grids.map(it => <UserProfileGridItem key={it.title} item={it} />)}
+				{showSkeleton ? (
+					<UserProfilePageGridsSkeleton />
+				) : (
+					grids.map(it => <UserProfileGridItem key={it.title} item={it} />)
+				)}
 			</div>
 		</div>
 	)
