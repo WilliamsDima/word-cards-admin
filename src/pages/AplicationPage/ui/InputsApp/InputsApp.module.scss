@@ -10,6 +10,31 @@
 	@extend %glassPanel;
 }
 
+.group {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.subGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.label {
+	margin: 0;
+	color: colors.$color-text-secondary;
+	font-size: 13px;
+}
+
+.subtitle {
+	margin: 0;
+	color: colors.$color-white;
+	font-size: 18px;
+	font-weight: 700;
+}
+
 .inputWrapper {
 	display: flex;
 	flex-direction: row;
@@ -19,11 +44,6 @@
 	svg {
 		cursor: pointer;
 	}
-}
-
-.blockName {
-	margin-bottom: 6px;
-	color: colors.$color-text-secondary;
 }
 
 .loader {

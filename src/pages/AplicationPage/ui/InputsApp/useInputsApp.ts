@@ -1,4 +1,7 @@
-import { useAppSelector } from "@shared/hooks/useStore"
+import {
+	useGetAppConfigQuery,
+	useUpdateAppConfigMutation,
+} from "@shared/api/services/appConfig/AppConfigQuery"
 import { ChangeEvent, useCallback, useEffect, useState } from "react"
 
 export const INPUTS = {
@@ -12,7 +15,10 @@ export const INPUTS = {
 type INPUTSKeys = keyof typeof INPUTS
 
 export const useInputsApp = () => {
-	const { firebaseApp } = useAppSelector(store => store.app)
+	const { data } = useGetAppConfigQuery()
+	const [updateConfig, { isLoading: isSaving }] =
+		useUpdateAppConfigMutation()
+	const [savingKey, setSavingKey] = useState<INPUTSKeys | null>(null)
 
 	const [inputData, setInputData] = useState({
 		[INPUTS.appName]: {
@@ -37,18 +43,6 @@ export const useInputsApp = () => {
 		},
 	})
 
-	const [changeAppName, { isLoading: isLoadingAppName }] =
-		useChangeAppNameMutation()
-
-	const [changePrivacyPolicyLink, { isLoading: isLoadingPrivacyPolicy }] =
-		useChangePrivacyPolicyLinkMutation()
-
-	const [changeAppVersion, { isLoading: isLoadingAppVersion }] =
-		useChangeAppVersionMutation()
-
-	const [changeGooglePlay, { isLoading: isLoadingChangeGooglePlay }] =
-		useChangeGooglePlayMutation()
-
 	const onChangeHandler = useCallback(
 		(key: INPUTSKeys, e: ChangeEvent<HTMLInputElement>) => {
 			setInputData(prev => {
@@ -65,46 +59,38 @@ export const useInputsApp = () => {
 	)
 
 	const onSaveHandler = useCallback(
-		(key: INPUTSKeys) => {
-			setInputData(prev => {
-				return {
-					...prev,
-					[key]: {
-						...prev[key],
-						change: false,
-					},
-				}
-			})
+		async (key: INPUTSKeys) => {
+			if (!data) return
+			setSavingKey(key)
 
-			if (key === INPUTS.appName) {
-				changeAppName({ appName: inputData[INPUTS.appName].value })
-			} else if (key === INPUTS.privacyPolicy) {
-				changePrivacyPolicyLink({
-					privacy_policy_link: inputData[INPUTS.privacyPolicy].value,
-				})
-			} else if (key === INPUTS.appVersion) {
-				changeAppVersion({ version: inputData[INPUTS.appVersion].value })
-			} else if (key === INPUTS.googlePlayIcon) {
-				changeGooglePlay({
+			const nextConfig = {
+				...data,
+				appName: inputData[INPUTS.appName].value,
+				version: inputData[INPUTS.appVersion].value,
+				privacy_policy_link: inputData[INPUTS.privacyPolicy].value,
+				developer: {
+					...data.developer,
 					icon: inputData[INPUTS.googlePlayIcon].value,
 					link: inputData[INPUTS.googlePlayLink].value,
+				},
+			}
+
+			try {
+				await updateConfig(nextConfig).unwrap()
+				setInputData(prev => {
+					return {
+						...prev,
+						[key]: {
+							...prev[key],
+							change: false,
+						},
+					}
 				})
-			} else if (key === INPUTS.googlePlayLink) {
-				changeGooglePlay({
-					icon: inputData[INPUTS.googlePlayIcon].value,
-					link: inputData[INPUTS.googlePlayLink].value,
-				})
-			} else {
-				return
+			} finally {
+				setSavingKey(null)
 			}
 		},
-		[
-			changeAppName,
-			changeAppVersion,
-			changePrivacyPolicyLink,
-			changeGooglePlay,
-			inputData,
-		],
+		[data, inputData, updateConfig],
 	)
 
 	useEffect(() => {
@@ -113,44 +99,42 @@ export const useInputsApp = () => {
 				[INPUTS.appName]: {
 					value: prev[INPUTS.appName].change
 						? prev[INPUTS.appName].value
-						: firebaseApp?.appName || "",
+						: data?.appName || "",
 					change: prev[INPUTS.appName].change,
 				},
 				[INPUTS.privacyPolicy]: {
 					value: prev[INPUTS.privacyPolicy].change
 						? prev[INPUTS.privacyPolicy].value
-						: firebaseApp?.privacy_policy_link || "",
+						: data?.privacy_policy_link || "",
 					change: prev[INPUTS.privacyPolicy].change,
 				},
 				[INPUTS.appVersion]: {
 					value: prev[INPUTS.appVersion].change
 						? prev[INPUTS.appVersion].value
-						: firebaseApp?.version || "",
+						: data?.version || "",
 					change: prev[INPUTS.appVersion].change,
 				},
 				[INPUTS.googlePlayIcon]: {
 					value: prev[INPUTS.googlePlayIcon].change
 						? prev[INPUTS.googlePlayIcon].value
-						: firebaseApp?.developer.icon || "",
+						: data?.developer.icon || "",
 					change: prev[INPUTS.googlePlayIcon].change,
 				},
 				[INPUTS.googlePlayLink]: {
 					value: prev[INPUTS.googlePlayLink].change
 						? prev[INPUTS.googlePlayLink].value
-						: firebaseApp?.developer.link || "",
+						: data?.developer.link || "",
 					change: prev[INPUTS.googlePlayLink].change,
 				},
 			}
 		})
-	}, [firebaseApp])
+	}, [data])
 
 	return {
-		isLoadingAppName,
-		isLoadingPrivacyPolicy,
-		isLoadingAppVersion,
-		isLoadingChangeGooglePlay,
 		inputData,
 		onChangeHandler,
 		onSaveHandler,
+		isSaving,
+		savingKey,
 	}
 }

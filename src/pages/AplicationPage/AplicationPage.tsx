@@ -2,16 +2,11 @@ import { AppRoutes } from "@app/navigation/routes"
 import Button from "@shared/Button/Button"
 import { useAppNavigate } from "@shared/hooks/useAppNavigate"
 import styles from "./AplicationPage.module.scss"
-import { useAppSelector } from "@shared/hooks/useStore"
 import InputsApp from "./ui/InputsApp/InputsApp"
 import BooleanChange from "./ui/BooleanChange/BooleanChange"
 
 function AplicationPage() {
 	const navigation = useAppNavigate()
-
-	const { firebaseApp } = useAppSelector(store => store.app)
-
-	console.log("firebaseApp", firebaseApp)
 
 	const toTranslation = () => {
 		navigation(AppRoutes.translation)
@@ -24,14 +19,14 @@ function AplicationPage() {
 	return (
 		<div className={styles.page}>
 			<div className={styles.header}>
-				<h1 className={styles.title}>Application</h1>
+				<h1 className={styles.title}>Приложение</h1>
 				<p className={styles.subtitle}>
-					Manage app settings, links, and integrations.
+					Приложение Управление настройками приложения, ссылками и интеграциями.
 				</p>
 			</div>
 
 			<div className={styles.card}>
-				{/* <InputsApp /> */}
+				<InputsApp />
 
 				{/* <BooleanChange /> */}
 

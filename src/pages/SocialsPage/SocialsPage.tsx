@@ -6,14 +6,15 @@ import React, {
 	useState,
 } from "react"
 import styles from "./SocialsPage.module.scss"
-import { useAppSelector } from "@shared/hooks/useStore"
 import type { ISocial, SocialKey, SocialKeys } from "@shared/api/types"
 import SocialItem from "./ui/SocialItem/SocialItem"
+import { useGetAppConfigQuery } from "@shared/api/services/appConfig/AppConfigQuery"
+import { Icon } from "@assets/icons/Icon"
 
 type SocialsDataType = Record<SocialKey, ISocial>
 
 function SocialsPage() {
-	const { firebaseApp } = useAppSelector(store => store.app)
+	const { data } = useGetAppConfigQuery()
 
 	const [socialsData, setSocialsData] = useState<SocialsDataType | null>(null)
 
@@ -86,14 +87,14 @@ function SocialsPage() {
 	}, [socialsData])
 
 	useEffect(() => {
-		if (firebaseApp?.socials) {
+		if (data?.socials) {
 			const map: Partial<SocialsDataType> = {}
-			firebaseApp?.socials.forEach(it => {
+			data?.socials.forEach(it => {
 				map[it.key] = it
 			})
 			setSocialsData(map as SocialsDataType)
 		}
-	}, [firebaseApp])
+	}, [data])
 
 	return (
 		<div className={styles.page}>
@@ -109,7 +110,7 @@ function SocialsPage() {
 					<h1 className={styles.cardTitle}>Социальные сети</h1>
 
 					{inputs.map((it, i) => {
-						const prevIt = firebaseApp?.socials.find(item => item.id === it.id)
+						const prevIt = data?.socials.find(item => item.id === it.id)
 						return (
 							<SocialItem
 								key={it.id}
@@ -127,7 +128,13 @@ function SocialsPage() {
 
 				{!socialsData?.["add"] && (
 					<div className={styles.addBtn}>
-						<AddIcon onClick={onAdd} />
+						<Icon
+							kind='svg'
+							name='add-square-green-64'
+							width={20}
+							height={20}
+							onClick={onAdd}
+						/>
 					</div>
 				)}
 			</div>

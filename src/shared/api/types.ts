@@ -108,6 +108,5 @@ export interface IAplication {
 	showVariantsList: ShowVariantsOption[]
 	privacy_policy_link: string
 	showVKAuth: boolean
-	translations?: TranslationsType
-	appLanguages?: AppLanguagesType
+	updated_at: string
 }
