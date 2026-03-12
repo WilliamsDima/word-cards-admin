@@ -18,7 +18,7 @@ type UserProfileGridItemProps = {
 const UserProfileGridItem: FC<UserProfileGridItemProps> = memo(({ item }) => {
 	return (
 		<div className={styles.card}>
-			<h3 className={styles.cardTitle}>Account</h3>
+			<h3 className={styles.cardTitle}>{item.title}</h3>
 
 			{item.rows.map((it, i) => (
 				<div className={styles.row} key={i}>

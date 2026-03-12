@@ -6,6 +6,7 @@ import { useGetUserByIdQuery } from "@entities/api/users/UsersQuery"
 import UserProfileGridItem, {
 	ProfileGridItemType,
 } from "./ui/UserProfileGridItem"
+import Skeleton from "@shared/Skeleton/Skeleton"
 
 const buildGrids = (
 	user: IUser | undefined,
@@ -49,6 +50,7 @@ const UserProfilePage = () => {
 		() => data ?? userFromState,
 		[data, userFromState],
 	)
+	const showSkeleton = useMemo(() => isLoading && !user, [isLoading, user])
 
 	const createdAt = useMemo(
 		() =>
@@ -67,26 +69,49 @@ const UserProfilePage = () => {
 	return (
 		<div className={styles.page}>
 			<div className={styles.header}>
-				<div className={styles.avatar}>
-					{user?.image ? (
-						<img src={user.image} alt={user.name || "N/A"} />
-					) : (
-						<span>{user?.name?.charAt(0).toUpperCase() ?? "N/A"}</span>
-					)}
-				</div>
-				<div className={styles.titleBlock}>
-					<h1 className={styles.title}>{user?.name ?? "N/A"}</h1>
-					<p className={styles.subtitle}>
-						{isLoading ? "Loading profile data..." : "User profile overview"}
-					</p>
-					<span className={styles.idBadge}>ID {user?.id ?? id ?? "N/A"}</span>
-				</div>
+				{showSkeleton ? (
+					<>
+						<Skeleton className={styles.avatarSkeleton} circle />
+						<div className={styles.titleBlock}>
+							<Skeleton className={styles.titleSkeleton} />
+							<Skeleton className={styles.subtitleSkeleton} />
+						</div>
+					</>
+				) : (
+					<>
+						<div className={styles.avatar}>
+							{user?.image ? (
+								<img src={user.image} alt={user.name || "N/A"} />
+							) : (
+								<span>{user?.name?.charAt(0).toUpperCase() ?? "N/A"}</span>
+							)}
+						</div>
+						<div className={styles.titleBlock}>
+							<h1 className={styles.title}>{user?.name ?? "N/A"}</h1>
+							<p className={styles.subtitle}>
+								{isLoading
+									? "Loading profile data..."
+									: "User profile overview"}
+							</p>
+							<span className={styles.idBadge}>
+								ID {user?.id ?? id ?? "N/A"}
+							</span>
+						</div>
+					</>
+				)}
 			</div>
 
 			<div className={styles.grid}>
-				{grids.map(it => (
-					<UserProfileGridItem key={it.title} item={it} />
-				))}
+				{showSkeleton
+					? Array.from({ length: 3 }).map((_, i) => (
+							<div className={styles.card} key={i}>
+								<Skeleton className={styles.cardTitleSkeleton} />
+								<Skeleton className={styles.rowSkeleton} />
+								<Skeleton className={styles.rowSkeletonShort} />
+								<Skeleton className={styles.rowSkeleton} />
+							</div>
+						))
+					: grids.map(it => <UserProfileGridItem key={it.title} item={it} />)}
 			</div>
 		</div>
 	)

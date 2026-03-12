@@ -69,6 +69,21 @@
 	color: colors.$color-text-secondary;
 }
 
+.avatarSkeleton {
+	width: 84px;
+	height: 84px;
+}
+
+.titleSkeleton {
+	width: 180px;
+	height: 22px;
+}
+
+.subtitleSkeleton {
+	width: 220px;
+	height: 14px;
+}
+
 .grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -89,6 +104,22 @@
 	color: colors.$color-text-secondary;
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
+}
+
+.cardTitleSkeleton {
+	width: 90px;
+	height: 12px;
+	margin-bottom: 6px;
+}
+
+.rowSkeleton {
+	width: 100%;
+	height: 12px;
+}
+
+.rowSkeletonShort {
+	width: 70%;
+	height: 12px;
 }
 
 .row {

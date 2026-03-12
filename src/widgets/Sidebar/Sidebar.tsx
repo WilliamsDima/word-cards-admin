@@ -12,6 +12,7 @@ import { useLocation } from "react-router-dom"
 import cn from "classnames"
 import Button from "@shared/Button/Button"
 import { Icon } from "@assets/icons/Icon"
+import Skeleton from "@shared/Skeleton/Skeleton"
 
 const routesNav = [
 	{
@@ -38,7 +39,7 @@ const Sidebar: React.FC = () => {
 	const { setIsAdmin } = useActions()
 	const [logoutRequest] = useLogoutMutation()
 	const token = getAuthToken()
-	const { data } = useMeQuery(undefined, { skip: !token })
+	const { data, isLoading } = useMeQuery(undefined, { skip: !token })
 
 	const displayName = useMemo(
 		() => data?.name || data?.email || "Current user",
@@ -104,7 +105,9 @@ const Sidebar: React.FC = () => {
 			</nav>
 			<button className={styles.currentUser} onClick={toProfile} type='button'>
 				<span className={styles.currentAvatar}>
-					{data?.picture ? (
+					{isLoading ? (
+						<Skeleton className={styles.currentAvatarSkeleton} circle />
+					) : data?.picture ? (
 						<img src={data.picture} alt={displayName} />
 					) : (
 						<span>{displayName.charAt(0).toUpperCase()}</span>
@@ -112,8 +115,17 @@ const Sidebar: React.FC = () => {
 				</span>
 				{!hidden && (
 					<span className={styles.currentMeta}>
-						<span className={styles.currentName}>{displayName}</span>
-						<span className={styles.currentSub}>View profile</span>
+						{isLoading ? (
+							<>
+								<Skeleton className={styles.currentNameSkeleton} />
+								<Skeleton className={styles.currentSubSkeleton} />
+							</>
+						) : (
+							<>
+								<span className={styles.currentName}>{displayName}</span>
+								<span className={styles.currentSub}>View profile</span>
+							</>
+						)}
 					</span>
 				)}
 			</button>
