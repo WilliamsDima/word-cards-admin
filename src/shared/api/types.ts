@@ -10,6 +10,12 @@ export type SelectOption = {
 	iconUrl?: string
 }
 
+export type ShowVariantsOption = {
+	value: SelectOptionValue
+	keyTranslate?: string
+	label: string
+}
+
 export type SocialKey =
 	| "site"
 	| "vk"
@@ -95,13 +101,13 @@ export interface IAplication {
 	developer: {
 		icon: string
 		link: string
-		text: string
+		text?: string
 	}
 	socials: ISocial[]
 	version: string
-	showVariantsList: SelectOption[]
+	showVariantsList: ShowVariantsOption[]
 	privacy_policy_link: string
 	showVKAuth: boolean
-	translations: TranslationsType
-	appLanguages: AppLanguagesType
+	translations?: TranslationsType
+	appLanguages?: AppLanguagesType
 }

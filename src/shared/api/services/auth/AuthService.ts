@@ -3,7 +3,7 @@ import type { AuthUser } from "./types"
 
 class AuthService {
 	me() {
-		return request<AuthUser>("/auth/me", { method: "GET" })
+		return request<AuthUser>("/admin/me", { method: "GET" })
 	}
 
 	googleSync(idToken: string) {

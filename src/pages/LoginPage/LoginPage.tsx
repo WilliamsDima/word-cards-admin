@@ -1,27 +1,53 @@
 import React, { useState } from "react"
-import { useGoogleLoginMutation } from "@shared/api/services/auth/AuthQuery"
+import {
+	useGoogleLoginMutation,
+	useLazyMeQuery,
+} from "@shared/api/services/auth/AuthQuery"
 import { useActions } from "@shared/hooks/useActions"
 import { signInWithGoogle } from "@shared/config/firebaseAuth"
 import Button from "@shared/Button/Button"
 import { Icon } from "@assets/icons/Icon"
 import styles from "./LoginPage.module.scss"
+import { clearAuthToken } from "@shared/lib/authToken"
 
 function LoginPage() {
 	const { setIsAdmin } = useActions()
 	const [googleLogin] = useGoogleLoginMutation()
+	const [fetchMe] = useLazyMeQuery()
 	const [googleLoading, setGoogleLoading] = useState(false)
 	const [googleError, setGoogleError] = useState<string | null>(null)
+
+	const getErrorMessage = (err: unknown) => {
+		if (err && typeof err === "object" && "status" in err) {
+			const status = (err as { status?: number }).status
+			const data = (err as { data?: { error?: string } }).data
+
+			if (status === 403 || data?.error === "admin only") {
+				return "Доступ запрещен. Вход разрешен только администраторам."
+			}
+
+			if (status === 401) {
+				return "Не удалось авторизоваться. Попробуйте ещё раз."
+			}
+
+			if (data?.error) return data.error
+		}
+
+		return err instanceof Error ? err.message : "Login error"
+	}
 
 	const onGoogleLogin = async () => {
 		setGoogleLoading(true)
 		setGoogleError(null)
 		try {
 			const { idToken } = await signInWithGoogle()
-			const me = await googleLogin({ idToken }).unwrap()
-
-			setIsAdmin(Boolean(me.isAdmin ?? me.user?.isAdmin ?? true))
+			await googleLogin({ idToken }).unwrap()
+			await fetchMe().unwrap()
+			setIsAdmin(true)
 		} catch (err) {
-			setGoogleError(err instanceof Error ? err.message : "Google login error")
+			clearAuthToken()
+			setIsAdmin(false)
+			setGoogleError(getErrorMessage(err))
 		} finally {
 			setGoogleLoading(false)
 		}
