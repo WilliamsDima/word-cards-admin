@@ -63,3 +63,38 @@
 	width: 45%;
 	height: 12px;
 }
+
+.empty {
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	text-align: center;
+	color: colors.$color-text-secondary;
+	padding: 24px;
+}
+
+.emptyIcon {
+	width: 48px;
+	height: 48px;
+	border-radius: 14px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	color: colors.$color-primary-light;
+}
+
+.emptyTitle {
+	margin: 0;
+	font-size: 16px;
+	color: colors.$color-text-primary;
+}
+
+.emptyText {
+	margin: 0;
+	font-size: 13px;
+	max-width: 320px;
+}

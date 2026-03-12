@@ -3,10 +3,11 @@ import styles from "./UsersList.module.scss"
 import { UserItem } from "../UserItem/UserItem"
 import { useGetUsersQuery } from "@entities/api/users/UsersQuery"
 import Skeleton from "@shared/Skeleton/Skeleton"
+import { UsersListSkeleton } from "./UsersListSkeleton"
+import { Icon } from "@assets/icons/Icon"
 
 export const UsersList = () => {
 	const { data, isLoading } = useGetUsersQuery()
-	const skeletonItems = Array.from({ length: 6 })
 
 	return (
 		<div className={styles.content}>
@@ -19,26 +20,23 @@ export const UsersList = () => {
 			</p>
 			<div className={styles.listWrapper}>
 				{isLoading ? (
-					<ul className={styles.list}>
-						{skeletonItems.map((_, i) => (
-							<li className={styles.skeletonItem} key={i}>
-								<Skeleton className={styles.skeletonAvatar} circle />
-								<div className={styles.skeletonInfo}>
-									<Skeleton className={styles.skeletonLine} />
-									<Skeleton className={styles.skeletonLineShort} />
-									<Skeleton className={styles.skeletonLine} />
-								</div>
-							</li>
-						))}
-					</ul>
-				) : data ? (
+					<UsersListSkeleton />
+				) : data && data.length > 0 ? (
 					<ul className={styles.list}>
 						{data?.map(user => (
 							<UserItem key={user.id} user={user} />
 						))}
 					</ul>
 				) : (
-					<></>
+					<div className={styles.empty}>
+						<span className={styles.emptyIcon}>
+							<Icon kind='svg' name='user' width={28} height={28} />
+						</span>
+						<p className={styles.emptyTitle}>Пользователи не найдены</p>
+						<p className={styles.emptyText}>
+							Проверьте фильтры или попробуйте обновить список.
+						</p>
+					</div>
 				)}
 			</div>
 		</div>
