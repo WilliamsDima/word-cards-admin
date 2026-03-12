@@ -3,6 +3,7 @@ import UsersListFilter from "@widgets/UsersListFilter/UsersListFilter"
 import React, { useState } from "react"
 import styles from "./UsersPage.module.scss"
 import { useDebounce } from "@shared/hooks/useDebounce"
+import PageHeader from "@shared/PageHeader/PageHeader"
 
 function UsersPage() {
 	const [search, setSearch] = useState("")
@@ -19,10 +20,10 @@ function UsersPage() {
 
 	return (
 		<div className={styles.page}>
-			<div className={styles.header}>
-				<h1 className={styles.title}>Users</h1>
-				<p className={styles.subtitle}>Manage profiles, activity, and access.</p>
-			</div>
+			<PageHeader
+				title='Users'
+				subtitle='Manage profiles, activity, and access.'
+			/>
 			<div className={styles.toolbar}>
 				<UsersListFilter value={search} onChange={onSearchChange} />
 			</div>

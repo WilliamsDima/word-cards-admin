@@ -10,6 +10,7 @@ import type { ISocial, SocialKey, SocialKeys } from "@shared/api/types"
 import SocialItem from "./ui/SocialItem/SocialItem"
 import { useGetAppConfigQuery } from "@shared/api/services/appConfig/AppConfigQuery"
 import { Icon } from "@assets/icons/Icon"
+import PageHeader from "@shared/PageHeader/PageHeader"
 
 type SocialsDataType = Record<SocialKey, ISocial>
 
@@ -98,12 +99,10 @@ function SocialsPage() {
 
 	return (
 		<div className={styles.page}>
-			<div className={styles.header}>
-				<h1 className={styles.title}>Social links</h1>
-				<p className={styles.subtitle}>
-					Manage external profiles and store badges.
-				</p>
-			</div>
+			<PageHeader
+				title='Social links'
+				subtitle='Manage external profiles and store badges.'
+			/>
 
 			<div className={styles.card}>
 				<div className={styles.inputs}>

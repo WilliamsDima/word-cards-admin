@@ -1,7 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import styles from "./BooleanChange.module.scss"
-import { useAppSelector } from "@shared/hooks/useStore"
-import Select, { type SingleValue } from "react-select"
+import Select, { type SingleValue, StylesConfig } from "react-select"
+import {
+	useGetAppConfigQuery,
+	useUpdateAppConfigMutation,
+} from "@shared/api/services/appConfig/AppConfigQuery"
+import { Icon } from "@assets/icons/Icon"
 
 type OptionVk = {
 	value: boolean
@@ -13,60 +17,117 @@ const optionsVk: OptionVk[] = [
 	{ value: false, label: "false" },
 ]
 
-function BooleanChange() {
-	const { firebaseApp } = useAppSelector(store => store.app)
+const BooleanChange = () => {
+	const { data } = useGetAppConfigQuery()
+	const [updateConfig, { isLoading }] = useUpdateAppConfigMutation()
 
 	const [showVKAuth, setShowVKAuth] = useState<
 		SingleValue<OptionVk> | undefined
 	>()
 
-	const [changeShowVkAuth, { isLoading }] = useChangeShowVkAuthMutation()
+	const isChanged = useMemo(
+		() =>
+			data?.showVKAuth !== undefined &&
+			showVKAuth?.value !== undefined &&
+			data?.showVKAuth !== showVKAuth?.value,
+		[data, showVKAuth],
+	)
 
-	const onChangeVk = (newValue: any) => {
+	const selectStyles: StylesConfig<OptionVk, false> = useMemo(
+		() => ({
+			control: (base, state) => ({
+				...base,
+				backgroundColor: "rgba(255, 255, 255, 0.06)",
+				borderColor: state.isFocused ? "#1fb141" : "rgba(255, 255, 255, 0.08)",
+				boxShadow: state.isFocused
+					? "0 0 0 3px rgba(31, 177, 65, 0.15)"
+					: "none",
+				borderRadius: 12,
+				minHeight: 42,
+				color: "#e0e0e0",
+			}),
+			menu: base => ({
+				...base,
+				backgroundColor: "rgba(18, 18, 18, 0.95)",
+				border: "1px solid rgba(255, 255, 255, 0.08)",
+				boxShadow: "0 18px 40px rgba(0, 0, 0, 0.45)",
+				borderRadius: 12,
+				overflow: "hidden",
+			}),
+			option: (base, { isSelected, isFocused }) => ({
+				...base,
+				backgroundColor: isSelected
+					? "rgba(31, 177, 65, 0.2)"
+					: isFocused
+						? "rgba(31, 177, 65, 0.12)"
+						: "transparent",
+				color: "#e0e0e0",
+				cursor: "pointer",
+			}),
+			singleValue: base => ({
+				...base,
+				color: "#e0e0e0",
+			}),
+			placeholder: base => ({
+				...base,
+				color: "#a0a0a0",
+			}),
+			dropdownIndicator: base => ({
+				...base,
+				color: "#a0a0a0",
+			}),
+			indicatorSeparator: base => ({
+				...base,
+				backgroundColor: "rgba(255, 255, 255, 0.08)",
+			}),
+		}),
+		[],
+	)
+
+	const onChangeVk = (newValue: SingleValue<OptionVk>) => {
 		setShowVKAuth(newValue)
 	}
 
-	const save = useCallback(() => {
-		if (showVKAuth) changeShowVkAuth({ showVKAuth: showVKAuth?.value })
-	}, [showVKAuth, changeShowVkAuth])
+	const save = useCallback(async () => {
+		if (!data || showVKAuth?.value === undefined) return
+
+		const nextConfig = {
+			...data,
+			showVKAuth: showVKAuth.value,
+		}
+
+		await updateConfig(nextConfig).unwrap()
+	}, [data, showVKAuth, updateConfig])
 
 	useEffect(() => {
-		if (firebaseApp?.showVKAuth !== undefined)
-			setShowVKAuth(optionsVk.find(it => it.value === firebaseApp?.showVKAuth))
-	}, [firebaseApp])
+		if (data?.showVKAuth !== undefined)
+			setShowVKAuth(optionsVk.find(it => it.value === data?.showVKAuth))
+	}, [data])
 
 	return (
-		<div>
-			<div>
-				<p className={styles.nameApp}>Авторизация через VK</p>
+		<div className={styles.block}>
+			<p className={styles.label}>Авторизация через VK</p>
 
-				<div className={styles.inputWrapper}>
-					<Select
-						isLoading={isLoading}
-						options={optionsVk}
-						value={showVKAuth}
-						styles={{
-							option: (s, { isSelected }) => ({
-								...s,
-								color: isSelected ? "#1fb141" : "#000",
-								backgroundColor: "#fff",
-								padding: 10,
-							}),
-							control: s => ({
-								...s,
-								backgroundColor: "#fff",
-							}),
-							singleValue: s => ({
-								...s,
-								color: "#1fb141",
-							}),
-						}}
-						onChange={onChangeVk}
+			<div className={styles.inputWrapper}>
+				<Select
+					isLoading={isLoading}
+					options={optionsVk}
+					value={showVKAuth}
+					styles={selectStyles}
+					onChange={onChangeVk}
+					isSearchable={false}
+					placeholder='Select'
+				/>
+				{isChanged && !isLoading && (
+					<Icon
+						kind='svg'
+						name='done-green-48'
+						onClick={save}
+						width={28}
+						height={28}
 					/>
-					{/* {firebaseApp?.showVKAuth !== undefined &&
-						firebaseApp?.showVKAuth !== showVKAuth?.value &&
-						!isLoading && <DoneIcon onClick={save} width={28} height={28} />} */}
-				</div>
+				)}
+				{isLoading && <span className={styles.saving}>...</span>}
 			</div>
 		</div>
 	)

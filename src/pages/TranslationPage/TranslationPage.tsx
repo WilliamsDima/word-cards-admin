@@ -7,6 +7,7 @@ import styles from "./TranslationPage.module.scss"
 import Dropdown from "@shared/Dropdown/Dropdown"
 import type { AppLanguageType } from "@shared/api/types"
 import cn from "classnames"
+import PageHeader from "@shared/PageHeader/PageHeader"
 
 function TranslationPage() {
 	const [jsonData, setJsonData] = useState<JsonData | null>(null)
@@ -96,12 +97,10 @@ function TranslationPage() {
 
 	return (
 		<div className={styles.page}>
-			<div className={styles.header}>
-				<h1 className={styles.title}>Translations</h1>
-				<p className={styles.subtitle}>
-					Edit localized strings and publish updates.
-				</p>
-			</div>
+			<PageHeader
+				title='Translations'
+				subtitle='Edit localized strings and publish updates.'
+			/>
 
 			<div className={styles.card}>
 				<div className={styles.json}>
