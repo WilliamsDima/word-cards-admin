@@ -9,9 +9,12 @@
 
 	.main {
 		flex-grow: 1;
-		padding: 28px;
+		padding: 20px;
 		@extend %glassPanel;
 		height: calc(100vh - 48px);
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
 		overflow: hidden;
 		@extend %scroll;
 	}

@@ -5,11 +5,14 @@
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
+	flex: 1;
+	min-height: 0;
 }
 
 .listWrapper {
 	flex: 1;
-	min-height: 300px;
+	min-height: 0;
+	display: flex;
 }
 
 .count {
@@ -20,12 +23,9 @@
 }
 
 .list {
-	margin: 0;
-	padding: 0;
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
-	max-height: none;
 	flex: 1;
 	overflow-y: auto;
 	@extend %scroll;
