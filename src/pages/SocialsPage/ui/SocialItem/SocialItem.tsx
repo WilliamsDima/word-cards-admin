@@ -1,4 +1,4 @@
-import React, { FC, memo } from "react"
+import React, { FC, memo, useMemo, useState } from "react"
 import Loading from "@shared/Loading/Loading"
 import styles from "./SocialItem.module.scss"
 import type { ISocial, SocialKeys } from "@shared/api/types"
@@ -7,8 +7,8 @@ import { Icon } from "@assets/icons/Icon"
 
 type Props = {
 	item: ISocial
-	onDelete: (id: number) => void
-	onSaveHandler: () => void
+	onDelete: (id: number | string) => void
+	onSaveHandler: (id: number | string) => void
 	onChangeInput: (
 		e: React.ChangeEvent<HTMLInputElement>,
 		it: ISocial,
@@ -20,33 +20,48 @@ type Props = {
 }
 
 const SocialItem: FC<Props> = memo(
-	({
-		item,
-		index,
-		isLoading,
-		prevIt,
-		onDelete,
-		onSaveHandler,
-		onChangeInput,
-	}) => {
-		const onDeleteHandler = () => onDelete(item.id)
+	({ item, index, isLoading, prevIt, onDelete, onSaveHandler, onChangeInput }) => {
+		const [expanded, setExpanded] = useState(false)
+		const onSave = () => onSaveHandler(item.id)
+
+		const isDirty = useMemo(() => {
+			if (!prevIt) return true
+			return (
+				prevIt.key !== item.key ||
+				prevIt.name !== item.name ||
+				prevIt.icon !== item.icon ||
+				prevIt.link !== item.link
+			)
+		}, [item, prevIt])
+
+		const title = useMemo(
+			() => item.name || prevIt?.name || "New social",
+			[prevIt, item],
+		)
+
 		return (
 			<div className={styles.group}>
-				<div className={styles.groupNameBlock}>
+				<button
+					type='button'
+					className={styles.groupNameBlock}
+					onClick={() => setExpanded(prev => !prev)}
+				>
 					<Icon
 						kind='svg'
 						name='delete-red-64'
-						onClick={onDeleteHandler}
+						onClick={event => {
+							event.stopPropagation()
+							onDelete(item.id)
+						}}
 						width={25}
 						height={25}
 					/>
 					<p className={styles.index}>{index + 1}.</p>
-					<p className={styles.blockName}>
-						{item.id === 10 ? item.name : prevIt?.name}
-					</p>
-				</div>
+					<p className={styles.blockName}>{title}</p>
+					<span className={styles.chevron} data-open={expanded} />
+				</button>
 
-				<>
+				<div className={styles.content} data-open={expanded}>
 					<p className={styles.blockName}>Key</p>
 
 					<div className={styles.inputWrapper}>
@@ -54,88 +69,75 @@ const SocialItem: FC<Props> = memo(
 							value={item.key}
 							onChange={e => onChangeInput(e, item, "key")}
 						/>
-						{prevIt && prevIt?.key !== item.key && (
+						{isDirty && !isLoading && (
 							<Icon
 								kind='svg'
 								name='done-green-48'
-								onClick={onSaveHandler}
+								onClick={onSave}
 								width={28}
 								height={28}
 							/>
 						)}
 						{isLoading && <Loading className={styles.loader} />}
 					</div>
-				</>
 
-				<p className={styles.blockName}>Name</p>
+					<p className={styles.blockName}>Name</p>
 
-				<div className={styles.inputWrapper}>
-					<Input
-						value={item.name}
-						onChange={e => onChangeInput(e, item, "name")}
-					/>
-					{prevIt && prevIt?.name !== item.name && (
-						<Icon
-							kind='svg'
-							name='done-green-48'
-							onClick={onSaveHandler}
-							width={28}
-							height={28}
+					<div className={styles.inputWrapper}>
+						<Input
+							value={item.name}
+							onChange={e => onChangeInput(e, item, "name")}
 						/>
-					)}
-					{isLoading && <Loading className={styles.loader} />}
+						{isDirty && !isLoading && (
+							<Icon
+								kind='svg'
+								name='done-green-48'
+								onClick={onSave}
+								width={28}
+								height={28}
+							/>
+						)}
+						{isLoading && <Loading className={styles.loader} />}
+					</div>
+
+					<p className={styles.blockName}>Icon</p>
+
+					<div className={styles.inputWrapper}>
+						<Input
+							value={item.icon}
+							onChange={e => onChangeInput(e, item, "icon")}
+						/>
+						{isDirty && !isLoading && (
+							<Icon
+								kind='svg'
+								name='done-green-48'
+								onClick={onSave}
+								width={28}
+								height={28}
+							/>
+						)}
+						{isLoading && <Loading className={styles.loader} />}
+					</div>
+
+					<p className={styles.blockName}>Link</p>
+
+					<div className={styles.inputWrapper}>
+						<Input
+							value={item.link}
+							onChange={e => onChangeInput(e, item, "link")}
+						/>
+						{isDirty && !isLoading && (
+							<Icon
+								kind='svg'
+								name='done-green-48'
+								onClick={onSave}
+								width={28}
+								height={28}
+							/>
+						)}
+						{isLoading && <Loading className={styles.loader} />}
+					</div>
 				</div>
-
-				<p className={styles.blockName}>icon</p>
-
-				<div className={styles.inputWrapper}>
-					<Input
-						value={item.icon}
-						onChange={e => onChangeInput(e, item, "icon")}
-					/>
-					{prevIt && prevIt?.icon !== item.icon && (
-						<Icon
-							kind='svg'
-							name='done-green-48'
-							onClick={onSaveHandler}
-							width={28}
-							height={28}
-						/>
-					)}
-					{isLoading && <Loading className={styles.loader} />}
-				</div>
-
-				<p className={styles.blockName}>link</p>
-
-				<div className={styles.inputWrapper}>
-					<Input
-						value={item.link}
-						onChange={e => onChangeInput(e, item, "link")}
-					/>
-					{prevIt && prevIt?.link !== item.link && (
-						<Icon
-							kind='svg'
-							name='done-green-48'
-							onClick={onSaveHandler}
-							width={28}
-							height={28}
-						/>
-					)}
-					{isLoading && <Loading className={styles.loader} />}
-				</div>
-
-				{item.id === 10 && (
-					<span className={styles.save} onClick={onSaveHandler}>
-						<Icon
-							kind='svg'
-							name='done-green-48'
-							onClick={onSaveHandler}
-							width={28}
-							height={28}
-						/>
-						Добавить
-					</span>
-				)}
 			</div>
 		)
 	},

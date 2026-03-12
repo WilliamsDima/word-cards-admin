@@ -6,95 +6,84 @@ import React, {
 	useState,
 } from "react"
 import styles from "./SocialsPage.module.scss"
-import type { ISocial, SocialKey, SocialKeys } from "@shared/api/types"
+import type { ISocial, SocialKeys } from "@shared/api/types"
 import SocialItem from "./ui/SocialItem/SocialItem"
-import { useGetAppConfigQuery } from "@shared/api/services/appConfig/AppConfigQuery"
+import {
+	useGetAppConfigQuery,
+	useUpdateAppConfigMutation,
+} from "@shared/api/services/appConfig/AppConfigQuery"
 import { Icon } from "@assets/icons/Icon"
 import PageHeader from "@shared/PageHeader/PageHeader"
 import Card from "@shared/Card/Card"
 
-type SocialsDataType = Record<SocialKey, ISocial>
+type SocialsDataType = ISocial[]
 
 function SocialsPage() {
 	const { data } = useGetAppConfigQuery()
+	const [updateConfig, { isLoading }] = useUpdateAppConfigMutation()
 
-	const [socialsData, setSocialsData] = useState<SocialsDataType | null>(null)
+	const [socialsData, setSocialsData] = useState<SocialsDataType>([])
+	const [savingId, setSavingId] = useState<number | string | null>(null)
 
-	const inputs = useMemo(() => {
-		return socialsData ? Object.values(socialsData) : []
-	}, [socialsData])
+	const inputs = useMemo(() => socialsData, [socialsData])
+
+	const persist = useCallback(
+		async (nextSocials: ISocial[], id?: number | string) => {
+			if (!data) return
+			setSavingId(id ?? null)
+			try {
+				await updateConfig({ ...data, socials: nextSocials }).unwrap()
+			} finally {
+				setSavingId(null)
+			}
+		},
+		[data, updateConfig],
+	)
 
 	const onDelete = useCallback(
-		(id: number) => {
-			const socials = socialsData
-				? Object.values(socialsData).filter(it => it.id !== id)
-				: []
-			if (socials.length) changeSocials({ socials })
+		async (id: number | string) => {
+			const next = socialsData.filter(it => it.id !== id)
+			setSocialsData(next)
+			await persist(next, id)
 		},
-		[socialsData],
+		[persist, socialsData],
 	)
 
 	const onAdd = useCallback(() => {
-		setSocialsData(prev => {
-			return prev
-				? {
-						...prev,
-						add: {
-							id: 10,
-							link: "",
-							icon: "",
-							name: "",
-							key: "",
-						},
-					}
-				: null
-		})
+		const tempId = `temp-${Date.now()}`
+		setSocialsData(prev => [
+			...prev,
+			{
+				id: tempId,
+				link: "",
+				icon: "",
+				name: "",
+				key: "",
+			},
+		])
 	}, [])
 
 	const onChangeInput = useCallback(
 		(e: ChangeEvent<HTMLInputElement>, it: ISocial, fieldName: SocialKeys) => {
-			setSocialsData(prev => {
-				return prev
-					? {
-							...prev,
-							[it.id === 10 ? "add" : it.key]: {
-								...prev[it.id === 10 ? "add" : it.key],
-								[fieldName]: e.target.value,
-							},
-						}
-					: prev
-			})
+			setSocialsData(prev =>
+				prev.map(item =>
+					item.id === it.id ? { ...item, [fieldName]: e.target.value } : item,
+				),
+			)
 		},
 		[],
 	)
 
-	const onSaveHandler = useCallback(() => {
-		const newSocialsData = {
-			...socialsData,
-		}
-
-		const add = newSocialsData["add"]
-
-		if (add && add.key) {
-			delete newSocialsData["add"]
-			newSocialsData[add.key] = {
-				...add,
-				id: +new Date(),
-			}
-		}
-
-		const socials = newSocialsData ? Object.values(newSocialsData) : []
-
-		// if (socials.length) changeSocials({ socials })
-	}, [socialsData])
+	const onSaveHandler = useCallback(
+		async (id: number | string) => {
+			await persist(socialsData, id)
+		},
+		[persist, socialsData],
+	)
 
 	useEffect(() => {
 		if (data?.socials) {
-			const map: Partial<SocialsDataType> = {}
-			data?.socials.forEach(it => {
-				map[it.key] = it
-			})
-			setSocialsData(map as SocialsDataType)
+			setSocialsData(data.socials)
 		}
 	}, [data])
 
@@ -107,8 +96,6 @@ function SocialsPage() {
 
 			<Card className={styles.card}>
 				<div className={styles.inputs}>
-					<h1 className={styles.cardTitle}>Социальные сети</h1>
-
 					{inputs.map((it, i) => {
 						const prevIt = data?.socials.find(item => item.id === it.id)
 						return (
@@ -117,7 +104,7 @@ function SocialsPage() {
 								index={i}
 								item={it}
 								prevIt={prevIt}
-								isLoading={false}
+								isLoading={isLoading && savingId === it.id}
 								onChangeInput={onChangeInput}
 								onDelete={onDelete}
 								onSaveHandler={onSaveHandler}
@@ -126,17 +113,15 @@ function SocialsPage() {
 					})}
 				</div>
 
-				{!socialsData?.["add"] && (
-					<div className={styles.addBtn}>
-						<Icon
-							kind='svg'
-							name='add-square-green-64'
-							width={20}
-							height={20}
-							onClick={onAdd}
-						/>
-					</div>
-				)}
+				<div className={styles.addBtn}>
+					<Icon
+						kind='svg'
+						name='add-square-green-64'
+						width={20}
+						height={20}
+						onClick={onAdd}
+					/>
+				</div>
 			</Card>
 		</div>
 	)

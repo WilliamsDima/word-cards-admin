@@ -9,53 +9,89 @@
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
+}
 
-	.inputWrapper {
-		display: flex;
-		flex-direction: row;
-		gap: 1rem;
-		align-items: center;
+.groupNameBlock {
+	display: flex;
+	align-items: center;
+	margin-bottom: 2px;
+	color: colors.$color-primary;
+	gap: 8px;
+	background: transparent;
+	border: none;
+	width: 100%;
+	text-align: left;
+	cursor: pointer;
+	padding: 0;
 
-		svg {
-			cursor: pointer;
-		}
+	svg {
+		cursor: pointer;
 	}
 
-	.groupNameBlock {
-		display: flex;
-		align-items: center;
-		margin-bottom: 2px;
-		color: colors.$color-primary;
-		gap: 8px;
+	.index {
+		font-size: 1.4rem;
+		margin: 0;
+	}
 
-		svg {
-			cursor: pointer;
-		}
+	.blockName {
+		font-size: 1.4rem;
+		margin: 0;
+		color: colors.$color-text-primary;
+	}
+}
 
-		.index {
-			font-size: 1.4rem;
-			margin: 0;
-		}
+.blockName {
+	margin: 0;
+	font-size: 1.3rem;
+	color: colors.$color-text-secondary;
+}
 
-		.blockName {
-			font-size: 1.4rem;
-			margin: 0;
-		}
+.chevron {
+	margin-left: auto;
+	width: 8px;
+	height: 8px;
+	border-right: 2px solid colors.$color-text-secondary;
+	border-bottom: 2px solid colors.$color-text-secondary;
+	transform: rotate(45deg);
+	transition: transform 0.2s ease;
+}
+
+.chevron[data-open="true"] {
+	transform: rotate(-135deg);
+}
+
+.content {
+	max-height: 0;
+	overflow: hidden;
+	opacity: 0;
+	transform: translateY(-4px);
+	transition: max-height 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
+	pointer-events: none;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.content[data-open="true"] {
+	max-height: 600px;
+	opacity: 1;
+	transform: translateY(0);
+	pointer-events: auto;
+}
+
+.inputWrapper {
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
+	align-items: center;
+
+	svg {
+		cursor: pointer;
 	}
 }
 
 .loader {
 	width: 30px;
-}
-
-.save {
-	display: inline-flex;
-	flex-direction: row;
-	align-items: center;
-	cursor: pointer;
-	gap: 6px;
-	margin-top: 6px;
-	color: colors.$color-primary-light;
 }
 
 .addBtn {

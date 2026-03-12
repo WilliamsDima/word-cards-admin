@@ -25,7 +25,7 @@ export type SocialKey =
 	| string
 
 export interface ISocial {
-	id: number
+	id: number | string
 	link: string
 	icon: string
 	name: string
