@@ -20,9 +20,16 @@ type Props = {
 }
 
 const SocialItem: FC<Props> = memo(
-	({ item, index, isLoading, prevIt, onDelete, onSaveHandler, onChangeInput }) => {
+	({
+		item,
+		index,
+		isLoading,
+		prevIt,
+		onDelete,
+		onSaveHandler,
+		onChangeInput,
+	}) => {
 		const [expanded, setExpanded] = useState(false)
-		const onSave = () => onSaveHandler(item.id)
 
 		const isDirty = useMemo(() => {
 			if (!prevIt) return true
@@ -39,22 +46,28 @@ const SocialItem: FC<Props> = memo(
 			[prevIt, item],
 		)
 
+		const onSave = () => onSaveHandler(item.id)
+		const onExpanded = () => setExpanded(prev => !prev)
+		const onDeleteHandler = (
+			event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+		) => {
+			event.stopPropagation()
+			onDelete(item.id)
+		}
+
 		return (
 			<div className={styles.group}>
 				<button
 					type='button'
 					className={styles.groupNameBlock}
-					onClick={() => setExpanded(prev => !prev)}
+					onClick={onExpanded}
 				>
 					<Icon
 						kind='svg'
 						name='delete-red-64'
-						onClick={event => {
-							event.stopPropagation()
-							onDelete(item.id)
-						}}
-						width={25}
-						height={25}
+						onClick={onDeleteHandler}
+						width={20}
+						height={20}
 					/>
 					<p className={styles.index}>{index + 1}.</p>
 					<p className={styles.blockName}>{title}</p>

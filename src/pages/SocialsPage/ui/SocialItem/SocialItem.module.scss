@@ -34,7 +34,7 @@
 	}
 
 	.blockName {
-		font-size: 1.4rem;
+		font-size: 1.6rem;
 		margin: 0;
 		color: colors.$color-text-primary;
 	}
@@ -65,7 +65,10 @@
 	overflow: hidden;
 	opacity: 0;
 	transform: translateY(-4px);
-	transition: max-height 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
+	transition:
+		max-height 0.25s ease,
+		opacity 0.25s ease,
+		transform 0.25s ease;
 	pointer-events: none;
 	display: flex;
 	flex-direction: column;

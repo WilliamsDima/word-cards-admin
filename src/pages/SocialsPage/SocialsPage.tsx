@@ -1,4 +1,4 @@
-import React, {
+﻿import React, {
 	ChangeEvent,
 	useCallback,
 	useEffect,
@@ -15,15 +15,15 @@ import {
 import { Icon } from "@assets/icons/Icon"
 import PageHeader from "@shared/PageHeader/PageHeader"
 import Card from "@shared/Card/Card"
-
-type SocialsDataType = ISocial[]
+import { SocialDeleteModal } from "./ui/SocialDeleteModal"
 
 function SocialsPage() {
 	const { data } = useGetAppConfigQuery()
 	const [updateConfig, { isLoading }] = useUpdateAppConfigMutation()
 
-	const [socialsData, setSocialsData] = useState<SocialsDataType>([])
+	const [socialsData, setSocialsData] = useState<ISocial[]>([])
 	const [savingId, setSavingId] = useState<number | string | null>(null)
+	const [deleteTarget, setDeleteTarget] = useState<ISocial | null>(null)
 
 	const inputs = useMemo(() => socialsData, [socialsData])
 
@@ -41,12 +41,11 @@ function SocialsPage() {
 	)
 
 	const onDelete = useCallback(
-		async (id: number | string) => {
-			const next = socialsData.filter(it => it.id !== id)
-			setSocialsData(next)
-			await persist(next, id)
+		(id: number | string) => {
+			const target = socialsData.find(it => it.id === id) || null
+			setDeleteTarget(target)
 		},
-		[persist, socialsData],
+		[socialsData],
 	)
 
 	const onAdd = useCallback(() => {
@@ -96,6 +95,8 @@ function SocialsPage() {
 
 			<Card className={styles.card}>
 				<div className={styles.inputs}>
+					<h1 className={styles.cardTitle}>Социальные сети</h1>
+
 					{inputs.map((it, i) => {
 						const prevIt = data?.socials.find(item => item.id === it.id)
 						return (
@@ -117,12 +118,20 @@ function SocialsPage() {
 					<Icon
 						kind='svg'
 						name='add-square-green-64'
-						width={20}
-						height={20}
+						width={50}
+						height={50}
 						onClick={onAdd}
 					/>
 				</div>
 			</Card>
+
+			<SocialDeleteModal
+				deleteTarget={deleteTarget}
+				socialsData={socialsData}
+				setSocialsData={setSocialsData}
+				persist={persist}
+				setDeleteTarget={setDeleteTarget}
+			/>
 		</div>
 	)
 }

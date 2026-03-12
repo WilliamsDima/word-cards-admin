@@ -1,14 +1,17 @@
-import React, { FC } from "react"
+import React, { FC, HTMLAttributes } from "react"
 import cn from "classnames"
 import styles from "./Card.module.scss"
 
-type Props = {
+type Props = HTMLAttributes<HTMLDivElement> & {
 	children: React.ReactNode
-	className?: string
 }
 
-const Card: FC<Props> = ({ children, className }) => {
-	return <div className={cn(styles.card, className)}>{children}</div>
+const Card: FC<Props> = ({ children, className, ...rest }) => {
+	return (
+		<div className={cn(styles.card, className)} {...rest}>
+			{children}
+		</div>
+	)
 }
 
 export default Card
