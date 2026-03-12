@@ -113,6 +113,8 @@
 	font-weight: 500;
 	text-align: right;
 	max-width: 60%;
+	overflow-wrap: anywhere;
+	word-break: break-word;
 }
 
 @media screen and (max-width: 700px) {

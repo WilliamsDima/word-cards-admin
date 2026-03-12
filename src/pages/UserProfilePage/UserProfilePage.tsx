@@ -3,8 +3,42 @@ import { useLocation, useParams } from "react-router-dom"
 import styles from "./UserProfilePage.module.scss"
 import type { IUser } from "@entities/api/users/types"
 import { useGetUserByIdQuery } from "@entities/api/users/UsersQuery"
+import UserProfileGridItem, {
+	ProfileGridItemType,
+} from "./ui/UserProfileGridItem"
 
-function UserProfilePage() {
+const buildGrids = (
+	user: IUser | undefined,
+	createdAt: string,
+	id: string | undefined,
+) => [
+	{
+		title: "Account",
+		rows: [
+			{ label: "Email", value: user?.email },
+			{ label: "Auth provider", value: user?.email ? "Google" : "Vk" },
+			{ label: "UID", value: user?.google_uid },
+		],
+	},
+	{
+		title: "Activity",
+		rows: [
+			{ label: "Registered", value: createdAt },
+			{ label: "Last active", value: "N/A" },
+			{ label: "Status", value: "Active" },
+		],
+	},
+	{
+		title: "Profile",
+		rows: [
+			{ label: "User id", value: user?.id ?? id },
+			{ label: "Avatar", value: user?.image ? "Set" : "Not set" },
+			{ label: "Notes", value: "N/A" },
+		],
+	},
+]
+
+const UserProfilePage = () => {
 	const { id } = useParams()
 	const location = useLocation()
 	const userFromState = (location.state as { user?: IUser } | undefined)?.user
@@ -26,6 +60,10 @@ function UserProfilePage() {
 		[user],
 	)
 
+	const grids: ProfileGridItemType[] = useMemo(() => {
+		return buildGrids(user, createdAt, id)
+	}, [createdAt, user, id])
+
 	return (
 		<div className={styles.page}>
 			<div className={styles.header}>
@@ -46,57 +84,9 @@ function UserProfilePage() {
 			</div>
 
 			<div className={styles.grid}>
-				<div className={styles.card}>
-					<h3 className={styles.cardTitle}>Account</h3>
-					<div className={styles.row}>
-						<span className={styles.label}>Email</span>
-						<span className={styles.value}>{user?.email ?? "N/A"}</span>
-					</div>
-					<div className={styles.row}>
-						<span className={styles.label}>Auth provider</span>
-						<span className={styles.value}>
-							{user?.email ? "Google" : "Vk"}
-						</span>
-					</div>
-					<div className={styles.row}>
-						<span className={styles.label}>UID</span>
-						<span className={styles.value}>{user?.google_uid ?? "N/A"}</span>
-					</div>
-				</div>
-
-				<div className={styles.card}>
-					<h3 className={styles.cardTitle}>Activity</h3>
-					<div className={styles.row}>
-						<span className={styles.label}>Registered</span>
-						<span className={styles.value}>{createdAt}</span>
-					</div>
-					<div className={styles.row}>
-						<span className={styles.label}>Last active</span>
-						<span className={styles.value}>N/A</span>
-					</div>
-					<div className={styles.row}>
-						<span className={styles.label}>Status</span>
-						<span className={styles.value}>Active</span>
-					</div>
-				</div>
-
-				<div className={styles.card}>
-					<h3 className={styles.cardTitle}>Profile</h3>
-					<div className={styles.row}>
-						<span className={styles.label}>User id</span>
-						<span className={styles.value}>{user?.id ?? id ?? "N/A"}</span>
-					</div>
-					<div className={styles.row}>
-						<span className={styles.label}>Avatar</span>
-						<span className={styles.value}>
-							{user?.image ? "Set" : "Not set"}
-						</span>
-					</div>
-					<div className={styles.row}>
-						<span className={styles.label}>Notes</span>
-						<span className={styles.value}>N/A</span>
-					</div>
-				</div>
+				{grids.map(it => (
+					<UserProfileGridItem key={it.title} item={it} />
+				))}
 			</div>
 		</div>
 	)
