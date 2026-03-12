@@ -1,15 +1,34 @@
-import React, { FC } from "react"
+import React, { FC, memo } from "react"
 import styles from "./UserItem.module.scss"
 import cn from "classnames"
 import { IUser } from "@entities/api/users/types"
+import { AppRoutes } from "@app/navigation/routes"
+import { useAppNavigate } from "@shared/hooks/useAppNavigate"
 
 type Props = {
 	user: IUser
 }
 
-export const UserItem: FC<Props> = ({ user }) => {
+export const UserItem: FC<Props> = memo(({ user }) => {
+	const navigate = useAppNavigate()
+
+	const openProfile = () =>
+		navigate(AppRoutes.userProfile, { id: user.id }, { state: { user } })
+
+	const onKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
+		if (event.key === "Enter" || event.key === " ") {
+			openProfile()
+		}
+	}
+
 	return (
-		<li className={styles.item}>
+		<li
+			className={styles.item}
+			onClick={openProfile}
+			role='button'
+			tabIndex={0}
+			onKeyDown={onKeyDown}
+		>
 			<div className={styles.avatar}>
 				<img className={styles.image} src={user.image} />
 				<span className={styles.idBadge}>ID {user.id}</span>
@@ -50,10 +69,10 @@ export const UserItem: FC<Props> = ({ user }) => {
 
 					<div className={styles.infoItem}>
 						<p>последняя активность: </p>
-						<h3 className={styles.name}>{"---"}</h3>
+						<h3 className={styles.name}>N/A</h3>
 					</div>
 				</div>
 			</div>
 		</li>
 	)
-}
+})

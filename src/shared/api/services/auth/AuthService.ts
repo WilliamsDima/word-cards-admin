@@ -1,13 +1,13 @@
 import { request } from "@shared/api/request"
-import type { AuthMeResponse } from "./types"
+import type { AuthUser } from "./types"
 
 class AuthService {
 	me() {
-		return request<AuthMeResponse>("/auth/me", { method: "GET" })
+		return request<AuthUser>("/auth/me", { method: "GET" })
 	}
 
 	googleSync(idToken: string) {
-		return request<AuthMeResponse>("/users/sync", {
+		return request<AuthUser>("/users/sync", {
 			method: "POST",
 			authToken: idToken,
 		})

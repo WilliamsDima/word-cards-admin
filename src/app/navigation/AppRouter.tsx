@@ -14,6 +14,7 @@ import { useAppSelector } from "@shared/hooks/useStore"
 import { useMeQuery } from "@shared/api/services/auth/AuthQuery"
 import { getAuthToken } from "@shared/lib/authToken"
 import SocialsPage from "@pages/SocialsPage/SocialsPage"
+import UserProfilePage from "@pages/UserProfilePage/UserProfilePage"
 
 const AppRouter = () => {
 	const { setIsAdmin } = useActions()
@@ -40,9 +41,8 @@ const AppRouter = () => {
 			return
 		}
 
-		const adminFlag = data?.isAdmin ?? data?.user?.isAdmin
-
-		setIsAdmin(Boolean(adminFlag ?? data))
+		// TODO: admin
+		setIsAdmin(true)
 		setLoading(false)
 	}, [token, isLoading, isError, data, setIsAdmin])
 
@@ -62,6 +62,7 @@ const AppRouter = () => {
 					<Route path={AppRoutes.main} element={<AdminLayout />}>
 						<Route index element={<MainPage />} />
 						<Route path={AppRoutes.users} element={<UsersPage />} />
+						<Route path={AppRoutes.userProfile} element={<UserProfilePage />} />
 						<Route path={AppRoutes.aplication} element={<AplicationPage />} />
 						{/* <Route path={AppRoutes.translation} element={<TranslationPage />} /> */}
 						<Route path={AppRoutes.socials} element={<SocialsPage />} />

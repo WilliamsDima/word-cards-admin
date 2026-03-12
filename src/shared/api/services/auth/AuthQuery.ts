@@ -2,17 +2,17 @@ import { baseRTK } from "@app/api/BaseRTK"
 import { clearAuthToken, setAuthToken } from "@shared/lib/authToken"
 import { authService } from "@shared/api/services/auth/AuthService"
 import { toRtkQueryResult } from "@shared/api/RTK/rtk"
-import type { AuthMeResponse } from "@shared/api/services/auth/types"
+import type { AuthUser } from "@shared/api/services/auth/types"
 
 export const authAPI = baseRTK.injectEndpoints({
 	endpoints: builder => ({
-		me: builder.query<AuthMeResponse, void>({
+		me: builder.query<AuthUser, void>({
 			async queryFn() {
 				return toRtkQueryResult(await authService.me())
 			},
 		}),
 
-		googleLogin: builder.mutation<AuthMeResponse, { idToken: string }>({
+		googleLogin: builder.mutation<AuthUser, { idToken: string }>({
 			async queryFn({ idToken }) {
 				return toRtkQueryResult(await authService.googleSync(idToken))
 			},

@@ -43,6 +43,8 @@ export const request = async <T>(
 
 		return { ok: true, data: res.data as T }
 	} catch (err) {
+		console.log("axios err", err)
+
 		if (typeof err === "object" && err && "response" in err) {
 			const error = err as { response?: { status?: number; data?: unknown } }
 			return {

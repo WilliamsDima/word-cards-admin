@@ -17,7 +17,7 @@ export interface RouteParams {
 	[AppRoutes.main]: undefined
 	[AppRoutes.login]: undefined
 	[AppRoutes.users]: undefined
-	[AppRoutes.userProfile]: { id: string }
+	[AppRoutes.userProfile]: { id: number }
 	[AppRoutes.aplication]: undefined
 	[AppRoutes.notFount]: undefined
 	[AppRoutes.chats]: undefined

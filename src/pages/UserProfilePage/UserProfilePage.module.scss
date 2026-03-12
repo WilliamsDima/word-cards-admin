@@ -1,0 +1,128 @@
+@use "../../assets/styles/colors.scss" as colors;
+@use "../../assets/styles/globalStyles.scss" as global;
+
+.page {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	@extend %glassPanel;
+	padding: 20px;
+}
+
+.avatar {
+	position: relative;
+	width: 84px;
+	height: 84px;
+	border-radius: 24px;
+	overflow: hidden;
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: colors.$color-text-primary;
+	font-size: 28px;
+	font-weight: 600;
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+}
+
+.idBadge {
+	position: absolute;
+	bottom: -12px;
+	left: -12px;
+	padding: 4px 10px;
+	border-radius: 999px;
+	background: rgba(18, 18, 18, 0.9);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	font-size: 10px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: colors.$color-text-secondary;
+	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+}
+
+.titleBlock {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.title {
+	margin: 0;
+	font-size: 28px;
+}
+
+.subtitle {
+	margin: 0;
+	color: colors.$color-text-secondary;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 16px;
+}
+
+.card {
+	@extend %glassCard;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.cardTitle {
+	margin: 0 0 4px;
+	font-size: 16px;
+	color: colors.$color-text-secondary;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+}
+
+.row {
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 8px 0;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+	&:last-child {
+		border-bottom: none;
+	}
+}
+
+.label {
+	color: colors.$color-text-secondary;
+	font-size: 13px;
+}
+
+.value {
+	color: colors.$color-text-primary;
+	font-weight: 500;
+	text-align: right;
+	max-width: 60%;
+}
+
+@media screen and (max-width: 700px) {
+	.header {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.value {
+		text-align: left;
+		max-width: 100%;
+	}
+}

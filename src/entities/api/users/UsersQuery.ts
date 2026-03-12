@@ -11,7 +11,13 @@ export const usersAPI = baseRTK.injectEndpoints({
 			},
 			providesTags: ["users"],
 		}),
+		getUserById: builder.query<IUser, string | number>({
+			async queryFn(id) {
+				return toRtkQueryResult(await usersService.getUserById(id))
+			},
+			providesTags: (_result, _error, id) => [{ type: "users", id }],
+		}),
 	}),
 })
 
-export const { useGetUsersQuery } = usersAPI
+export const { useGetUsersQuery, useGetUserByIdQuery } = usersAPI

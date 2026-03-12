@@ -1,7 +1,10 @@
 import React, { useMemo, useState } from "react"
 import styles from "./Sidebar.module.scss"
-import { useLogoutMutation } from "@shared/api/services/auth/AuthQuery"
-import { clearAuthToken } from "@shared/lib/authToken"
+import {
+	useLogoutMutation,
+	useMeQuery,
+} from "@shared/api/services/auth/AuthQuery"
+import { clearAuthToken, getAuthToken } from "@shared/lib/authToken"
 import { useActions } from "@shared/hooks/useActions"
 import { useAppNavigate } from "@shared/hooks/useAppNavigate"
 import { AppRoutes } from "@app/navigation/routes"
@@ -34,6 +37,13 @@ const Sidebar: React.FC = () => {
 	const [hidden, setHidden] = useState(false)
 	const { setIsAdmin } = useActions()
 	const [logoutRequest] = useLogoutMutation()
+	const token = getAuthToken()
+	const { data } = useMeQuery(undefined, { skip: !token })
+
+	const displayName = useMemo(
+		() => data?.name || data?.email || "Current user",
+		[data],
+	)
 
 	const currentRoute = useMemo(() => {
 		return location?.pathname
@@ -41,6 +51,8 @@ const Sidebar: React.FC = () => {
 
 	const toMain = () => navigation(AppRoutes.main)
 	const toggleShow = () => setHidden(prev => !prev)
+	const toProfile = () =>
+		data?.id ? navigation(AppRoutes.userProfile, { id: data.id }) : null
 
 	const onLogout = async () => {
 		try {
@@ -90,6 +102,21 @@ const Sidebar: React.FC = () => {
 					)
 				})}
 			</nav>
+			<button className={styles.currentUser} onClick={toProfile} type='button'>
+				<span className={styles.currentAvatar}>
+					{data?.picture ? (
+						<img src={data.picture} alt={displayName} />
+					) : (
+						<span>{displayName.charAt(0).toUpperCase()}</span>
+					)}
+				</span>
+				{!hidden && (
+					<span className={styles.currentMeta}>
+						<span className={styles.currentName}>{displayName}</span>
+						<span className={styles.currentSub}>View profile</span>
+					</span>
+				)}
+			</button>
 			<div className={styles.footer}>
 				<Button className={styles.logoutBtn} onClick={onLogout}>
 					<span>Выйти</span>

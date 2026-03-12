@@ -126,6 +126,73 @@
 		padding: 16px;
 	}
 
+	.currentUser {
+		margin: 0 16px 12px;
+		padding: 10px 12px;
+		border-radius: 14px;
+		background: rgba(255, 255, 255, 0.04);
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		color: colors.$color-white;
+		cursor: pointer;
+		transition: background-color 0.2s ease, transform 0.2s ease;
+
+		&:hover {
+			background-color: rgba(31, 177, 65, 0.12);
+			transform: translateX(2px);
+		}
+	}
+
+	.currentAvatar {
+		width: 38px;
+		height: 38px;
+		border-radius: 12px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(255, 255, 255, 0.08);
+		font-weight: 600;
+		color: colors.$color-text-primary;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			border-radius: 12px;
+			display: block;
+		}
+
+		span {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	.currentMeta {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	.currentName {
+		font-size: 14px;
+		font-weight: 600;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 140px;
+	}
+
+	.currentSub {
+		font-size: 12px;
+		color: colors.$color-text-secondary;
+	}
+
 	.logoutBtn {
 		width: 100%;
 		background: rgba(255, 255, 255, 0.06);
@@ -201,6 +268,12 @@
 					display: block;
 				}
 			}
+		}
+
+		.currentUser {
+			margin: 0 0 12px;
+			padding: 10px;
+			justify-content: center;
 		}
 
 		.header {

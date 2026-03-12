@@ -11,8 +11,8 @@ export function useAppNavigate() {
 	return <T extends AppRoutePath>(
 		path: T,
 		...rest: PathToParams<T> extends undefined
-			? [params?: undefined, options?: { replace?: boolean }]
-			: [params: PathToParams<T>, options?: { replace?: boolean }]
+			? [params?: undefined, options?: { replace?: boolean; state?: unknown }]
+			: [params: PathToParams<T>, options?: { replace?: boolean; state?: unknown }]
 	) => {
 		const [params, options] = rest
 		let resolvedPath = path as string

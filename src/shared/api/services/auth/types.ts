@@ -1,16 +1,12 @@
 export type AuthUser = {
-	id?: string
-	email?: string
-	name?: string
-	isAdmin?: boolean
+	email: string
+	name: string
+	picture: string
+	uid: string
+	id: number
 }
 
 export type AuthLoginResponse = {
 	token: string
 	user?: AuthUser
-}
-
-export type AuthMeResponse = {
-	user?: AuthUser
-	isAdmin?: boolean
 }
