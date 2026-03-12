@@ -26,10 +26,10 @@ function SocialsPage() {
 
 	const onDelete = useCallback(
 		(id: number) => {
-			// const socials = socialsData
-			// 	? Object.values(socialsData).filter(it => it.id !== id)
-			// 	: []
-			// if (socials.length) changeSocials({ socials })
+			const socials = socialsData
+				? Object.values(socialsData).filter(it => it.id !== id)
+				: []
+			if (socials.length) changeSocials({ socials })
 		},
 		[socialsData],
 	)
@@ -101,8 +101,8 @@ function SocialsPage() {
 	return (
 		<div className={styles.page}>
 			<PageHeader
-				title='Social links'
-				subtitle='Manage external profiles and store badges.'
+				title='Соц сети'
+				subtitle='Управление внешними ссылками и иконками сервиса.'
 			/>
 
 			<Card className={styles.card}>

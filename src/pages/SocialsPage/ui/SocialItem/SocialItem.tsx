@@ -3,6 +3,7 @@ import Loading from "@shared/Loading/Loading"
 import styles from "./SocialItem.module.scss"
 import type { ISocial, SocialKeys } from "@shared/api/types"
 import Input from "@shared/Input/Input"
+import { Icon } from "@assets/icons/Icon"
 
 type Props = {
 	item: ISocial
@@ -28,11 +29,14 @@ const SocialItem: FC<Props> = memo(
 		onSaveHandler,
 		onChangeInput,
 	}) => {
+		const onDeleteHandler = () => onDelete(item.id)
 		return (
 			<div className={styles.group}>
 				<div className={styles.groupNameBlock}>
-					<DeleteIcon
-						onClick={() => onDelete(item.id)}
+					<Icon
+						kind='svg'
+						name='delete-red-64'
+						onClick={onDeleteHandler}
 						width={25}
 						height={25}
 					/>
@@ -42,22 +46,26 @@ const SocialItem: FC<Props> = memo(
 					</p>
 				</div>
 
-				{item.id === 10 && (
-					<>
-						<p className={styles.blockName}>Key</p>
+				<>
+					<p className={styles.blockName}>Key</p>
 
-						<div className={styles.inputWrapper}>
-							<Input
-								value={item.key}
-								onChange={e => onChangeInput(e, item, "key")}
+					<div className={styles.inputWrapper}>
+						<Input
+							value={item.key}
+							onChange={e => onChangeInput(e, item, "key")}
+						/>
+						{prevIt && prevIt?.key !== item.key && (
+							<Icon
+								kind='svg'
+								name='done-green-48'
+								onClick={onSaveHandler}
+								width={28}
+								height={28}
 							/>
-							{prevIt && prevIt?.key !== item.key && (
-								<DoneIcon onClick={onSaveHandler} width={28} height={28} />
-							)}
-							{isLoading && <Loading className={styles.loader} />}
-						</div>
-					</>
-				)}
+						)}
+						{isLoading && <Loading className={styles.loader} />}
+					</div>
+				</>
 
 				<p className={styles.blockName}>Name</p>
 
@@ -67,7 +75,13 @@ const SocialItem: FC<Props> = memo(
 						onChange={e => onChangeInput(e, item, "name")}
 					/>
 					{prevIt && prevIt?.name !== item.name && (
-						<DoneIcon onClick={onSaveHandler} width={28} height={28} />
+						<Icon
+							kind='svg'
+							name='done-green-48'
+							onClick={onSaveHandler}
+							width={28}
+							height={28}
+						/>
 					)}
 					{isLoading && <Loading className={styles.loader} />}
 				</div>
@@ -80,7 +94,13 @@ const SocialItem: FC<Props> = memo(
 						onChange={e => onChangeInput(e, item, "icon")}
 					/>
 					{prevIt && prevIt?.icon !== item.icon && (
-						<DoneIcon onClick={onSaveHandler} width={28} height={28} />
+						<Icon
+							kind='svg'
+							name='done-green-48'
+							onClick={onSaveHandler}
+							width={28}
+							height={28}
+						/>
 					)}
 					{isLoading && <Loading className={styles.loader} />}
 				</div>
@@ -93,14 +113,26 @@ const SocialItem: FC<Props> = memo(
 						onChange={e => onChangeInput(e, item, "link")}
 					/>
 					{prevIt && prevIt?.link !== item.link && (
-						<DoneIcon onClick={onSaveHandler} width={28} height={28} />
+						<Icon
+							kind='svg'
+							name='done-green-48'
+							onClick={onSaveHandler}
+							width={28}
+							height={28}
+						/>
 					)}
 					{isLoading && <Loading className={styles.loader} />}
 				</div>
 
 				{item.id === 10 && (
 					<span className={styles.save} onClick={onSaveHandler}>
-						<DoneIcon width={28} height={28} />
+						<Icon
+							kind='svg'
+							name='done-green-48'
+							onClick={onSaveHandler}
+							width={28}
+							height={28}
+						/>
 						Добавить
 					</span>
 				)}

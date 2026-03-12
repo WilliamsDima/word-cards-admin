@@ -22,8 +22,8 @@ function UsersPage() {
 	return (
 		<div className={styles.page}>
 			<PageHeader
-				title='Users'
-				subtitle='Manage profiles, activity, and access.'
+				title='Пользователи'
+				subtitle='Управление профилями, активностью и доступом.'
 			/>
 			<div className={styles.toolbar}>
 				<UsersListFilter value={search} onChange={onSearchChange} />
