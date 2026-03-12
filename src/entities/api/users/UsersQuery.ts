@@ -5,9 +5,9 @@ import { IUser } from "./types"
 
 export const usersAPI = baseRTK.injectEndpoints({
 	endpoints: builder => ({
-		getUsers: builder.query<IUser[], void>({
-			async queryFn() {
-				return toRtkQueryResult(await usersService.getUsers())
+		getUsers: builder.query<IUser[], string | undefined>({
+			async queryFn(search) {
+				return toRtkQueryResult(await usersService.getUsers(search))
 			},
 			providesTags: ["users"],
 		}),

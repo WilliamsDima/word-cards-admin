@@ -1,14 +1,25 @@
-import React, { FC } from "react"
+import React, { FC, ChangeEvent } from "react"
 import styles from "./UsersListFilter.module.scss"
-import cn from "classnames"
 import Search from "@shared/Search/Search"
 
-const UsersListFilter: FC = () => {
+type Props = {
+	value: string
+	onChange: (value: string) => void
+}
+
+const UsersListFilter: FC<Props> = ({ value, onChange }) => {
+	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+		onChange(event.target.value)
+	}
+
 	return (
 		<div className={styles.usersFilter}>
 			<Search
+				value={value}
+				onChange={handleChange}
 				className={styles.input}
 				classnames={{ inputWrapper: styles.inputWrapper }}
+				placeholder='Search users...'
 			/>
 		</div>
 	)

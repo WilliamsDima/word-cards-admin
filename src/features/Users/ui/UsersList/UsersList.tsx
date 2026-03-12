@@ -6,8 +6,12 @@ import Skeleton from "@shared/Skeleton/Skeleton"
 import { UsersListSkeleton } from "./UsersListSkeleton"
 import { Icon } from "@assets/icons/Icon"
 
-export const UsersList = () => {
-	const { data, isLoading } = useGetUsersQuery()
+type Props = {
+	search: string
+}
+
+export const UsersList = ({ search }: Props) => {
+	const { data, isLoading } = useGetUsersQuery(search)
 
 	return (
 		<div className={styles.content}>
@@ -32,9 +36,9 @@ export const UsersList = () => {
 						<span className={styles.emptyIcon}>
 							<Icon kind='svg' name='user' width={28} height={28} />
 						</span>
-						<p className={styles.emptyTitle}>РџРѕР»СЊР·РѕРІР°С‚РµР»Рё РЅРµ РЅР°Р№РґРµРЅС‹</p>
+						<p className={styles.emptyTitle}>Пользователи не найдены</p>
 						<p className={styles.emptyText}>
-							РџСЂРѕРІРµСЂСЊС‚Рµ С„РёР»СЊС‚СЂС‹ РёР»Рё РїРѕРїСЂРѕР±СѓР№С‚Рµ РѕР±РЅРѕРІРёС‚СЊ СЃРїРёСЃРѕРє.
+							Проверьте фильтры или попробуйте обновить список.
 						</p>
 					</div>
 				)}
