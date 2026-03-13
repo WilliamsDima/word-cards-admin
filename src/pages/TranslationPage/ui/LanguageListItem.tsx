@@ -5,13 +5,14 @@ import cn from "classnames"
 import styles from "../TranslationPage.module.scss"
 import { useUpdateLanguageMutation } from "@shared/api/services/languages/LanguagesQuery"
 import { DirtyMap, DraftMap } from "../TranslationPage"
-import Input from "@shared/Input/Input"
 import { useToast } from "@shared/Toast/useToast"
 import type {
 	JsonValue,
 	LanguageItem,
 } from "@shared/api/services/languages/types"
 import Accordion from "@shared/Accordion/Accordion"
+import LanguageListItemInputs from "./LanguageListItemInputs"
+import LanguageListItemHeader from "./LanguageListItemHeader"
 
 type Props = {
 	language: LanguageItem
@@ -51,18 +52,6 @@ const LanguageListItem: React.FC<Props> = memo(
 		const onChangeJsonHandler = (value: unknown) =>
 			onChangeJson(language.code, value)
 		const onToggleHandler = () => onToggle(language.code)
-
-		const onChangeName = useCallback(
-			(e: React.ChangeEvent<HTMLInputElement>) =>
-				setLocalName(e.target.value),
-			[],
-		)
-
-		const onChangeEmoji = useCallback(
-			(e: React.ChangeEvent<HTMLInputElement>) =>
-				setLocalEmoji(e.target.value),
-			[],
-		)
 
 		const onSave = useCallback(
 			async (language: LanguageItem) => {
@@ -108,30 +97,6 @@ const LanguageListItem: React.FC<Props> = memo(
 			[isExpanded],
 		)
 
-		const badgeStyles = useMemo(
-			() =>
-				cn(styles.badge, {
-					[styles.badgeDirty]: isDirty,
-				}),
-			[isDirty],
-		)
-
-		const updatedAtInfo = useMemo(() => {
-			const parsed = new Date(language.updated_at)
-			const isValid = !Number.isNaN(parsed.getTime())
-			const today = new Date()
-			const isToday = isValid && parsed.toDateString() === today.toDateString()
-			const label = isValid
-				? parsed.toLocaleDateString("ru-RU", {
-						day: "2-digit",
-						month: "2-digit",
-						year: "numeric",
-					})
-				: "—"
-
-			return { label, isToday }
-		}, [language.updated_at])
-
 		const metaDirty = useMemo(() => {
 			return (
 				localName.trim() !== language.name ||
@@ -147,51 +112,16 @@ const LanguageListItem: React.FC<Props> = memo(
 			return (!isDirty && !metaDirty) || metaInvalid || isSaving
 		}, [isDirty, metaDirty, metaInvalid, isSaving])
 
-		const namePlaceholder = useMemo(() => language.name, [language.name])
-		const emojiPlaceholder = useMemo(() => language.emoji, [language.emoji])
-
 		const renderHeader = useCallback(
 			() => (
-				<div className={styles.langHeaderContent}>
-					<div className={styles.langInfo}>
-						<span className={styles.langEmoji}>
-							{localEmoji || language.emoji}
-						</span>
-						<div className={styles.langText}>
-							<span className={styles.langName}>
-								{localName || language.name}
-							</span>
-							<div className={styles.langMetaRow}>
-								<span className={styles.langMeta}>
-									{language.code.toUpperCase()}
-								</span>
-								<span className={styles.updatedAt}>
-									Обновлено: {updatedAtInfo.label}
-								</span>
-								{updatedAtInfo.isToday ? (
-									<span className={styles.updatedToday}>Сегодня</span>
-								) : null}
-							</div>
-						</div>
-					</div>
-					<div className={styles.langControls}>
-						<span className={badgeStyles}>
-							{isDirty ? "Черновик" : "Синхронизировано"}
-						</span>
-					</div>
-				</div>
+				<LanguageListItemHeader
+					isDirty={isDirty}
+					language={language}
+					localEmoji={localEmoji}
+					localName={localName}
+				/>
 			),
-			[
-				badgeStyles,
-				isDirty,
-				language.code,
-				language.emoji,
-				language.name,
-				localEmoji,
-				localName,
-				updatedAtInfo.isToday,
-				updatedAtInfo.label,
-			],
+			[isDirty, language, localEmoji, localName],
 		)
 
 		useEffect(() => {
@@ -208,30 +138,14 @@ const LanguageListItem: React.FC<Props> = memo(
 				contentClassName={styles.langBody}
 				header={renderHeader}
 			>
-				<div className={styles.metaEdit}>
-					<label className={styles.field}>
-						<span className={styles.label}>Название</span>
-						<Input
-							value={localName}
-							onChange={onChangeName}
-							placeholder={namePlaceholder}
-						/>
-					</label>
-					<label className={styles.field}>
-						<span className={styles.label}>Emoji</span>
-						<Input
-							value={localEmoji}
-							onChange={onChangeEmoji}
-							placeholder={emojiPlaceholder}
-						/>
-					</label>
-					<div className={styles.codeField}>
-						<span className={styles.label}>Код языка</span>
-						<div className={styles.codeValue}>
-							{language.code.toUpperCase()}
-						</div>
-					</div>
-				</div>
+				<LanguageListItemInputs
+					language={language}
+					localEmoji={localEmoji}
+					localName={localName}
+					setLocalEmoji={setLocalEmoji}
+					setLocalName={setLocalName}
+				/>
+
 				<div className={styles.editorWrap}>
 					<JsonEditor
 						data={draft}
