@@ -1,9 +1,10 @@
-import React, { FC, memo, useMemo, useState } from "react"
+﻿import React, { FC, memo, useCallback, useMemo, useState } from "react"
 import Loading from "@shared/Loading/Loading"
 import styles from "./SocialItem.module.scss"
 import Input from "@shared/Input/Input"
 import { Icon } from "@assets/icons/Icon"
 import type { ISocial, SocialKeys } from "@shared/api/services/appConfig/types"
+import Accordion from "@shared/Accordion/Accordion"
 
 type Props = {
 	item: ISocial
@@ -46,22 +47,45 @@ const SocialItem: FC<Props> = memo(
 			[prevIt, item],
 		)
 
-		const onSave = () => onSaveHandler(item.id)
-		const onExpanded = () => setExpanded(prev => !prev)
-		const onDeleteHandler = (
-			event: React.MouseEvent<SVGSVGElement, MouseEvent>,
-		) => {
-			event.stopPropagation()
-			onDelete(item.id)
-		}
+		const onSave = useCallback(() => onSaveHandler(item.id), [item.id, onSaveHandler])
+		const onExpanded = useCallback(() => {
+			setExpanded(prev => !prev)
+		}, [])
+		const onDeleteHandler = useCallback(
+			(event: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+				event.stopPropagation()
+				onDelete(item.id)
+			},
+			[item.id, onDelete],
+		)
 
-		return (
-			<div className={styles.group}>
-				<button
-					type='button'
-					className={styles.groupNameBlock}
-					onClick={onExpanded}
-				>
+		const onChangeKey = useCallback(
+			(e: React.ChangeEvent<HTMLInputElement>) => onChangeInput(e, item, "key"),
+			[item, onChangeInput],
+		)
+		const onChangeName = useCallback(
+			(e: React.ChangeEvent<HTMLInputElement>) =>
+				onChangeInput(e, item, "name"),
+			[item, onChangeInput],
+		)
+		const onChangeIcon = useCallback(
+			(e: React.ChangeEvent<HTMLInputElement>) =>
+				onChangeInput(e, item, "icon"),
+			[item, onChangeInput],
+		)
+		const onChangeLink = useCallback(
+			(e: React.ChangeEvent<HTMLInputElement>) =>
+				onChangeInput(e, item, "link"),
+			[item, onChangeInput],
+		)
+
+		const onToggleHandler = useCallback(() => {
+			onExpanded()
+		}, [onExpanded])
+
+		const renderHeader = useCallback(
+			(open: boolean) => (
+				<>
 					<Icon
 						kind='svg'
 						name='delete-red-64'
@@ -71,87 +95,85 @@ const SocialItem: FC<Props> = memo(
 					/>
 					<p className={styles.index}>{index + 1}.</p>
 					<p className={styles.blockName}>{title}</p>
-					<span className={styles.chevron} data-open={expanded} />
-				</button>
+					<span className={styles.chevron} data-open={open} />
+				</>
+			),
+			[index, onDeleteHandler, title],
+		)
 
-				<div className={styles.content} data-open={expanded}>
-					<p className={styles.blockName}>Key</p>
+		return (
+			<Accordion
+				open={expanded}
+				onOpenChange={onToggleHandler}
+				className={styles.group}
+				headerClassName={styles.groupNameBlock}
+				contentClassName={styles.content}
+				header={renderHeader}
+			>
+				<p className={styles.blockName}>Key</p>
 
-					<div className={styles.inputWrapper}>
-						<Input
-							value={item.key}
-							onChange={e => onChangeInput(e, item, "key")}
+				<div className={styles.inputWrapper}>
+					<Input value={item.key} onChange={onChangeKey} />
+					{isDirty && !isLoading && (
+						<Icon
+							kind='svg'
+							name='done-green-48'
+							onClick={onSave}
+							width={28}
+							height={28}
 						/>
-						{isDirty && !isLoading && (
-							<Icon
-								kind='svg'
-								name='done-green-48'
-								onClick={onSave}
-								width={28}
-								height={28}
-							/>
-						)}
-						{isLoading && <Loading className={styles.loader} />}
-					</div>
-
-					<p className={styles.blockName}>Name</p>
-
-					<div className={styles.inputWrapper}>
-						<Input
-							value={item.name}
-							onChange={e => onChangeInput(e, item, "name")}
-						/>
-						{isDirty && !isLoading && (
-							<Icon
-								kind='svg'
-								name='done-green-48'
-								onClick={onSave}
-								width={28}
-								height={28}
-							/>
-						)}
-						{isLoading && <Loading className={styles.loader} />}
-					</div>
-
-					<p className={styles.blockName}>Icon</p>
-
-					<div className={styles.inputWrapper}>
-						<Input
-							value={item.icon}
-							onChange={e => onChangeInput(e, item, "icon")}
-						/>
-						{isDirty && !isLoading && (
-							<Icon
-								kind='svg'
-								name='done-green-48'
-								onClick={onSave}
-								width={28}
-								height={28}
-							/>
-						)}
-						{isLoading && <Loading className={styles.loader} />}
-					</div>
-
-					<p className={styles.blockName}>Link</p>
-
-					<div className={styles.inputWrapper}>
-						<Input
-							value={item.link}
-							onChange={e => onChangeInput(e, item, "link")}
-						/>
-						{isDirty && !isLoading && (
-							<Icon
-								kind='svg'
-								name='done-green-48'
-								onClick={onSave}
-								width={28}
-								height={28}
-							/>
-						)}
-						{isLoading && <Loading className={styles.loader} />}
-					</div>
+					)}
+					{isLoading && <Loading className={styles.loader} />}
 				</div>
-			</div>
+
+				<p className={styles.blockName}>Name</p>
+
+				<div className={styles.inputWrapper}>
+					<Input value={item.name} onChange={onChangeName} />
+					{isDirty && !isLoading && (
+						<Icon
+							kind='svg'
+							name='done-green-48'
+							onClick={onSave}
+							width={28}
+							height={28}
+						/>
+					)}
+					{isLoading && <Loading className={styles.loader} />}
+				</div>
+
+				<p className={styles.blockName}>Icon</p>
+
+				<div className={styles.inputWrapper}>
+					<Input value={item.icon} onChange={onChangeIcon} />
+					{isDirty && !isLoading && (
+						<Icon
+							kind='svg'
+							name='done-green-48'
+							onClick={onSave}
+							width={28}
+							height={28}
+						/>
+					)}
+					{isLoading && <Loading className={styles.loader} />}
+				</div>
+
+				<p className={styles.blockName}>Link</p>
+
+				<div className={styles.inputWrapper}>
+					<Input value={item.link} onChange={onChangeLink} />
+					{isDirty && !isLoading && (
+						<Icon
+							kind='svg'
+							name='done-green-48'
+							onClick={onSave}
+							width={28}
+							height={28}
+						/>
+					)}
+					{isLoading && <Loading className={styles.loader} />}
+				</div>
+			</Accordion>
 		)
 	},
 )

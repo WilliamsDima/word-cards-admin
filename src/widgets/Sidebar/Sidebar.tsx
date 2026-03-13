@@ -1,4 +1,4 @@
-﻿import React, { useMemo, useState } from "react"
+﻿import React, { useCallback, useMemo, useState } from "react"
 import styles from "./Sidebar.module.scss"
 import {
 	useLogoutMutation,
@@ -59,12 +59,15 @@ const Sidebar: React.FC = () => {
 		return location?.pathname
 	}, [location])
 
-	const toMain = () => navigation(AppRoutes.main)
-	const toggleShow = () => setHidden(prev => !prev)
-	const toProfile = () =>
-		data?.id ? navigation(AppRoutes.userProfile, { id: data.id }) : null
+	const toMain = useCallback(() => navigation(AppRoutes.main), [navigation])
+	const toggleShow = useCallback(() => {
+		setHidden(prev => !prev)
+	}, [])
+	const toProfile = useCallback(() => {
+		if (data?.id) navigation(AppRoutes.userProfile, { id: data.id })
+	}, [data?.id, navigation])
 
-	const onLogout = async () => {
+	const onLogout = useCallback(async () => {
 		try {
 			await logoutRequest().unwrap()
 		} catch {
@@ -73,7 +76,7 @@ const Sidebar: React.FC = () => {
 			clearAuthToken()
 			setIsAdmin(false)
 		}
-	}
+	}, [logoutRequest, setIsAdmin])
 
 	const sidebarStyles = useMemo(
 		() =>
@@ -82,6 +85,16 @@ const Sidebar: React.FC = () => {
 			}),
 		[hidden],
 	)
+
+	const navItems = useMemo(() => {
+		return routesNav.map(item => ({
+			...item,
+			className: cn(styles.navItem, {
+				[styles.navItemActive]: currentRoute.includes(item.route),
+			}),
+			onClick: () => navigation(item.route),
+		}))
+	}, [currentRoute, navigation])
 
 	return (
 		<aside className={sidebarStyles}>
@@ -96,14 +109,12 @@ const Sidebar: React.FC = () => {
 				</button>
 			</div>
 			<nav className={styles.nav}>
-				{routesNav.map(it => {
+				{navItems.map(it => {
 					return (
 						<button
 							key={it.route}
-							className={cn(styles.navItem, {
-								[styles.navItemActive]: currentRoute.includes(it.route),
-							})}
-							onClick={() => navigation(it.route)}
+							className={it.className}
+							onClick={it.onClick}
 						>
 							{it.icon}
 

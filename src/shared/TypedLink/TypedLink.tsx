@@ -11,13 +11,13 @@ export function TypedLink<T extends AppRouteKey>({
 	params,
 	...rest
 }: TypedLinkProps<T>) {
-	let path = AppRoutes[route] as string
-
-	if (params) {
-		Object.entries(params).forEach(([key, value]) => {
-			path = path.replace(`:${key}`, String(value))
-		})
-	}
+	const basePath = AppRoutes[route] as string
+	const path = params
+		? Object.entries(params).reduce(
+				(acc, [key, value]) => acc.replace(`:${key}`, String(value)),
+				basePath,
+			)
+		: basePath
 
 	return <Link to={path} {...rest} />
 }

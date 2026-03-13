@@ -1,5 +1,5 @@
-import Input from "@shared/Input/Input"
-import React from "react"
+﻿import Input from "@shared/Input/Input"
+import React, { useMemo } from "react"
 import styles from "./InputsApp.module.scss"
 import Loading from "@shared/Loading/Loading"
 import { INPUTS, useInputsApp } from "./useInputsApp"
@@ -9,8 +9,43 @@ const InputsApp = () => {
 	const { inputData, onChangeHandler, onSaveHandler, isSaving, savingKey } =
 		useInputsApp()
 
-	const isSavingField = (key: keyof typeof INPUTS) =>
-		isSaving && savingKey === key
+	const savingFlags = useMemo(
+		() => ({
+			appName: isSaving && savingKey === INPUTS.appName,
+			privacyPolicy: isSaving && savingKey === INPUTS.privacyPolicy,
+			appVersion: isSaving && savingKey === INPUTS.appVersion,
+			googlePlayIcon: isSaving && savingKey === INPUTS.googlePlayIcon,
+			googlePlayLink: isSaving && savingKey === INPUTS.googlePlayLink,
+		}),
+		[isSaving, savingKey],
+	)
+
+	const changeHandlers = useMemo(
+		() => ({
+			appName: (e: React.ChangeEvent<HTMLInputElement>) =>
+				onChangeHandler(INPUTS.appName, e),
+			privacyPolicy: (e: React.ChangeEvent<HTMLInputElement>) =>
+				onChangeHandler(INPUTS.privacyPolicy, e),
+			appVersion: (e: React.ChangeEvent<HTMLInputElement>) =>
+				onChangeHandler(INPUTS.appVersion, e),
+			googlePlayIcon: (e: React.ChangeEvent<HTMLInputElement>) =>
+				onChangeHandler(INPUTS.googlePlayIcon, e),
+			googlePlayLink: (e: React.ChangeEvent<HTMLInputElement>) =>
+				onChangeHandler(INPUTS.googlePlayLink, e),
+		}),
+		[onChangeHandler],
+	)
+
+	const saveHandlers = useMemo(
+		() => ({
+			appName: () => onSaveHandler(INPUTS.appName),
+			privacyPolicy: () => onSaveHandler(INPUTS.privacyPolicy),
+			appVersion: () => onSaveHandler(INPUTS.appVersion),
+			googlePlayIcon: () => onSaveHandler(INPUTS.googlePlayIcon),
+			googlePlayLink: () => onSaveHandler(INPUTS.googlePlayLink),
+		}),
+		[onSaveHandler],
+	)
 
 	return (
 		<div className={styles.inputs}>
@@ -20,21 +55,18 @@ const InputsApp = () => {
 				<div className={styles.inputWrapper}>
 					<Input
 						value={inputData[INPUTS.appName].value}
-						onChange={e => onChangeHandler(INPUTS.appName, e)}
+						onChange={changeHandlers.appName}
 					/>
-					{inputData[INPUTS.appName].change &&
-						!isSavingField(INPUTS.appName) && (
-							<Icon
-								kind='svg'
-								name='done-green-48'
-								onClick={() => onSaveHandler(INPUTS.appName)}
-								width={28}
-								height={28}
-							/>
-						)}
-					{isSavingField(INPUTS.appName) && (
-						<Loading className={styles.loader} />
+					{inputData[INPUTS.appName].change && !savingFlags.appName && (
+						<Icon
+							kind='svg'
+							name='done-green-48'
+							onClick={saveHandlers.appName}
+							width={28}
+							height={28}
+						/>
 					)}
+					{savingFlags.appName && <Loading className={styles.loader} />}
 				</div>
 			</div>
 
@@ -45,21 +77,19 @@ const InputsApp = () => {
 					<Input
 						type='link'
 						value={inputData[INPUTS.privacyPolicy].value}
-						onChange={e => onChangeHandler(INPUTS.privacyPolicy, e)}
+						onChange={changeHandlers.privacyPolicy}
 					/>
 					{inputData[INPUTS.privacyPolicy].change &&
-						!isSavingField(INPUTS.privacyPolicy) && (
+						!savingFlags.privacyPolicy && (
 							<Icon
 								kind='svg'
 								name='done-green-48'
-								onClick={() => onSaveHandler(INPUTS.privacyPolicy)}
+								onClick={saveHandlers.privacyPolicy}
 								width={28}
 								height={28}
 							/>
 						)}
-					{isSavingField(INPUTS.privacyPolicy) && (
-						<Loading className={styles.loader} />
-					)}
+					{savingFlags.privacyPolicy && <Loading className={styles.loader} />}
 				</div>
 			</div>
 
@@ -70,21 +100,18 @@ const InputsApp = () => {
 					<Input
 						type='link'
 						value={inputData[INPUTS.appVersion].value}
-						onChange={e => onChangeHandler(INPUTS.appVersion, e)}
+						onChange={changeHandlers.appVersion}
 					/>
-					{inputData[INPUTS.appVersion].change &&
-						!isSavingField(INPUTS.appVersion) && (
-							<Icon
-								kind='svg'
-								name='done-green-48'
-								onClick={() => onSaveHandler(INPUTS.appVersion)}
-								width={28}
-								height={28}
-							/>
-						)}
-					{isSavingField(INPUTS.appVersion) && (
-						<Loading className={styles.loader} />
+					{inputData[INPUTS.appVersion].change && !savingFlags.appVersion && (
+						<Icon
+							kind='svg'
+							name='done-green-48'
+							onClick={saveHandlers.appVersion}
+							width={28}
+							height={28}
+						/>
 					)}
+					{savingFlags.appVersion && <Loading className={styles.loader} />}
 				</div>
 			</div>
 
@@ -97,19 +124,19 @@ const InputsApp = () => {
 						<Input
 							type='link'
 							value={inputData[INPUTS.googlePlayIcon].value}
-							onChange={e => onChangeHandler(INPUTS.googlePlayIcon, e)}
+							onChange={changeHandlers.googlePlayIcon}
 						/>
 						{inputData[INPUTS.googlePlayIcon].change &&
-							!isSavingField(INPUTS.googlePlayIcon) && (
+							!savingFlags.googlePlayIcon && (
 								<Icon
 									kind='svg'
 									name='done-green-48'
-									onClick={() => onSaveHandler(INPUTS.googlePlayIcon)}
+									onClick={saveHandlers.googlePlayIcon}
 									width={28}
 									height={28}
 								/>
 							)}
-						{isSavingField(INPUTS.googlePlayIcon) && (
+						{savingFlags.googlePlayIcon && (
 							<Loading className={styles.loader} />
 						)}
 					</div>
@@ -121,19 +148,19 @@ const InputsApp = () => {
 						<Input
 							type='link'
 							value={inputData[INPUTS.googlePlayLink].value}
-							onChange={e => onChangeHandler(INPUTS.googlePlayLink, e)}
+							onChange={changeHandlers.googlePlayLink}
 						/>
 						{inputData[INPUTS.googlePlayLink].change &&
-							!isSavingField(INPUTS.googlePlayLink) && (
+							!savingFlags.googlePlayLink && (
 								<Icon
 									kind='svg'
 									name='done-green-48'
-									onClick={() => onSaveHandler(INPUTS.googlePlayLink)}
+									onClick={saveHandlers.googlePlayLink}
 									width={28}
 									height={28}
 								/>
 							)}
-						{isSavingField(INPUTS.googlePlayLink) && (
+						{savingFlags.googlePlayLink && (
 							<Loading className={styles.loader} />
 						)}
 					</div>

@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, memo } from "react"
+import React, { CSSProperties, FC, memo, useMemo } from "react"
 import cn from "classnames"
 import styles from "./Skeleton.module.scss"
 
@@ -9,19 +9,26 @@ type SkeletonProps = {
 	className?: string
 }
 
-const Skeleton: FC<SkeletonProps> = memo(	({ width, height, circle, className }) => {
-		const style: CSSProperties = {
-			width,
-			height,
-		}
+const Skeleton: FC<SkeletonProps> = memo(
+	({ width, height, circle, className }) => {
+		const style = useMemo<CSSProperties>(
+			() => ({
+				width,
+				height,
+			}),
+			[height, width],
+		)
+
+		const skeletonClassName = useMemo(
+			() =>
+				cn(styles.skeleton, className, {
+					[styles.circle]: circle,
+				}),
+			[className, circle],
+		)
 
 		return (
-			<span
-				className={cn(styles.skeleton, className, {
-					[styles.circle]: circle,
-				})}
-				style={style}
-			/>
+			<span className={skeletonClassName} style={style} />
 		)
 	},
 )

@@ -55,14 +55,22 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
 		}
 	}, [])
 
+	const toastViews = useMemo(() => {
+		return toasts.map(toast => ({
+			...toast,
+			onClose: () => removeToast(toast.id),
+			className: cn(styles.toast, styles[toast.variant]),
+		}))
+	}, [toasts, removeToast])
+
 	return (
 		<ToastContext.Provider value={value}>
 			{children}
 			<div className={styles.container} aria-live='polite'>
-				{toasts.map(toast => (
+				{toastViews.map(toast => (
 					<div
 						key={toast.id}
-						className={cn(styles.toast, styles[toast.variant])}
+						className={toast.className}
 					>
 						<div className={styles.content}>
 							<div className={styles.title}>{toast.title}</div>
@@ -72,7 +80,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
 						</div>
 						<button
 							className={styles.close}
-							onClick={() => removeToast(toast.id)}
+							onClick={toast.onClose}
 							aria-label='Закрыть'
 							type='button'
 						>

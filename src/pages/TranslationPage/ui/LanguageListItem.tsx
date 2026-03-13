@@ -11,6 +11,7 @@ import type {
 	JsonValue,
 	LanguageItem,
 } from "@shared/api/services/languages/types"
+import Accordion from "@shared/Accordion/Accordion"
 
 type Props = {
 	language: LanguageItem
@@ -50,6 +51,18 @@ const LanguageListItem: React.FC<Props> = memo(
 		const onChangeJsonHandler = (value: unknown) =>
 			onChangeJson(language.code, value)
 		const onToggleHandler = () => onToggle(language.code)
+
+		const onChangeName = useCallback(
+			(e: React.ChangeEvent<HTMLInputElement>) =>
+				setLocalName(e.target.value),
+			[],
+		)
+
+		const onChangeEmoji = useCallback(
+			(e: React.ChangeEvent<HTMLInputElement>) =>
+				setLocalEmoji(e.target.value),
+			[],
+		)
 
 		const onSave = useCallback(
 			async (language: LanguageItem) => {
@@ -138,18 +151,16 @@ const LanguageListItem: React.FC<Props> = memo(
 			return !localName.trim() || !localEmoji.trim()
 		}, [localEmoji, localName])
 
-		useEffect(() => {
-			setLocalName(language.name)
-			setLocalEmoji(language.emoji)
-		}, [language.name, language.emoji])
+		const isSaveDisabled = useMemo(() => {
+			return (!isDirty && !metaDirty) || metaInvalid || isSaving
+		}, [isDirty, metaDirty, metaInvalid, isSaving])
 
-		return (
-			<article className={expandedStyles}>
-				<button
-					className={styles.langHeader}
-					onClick={onToggleHandler}
-					type='button'
-				>
+		const namePlaceholder = useMemo(() => language.name, [language.name])
+		const emojiPlaceholder = useMemo(() => language.emoji, [language.emoji])
+
+		const renderHeader = useCallback(
+			() => (
+				<>
 					<div className={styles.langInfo}>
 						<span className={styles.langEmoji}>
 							{localEmoji || language.emoji}
@@ -177,68 +188,94 @@ const LanguageListItem: React.FC<Props> = memo(
 						</span>
 						<span className={chevronStyles} />
 					</div>
-				</button>
+				</>
+			),
+			[
+				badgeStyles,
+				chevronStyles,
+				isDirty,
+				language.code,
+				language.emoji,
+				language.name,
+				localEmoji,
+				localName,
+				updatedAtInfo.isToday,
+				updatedAtInfo.label,
+			],
+		)
 
-				<div className={styles.langBody}>
-					<div className={styles.metaEdit}>
-						<label className={styles.field}>
-							<span className={styles.label}>Название</span>
-							<Input
-								value={localName}
-								onChange={e => setLocalName(e.target.value)}
-								placeholder={language.name}
-							/>
-						</label>
-						<label className={styles.field}>
-							<span className={styles.label}>Emoji</span>
-							<Input
-								value={localEmoji}
-								onChange={e => setLocalEmoji(e.target.value)}
-								placeholder={language.emoji}
-							/>
-						</label>
-						<div className={styles.codeField}>
-							<span className={styles.label}>Код языка</span>
-							<div className={styles.codeValue}>
-								{language.code.toUpperCase()}
-							</div>
+		useEffect(() => {
+			setLocalName(language.name)
+			setLocalEmoji(language.emoji)
+		}, [language.name, language.emoji])
+
+		return (
+			<Accordion
+				open={isExpanded}
+				onOpenChange={onToggleHandler}
+				className={expandedStyles}
+				headerClassName={styles.langHeader}
+				contentClassName={styles.langBody}
+				header={renderHeader}
+			>
+				<div className={styles.metaEdit}>
+					<label className={styles.field}>
+						<span className={styles.label}>Название</span>
+						<Input
+							value={localName}
+							onChange={onChangeName}
+							placeholder={namePlaceholder}
+						/>
+					</label>
+					<label className={styles.field}>
+						<span className={styles.label}>Emoji</span>
+						<Input
+							value={localEmoji}
+							onChange={onChangeEmoji}
+							placeholder={emojiPlaceholder}
+						/>
+					</label>
+					<div className={styles.codeField}>
+						<span className={styles.label}>Код языка</span>
+						<div className={styles.codeValue}>
+							{language.code.toUpperCase()}
 						</div>
 					</div>
-					<div className={styles.editorWrap}>
-						<JsonEditor
-							data={draft}
-							setData={onChangeJsonHandler}
-							rootName=''
-							showArrayIndices={false}
-							showCollectionCount={false}
-							theme={[githubDarkTheme]}
-							maxWidth='100%'
-							minWidth='100%'
-							className={styles.jsonEditor}
-						/>
-					</div>
-
-					<div className={styles.actions}>
-						<Button
-							className={styles.primaryBtn}
-							disabled={(!isDirty && !metaDirty) || metaInvalid || isSaving}
-							onClick={onSaveHandler}
-						>
-							{isSaving ? "Сохранение..." : "Сохранить"}
-						</Button>
-						<Button
-							className={styles.ghostBtn}
-							onClick={onResetHandler}
-							disabled={isSaving}
-						>
-							Отменить
-						</Button>
-						<Button className={styles.dangerBtn} onClick={onDeleteHandler}>
-							Удалить
-						</Button>
-					</div>
 				</div>
-			</article>
+				<div className={styles.editorWrap}>
+					<JsonEditor
+						data={draft}
+						setData={onChangeJsonHandler}
+						rootName=''
+						showArrayIndices={false}
+						showCollectionCount={false}
+						theme={[githubDarkTheme]}
+						maxWidth='100%'
+						minWidth='100%'
+						className={styles.jsonEditor}
+					/>
+				</div>
+
+				<div className={styles.actions}>
+					<Button
+						className={styles.primaryBtn}
+						disabled={isSaveDisabled}
+						onClick={onSaveHandler}
+					>
+						{isSaving ? "Сохранение..." : "Сохранить"}
+					</Button>
+					<Button
+						className={styles.ghostBtn}
+						onClick={onResetHandler}
+						disabled={isSaving}
+					>
+						Отменить
+					</Button>
+					<Button className={styles.dangerBtn} onClick={onDeleteHandler}>
+						Удалить
+					</Button>
+				</div>
+			</Accordion>
 		)
 	},
 )

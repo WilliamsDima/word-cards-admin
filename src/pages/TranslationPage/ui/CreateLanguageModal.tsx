@@ -48,6 +48,24 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 		[],
 	)
 
+	const onChangeCode = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) =>
+			onChangeCreateForm("code", e.target.value),
+		[onChangeCreateForm],
+	)
+
+	const onChangeName = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) =>
+			onChangeCreateForm("name", e.target.value),
+		[onChangeCreateForm],
+	)
+
+	const onChangeEmoji = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) =>
+			onChangeCreateForm("emoji", e.target.value),
+		[onChangeCreateForm],
+	)
+
 	const onCreate = useCallback(async () => {
 		const code = createForm.code.trim().toLowerCase()
 		const name = createForm.name.trim()
@@ -98,7 +116,12 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 		toast,
 	])
 
-	const onClose = () => setIsCreateOpen(false)
+	const onClose = useCallback(() => setIsCreateOpen(false), [setIsCreateOpen])
+
+	const isCreateDisabled = useMemo(
+		() => !canCreate || isCreating,
+		[canCreate, isCreating],
+	)
 
 	return (
 		<Modal
@@ -113,7 +136,7 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 					<Button
 						className={styles.primaryBtn}
 						onClick={onCreate}
-						disabled={!canCreate || isCreating}
+						disabled={isCreateDisabled}
 					>
 						{isCreating ? "Создание..." : "Создать"}
 					</Button>
@@ -126,7 +149,7 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 					<Input
 						placeholder='en'
 						value={createForm.code}
-						onChange={e => onChangeCreateForm("code", e.target.value)}
+						onChange={onChangeCode}
 					/>
 				</label>
 				<label className={styles.field}>
@@ -134,7 +157,7 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 					<Input
 						placeholder='English'
 						value={createForm.name}
-						onChange={e => onChangeCreateForm("name", e.target.value)}
+						onChange={onChangeName}
 					/>
 				</label>
 				<label className={styles.field}>
@@ -142,7 +165,7 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 					<Input
 						placeholder='🌍'
 						value={createForm.emoji}
-						onChange={e => onChangeCreateForm("emoji", e.target.value)}
+						onChange={onChangeEmoji}
 					/>
 				</label>
 				{createError ? (

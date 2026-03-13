@@ -8,8 +8,10 @@ import { getFirebaseApp, getFirebaseMissingEnv } from "./firebase"
 import { setAuthToken } from "../lib/authToken"
 import { authService } from "@shared/api/services/auth/AuthService"
 
-let tokenListenerReady = false
-let lastSyncedToken: string | null = null
+const tokenState = {
+	listenerReady: false,
+	lastSyncedToken: null as string | null,
+}
 
 const syncUserWithBackend = async (idToken: string) => {
 	const result = await authService.googleSync(idToken)
@@ -31,25 +33,25 @@ const getAuthClient = () => {
 }
 
 export const initFirebaseAuthTokenSync = () => {
-	if (tokenListenerReady) return false
+	if (tokenState.listenerReady) return false
 	const app = getFirebaseApp()
 	if (!app) return false
 
 	const auth = getAuth(app)
-	tokenListenerReady = true
+	tokenState.listenerReady = true
 
 	onIdTokenChanged(auth, async user => {
 		if (!user) {
 			setAuthToken(null)
-			lastSyncedToken = null
+			tokenState.lastSyncedToken = null
 			return
 		}
 		try {
 			const token = await user.getIdToken()
 			setAuthToken(token)
-			if (token !== lastSyncedToken) {
+			if (token !== tokenState.lastSyncedToken) {
 				await syncUserWithBackend(token)
-				lastSyncedToken = token
+				tokenState.lastSyncedToken = token
 			}
 		} catch {
 			// keep the last known token

@@ -1,22 +1,21 @@
 const STORAGE_KEY = "auth_token"
-
-let memoryToken: string | null = null
+const tokenStore: { value: string | null } = { value: null }
 
 export const getAuthToken = (): string | null => {
-	if (memoryToken) return memoryToken
+	if (tokenStore.value) return tokenStore.value
 	if (typeof window === "undefined") return null
 
 	try {
 		const token = window.localStorage.getItem(STORAGE_KEY)
-		if (token) memoryToken = token
+		if (token) tokenStore.value = token
 		return token
 	} catch {
-		return memoryToken
+		return tokenStore.value
 	}
 }
 
 export const setAuthToken = (token: string | null) => {
-	memoryToken = token
+	tokenStore.value = token
 	if (typeof window === "undefined") return
 
 	try {

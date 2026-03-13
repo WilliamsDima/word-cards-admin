@@ -15,15 +15,13 @@ export function useAppNavigate() {
 			: [params: PathToParams<T>, options?: { replace?: boolean; state?: unknown }]
 	) => {
 		const [params, options] = rest
-		let resolvedPath = path as string
-
-		if (params) {
-			;(Object.entries(params) as [keyof typeof params, string][]).forEach(
-				([key, value]) => {
-					resolvedPath = resolvedPath.replace(`:${String(key)}`, String(value))
-				}
-			)
-		}
+		const resolvedPath = params
+			? (Object.entries(params) as [keyof typeof params, string][]).reduce(
+					(acc, [key, value]) =>
+						acc.replace(`:${String(key)}`, String(value)),
+					path as string,
+				)
+			: (path as string)
 
 		navigate(resolvedPath, options)
 	}
