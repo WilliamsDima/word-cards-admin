@@ -123,36 +123,38 @@ function TranslationPage() {
 				)}
 
 				{!isLoading && !isError && (
-					<div className={styles.list}>
-						{languages.length === 0 ? (
-							<div className={styles.empty}>
-								<span className={styles.emptyTitle}>Нет языков</span>
-								<span className={styles.emptyText}>
-									Добавьте первый язык, чтобы начать работу.
-								</span>
-							</div>
-						) : (
-							languages.map(language => {
-								const isExpanded = expandedCode === language.code
-								const isDirty = Boolean(dirtyMap[language.code])
+					<div className={styles.listWrapper}>
+						<div className={styles.list}>
+							{languages.length === 0 ? (
+								<div className={styles.empty}>
+									<span className={styles.emptyTitle}>Нет языков</span>
+									<span className={styles.emptyText}>
+										Добавьте первый язык, чтобы начать работу.
+									</span>
+								</div>
+							) : (
+								languages.map(language => {
+									const isExpanded = expandedCode === language.code
+									const isDirty = Boolean(dirtyMap[language.code])
 
-								return (
-									<LanguageListItem
-										key={language.code}
-										drafts={drafts}
-										language={language}
-										isExpanded={isExpanded}
-										isDirty={isDirty}
-										setDirtyMap={setDirtyMap}
-										draft={getDraft(language)}
-										onToggle={toggleCard}
-										onChangeJson={onChangeJson}
-										onReset={onReset}
-										setDeleteTarget={setDeleteTarget}
-									/>
-								)
-							})
-						)}
+									return (
+										<LanguageListItem
+											key={language.code}
+											drafts={drafts}
+											language={language}
+											isExpanded={isExpanded}
+											isDirty={isDirty}
+											setDirtyMap={setDirtyMap}
+											draft={getDraft(language)}
+											onToggle={toggleCard}
+											onChangeJson={onChangeJson}
+											onReset={onReset}
+											setDeleteTarget={setDeleteTarget}
+										/>
+									)
+								})
+							)}
+						</div>
 					</div>
 				)}
 			</Card>

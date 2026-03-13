@@ -5,9 +5,6 @@
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-	height: 100%;
-	min-height: 0;
-	overflow: hidden;
 }
 
 .card {
@@ -28,8 +25,8 @@
 }
 
 .addBtn {
-	background: rgba(255, 255, 255, 0.08);
-	border: 1px solid rgba(255, 255, 255, 0.12);
+	background: colors.$color-surface-3;
+	border: 1px solid colors.$color-border-soft;
 }
 
 .sectionTitle {
@@ -45,13 +42,18 @@
 	max-width: 540px;
 }
 
+.listWrapper {
+	flex: 1;
+	display: flex;
+}
+
 .list {
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
 	flex: 1;
-	min-height: 0;
-	overflow-y: auto;
+	overflow-y: scroll;
+	height: 500px;
 	@extend %scroll;
 }
 
@@ -70,18 +72,17 @@
 }
 
 .langCard {
-	background: rgba(255, 255, 255, 0.03);
-	border: 1px solid rgba(255, 255, 255, 0.06);
+	background: colors.$color-surface-2;
+	border: 1px solid colors.$color-border-soft;
 	border-radius: 18px;
-	overflow: hidden;
 	transition:
 		border-color 0.2s ease,
 		box-shadow 0.2s ease;
 }
 
 .expanded {
-	border-color: rgba(120, 255, 220, 0.3);
-	box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+	border-color: colors.$color-primary;
+	box-shadow: 0 20px 45px colors.$color-shadow;
 }
 
 .langHeader {
@@ -111,9 +112,9 @@
 	align-items: center;
 	justify-content: center;
 	border-radius: 12px;
-	background: rgba(255, 255, 255, 0.08);
+	background: colors.$color-surface-3;
 	font-size: 20px;
-	box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.08);
+	box-shadow: inset 0 0 12px colors.$color-shadow;
 }
 
 .langText {
@@ -142,20 +143,20 @@
 	padding: 6px 10px;
 	border-radius: 999px;
 	font-size: 1.1rem;
-	background: rgba(255, 255, 255, 0.08);
+	background: colors.$color-surface-3;
 	color: colors.$color-text-secondary;
 }
 
 .badgeDirty {
-	background: rgba(255, 199, 120, 0.18);
+	background: rgba(colors.$color-warning, 0.2);
 	color: colors.$color-warning;
 }
 
 .chevron {
 	width: 10px;
 	height: 10px;
-	border-right: 2px solid rgba(255, 255, 255, 0.6);
-	border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+	border-right: 2px solid colors.$color-text-secondary;
+	border-bottom: 2px solid colors.$color-text-secondary;
 	transform: rotate(45deg);
 	transition: transform 0.2s ease;
 	margin-right: 4px;
@@ -189,8 +190,8 @@
 
 .editorWrap {
 	border-radius: 14px;
-	border: 1px solid rgba(255, 255, 255, 0.06);
-	background: rgba(255, 255, 255, 0.02);
+	border: 1px solid colors.$color-border-soft;
+	background: colors.$color-surface-2;
 	padding: 8px 10px 12px;
 	max-height: 420px;
 	overflow: auto;
@@ -212,7 +213,8 @@
 }
 
 .ghostBtn {
-	background: rgba(255, 255, 255, 0.06);
+	background: colors.$color-surface-3;
+	border: 1px solid colors.$color-border-soft;
 }
 
 .dangerBtn {
@@ -261,16 +263,21 @@
 	width: 100%;
 	padding: 10px 12px;
 	border-radius: 10px;
-	border: 1px solid rgba(255, 255, 255, 0.08);
-	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid colors.$color-border;
+	background: colors.$color-surface-2;
 	color: colors.$color-text-primary;
 	font-size: 1.3rem;
 	outline: none;
 
 	&:focus {
-		border-color: rgba(120, 255, 220, 0.35);
-		box-shadow: 0 0 0 2px rgba(120, 255, 220, 0.12);
+		border-color: colors.$color-primary;
+		box-shadow: 0 0 0 2px rgba(colors.$color-primary, 0.2);
 	}
+}
+
+.formError {
+	color: colors.$color-error;
+	font-size: 1.2rem;
 }
 
 @media (max-width: 720px) {
