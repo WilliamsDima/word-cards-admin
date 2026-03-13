@@ -70,7 +70,7 @@
 		opacity 0.25s ease,
 		transform 0.25s ease;
 	pointer-events: none;
-	display: flex;
+	display: none;
 	flex-direction: column;
 	gap: 12px;
 }
@@ -80,6 +80,7 @@
 	opacity: 1;
 	transform: translateY(0);
 	pointer-events: auto;
+	display: flex;
 }
 
 .inputWrapper {

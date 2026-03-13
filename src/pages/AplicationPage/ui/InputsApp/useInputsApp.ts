@@ -3,6 +3,7 @@ import {
 	useUpdateAppConfigMutation,
 } from "@shared/api/services/appConfig/AppConfigQuery"
 import { ChangeEvent, useCallback, useEffect, useState } from "react"
+import { useToast } from "@shared/Toast/useToast"
 
 export const INPUTS = {
 	appName: "appName",
@@ -18,6 +19,7 @@ export const useInputsApp = () => {
 	const { data } = useGetAppConfigQuery()
 	const [updateConfig, { isLoading: isSaving }] =
 		useUpdateAppConfigMutation()
+	const toast = useToast()
 	const [savingKey, setSavingKey] = useState<INPUTSKeys | null>(null)
 
 	const [inputData, setInputData] = useState({
@@ -86,11 +88,17 @@ export const useInputsApp = () => {
 						},
 					}
 				})
+				toast.success("Настройки обновлены")
+			} catch (err) {
+				const serverError =
+					(err as { data?: { data?: { error?: string } } })?.data?.data
+						?.error ?? null
+				toast.error("Ошибка сохранения", serverError || "Не удалось сохранить")
 			} finally {
 				setSavingKey(null)
 			}
 		},
-		[data, inputData, updateConfig],
+		[data, inputData, updateConfig, toast],
 	)
 
 	useEffect(() => {

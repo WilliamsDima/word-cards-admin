@@ -16,10 +16,12 @@ import PageHeader from "@shared/PageHeader/PageHeader"
 import Card from "@shared/Card/Card"
 import { SocialDeleteModal } from "./ui/SocialDeleteModal"
 import type { ISocial, SocialKeys } from "@shared/api/services/appConfig/types"
+import { useToast } from "@shared/Toast/useToast"
 
 function SocialsPage() {
 	const { data } = useGetAppConfigQuery()
 	const [updateConfig, { isLoading }] = useUpdateAppConfigMutation()
+	const toast = useToast()
 
 	const [socialsData, setSocialsData] = useState<ISocial[]>([])
 	const [savingId, setSavingId] = useState<number | string | null>(null)
@@ -33,6 +35,9 @@ function SocialsPage() {
 			setSavingId(id ?? null)
 			try {
 				await updateConfig({ ...data, socials: nextSocials }).unwrap()
+				return { ok: true as const }
+			} catch (err) {
+				return { ok: false as const, err }
 			} finally {
 				setSavingId(null)
 			}
@@ -75,9 +80,23 @@ function SocialsPage() {
 
 	const onSaveHandler = useCallback(
 		async (id: number | string) => {
-			await persist(socialsData, id)
+			const result = await persist(socialsData, id)
+			if (!result) return
+
+			if (result.ok) {
+				const saved = socialsData.find(item => item.id === id)
+				toast.success("Соцсеть сохранена", saved?.name || "Без названия")
+			} else {
+				const serverError =
+					(result.err as { data?: { data?: { error?: string } } })?.data?.data
+						?.error ?? null
+				toast.error(
+					"Ошибка сохранения",
+					serverError || "Не удалось сохранить соцсеть",
+				)
+			}
 		},
-		[persist, socialsData],
+		[persist, socialsData, toast],
 	)
 
 	useEffect(() => {
@@ -131,6 +150,7 @@ function SocialsPage() {
 				setSocialsData={setSocialsData}
 				persist={persist}
 				setDeleteTarget={setDeleteTarget}
+				toast={toast}
 			/>
 		</div>
 	)

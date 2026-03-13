@@ -6,6 +6,7 @@ import {
 	useUpdateAppConfigMutation,
 } from "@shared/api/services/appConfig/AppConfigQuery"
 import { Icon } from "@assets/icons/Icon"
+import { useToast } from "@shared/Toast/useToast"
 
 type OptionVk = {
 	value: boolean
@@ -20,6 +21,7 @@ const optionsVk: OptionVk[] = [
 const BooleanChange = () => {
 	const { data } = useGetAppConfigQuery()
 	const [updateConfig, { isLoading }] = useUpdateAppConfigMutation()
+	const toast = useToast()
 
 	const [showVKAuth, setShowVKAuth] = useState<
 		SingleValue<OptionVk> | undefined
@@ -96,8 +98,16 @@ const BooleanChange = () => {
 			showVKAuth: showVKAuth.value,
 		}
 
-		await updateConfig(nextConfig).unwrap()
-	}, [data, showVKAuth, updateConfig])
+		try {
+			await updateConfig(nextConfig).unwrap()
+			toast.success("Настройки обновлены")
+		} catch (err) {
+			const serverError =
+				(err as { data?: { data?: { error?: string } } })?.data?.data?.error ??
+				null
+			toast.error("Ошибка сохранения", serverError || "Не удалось сохранить")
+		}
+	}, [data, showVKAuth, updateConfig, toast])
 
 	useEffect(() => {
 		if (data?.showVKAuth !== undefined)

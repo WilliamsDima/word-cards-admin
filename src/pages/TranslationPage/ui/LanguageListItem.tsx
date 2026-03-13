@@ -6,6 +6,7 @@ import styles from "../TranslationPage.module.scss"
 import { useUpdateLanguageMutation } from "@shared/api/services/languages/LanguagesQuery"
 import { DirtyMap, DraftMap } from "../TranslationPage"
 import Input from "@shared/Input/Input"
+import { useToast } from "@shared/Toast/useToast"
 import type {
 	JsonValue,
 	LanguageItem,
@@ -39,6 +40,7 @@ const LanguageListItem: React.FC<Props> = memo(
 	}) => {
 		const [updateLanguage, { isLoading: isSaving }] =
 			useUpdateLanguageMutation()
+		const toast = useToast()
 		const [localName, setLocalName] = useState(language.name)
 		const [localEmoji, setLocalEmoji] = useState(language.emoji)
 
@@ -53,18 +55,29 @@ const LanguageListItem: React.FC<Props> = memo(
 			async (language: LanguageItem) => {
 				const draft = drafts[language.code] ?? language.json
 				if (!draft) return
-				await updateLanguage({
-					id: language.id,
-					payload: {
-						code: language.code,
-						emoji: localEmoji.trim(),
-						name: localName.trim(),
-						json: draft,
-					},
-				}).unwrap()
-				setDirtyMap(prev => ({ ...prev, [language.code]: false }))
+				try {
+					await updateLanguage({
+						id: language.id,
+						payload: {
+							code: language.code,
+							emoji: localEmoji.trim(),
+							name: localName.trim(),
+							json: draft,
+						},
+					}).unwrap()
+					setDirtyMap(prev => ({ ...prev, [language.code]: false }))
+					toast.success("Язык обновлён", localName)
+				} catch (err) {
+					const serverError =
+						(err as { data?: { data?: { error?: string } } })?.data?.data
+							?.error ?? null
+					toast.error(
+						"Ошибка обновления",
+						serverError || "Не удалось обновить язык",
+					)
+				}
 			},
-			[drafts, updateLanguage, setDirtyMap, localEmoji, localName],
+			[drafts, updateLanguage, setDirtyMap, localEmoji, localName, toast],
 		)
 
 		const onDelete = useCallback(

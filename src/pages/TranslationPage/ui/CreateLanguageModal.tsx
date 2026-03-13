@@ -3,6 +3,7 @@ import Modal from "@shared/Modal/Modal"
 import Button from "@shared/Button/Button"
 import styles from "../TranslationPage.module.scss"
 import { useCreateLanguageMutation } from "@shared/api/services/languages/LanguagesQuery"
+import { useToast } from "@shared/Toast/useToast"
 import Input from "@shared/Input/Input"
 
 type Props = {
@@ -13,6 +14,7 @@ type Props = {
 const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 	const [createLanguage, { isLoading: isCreating }] =
 		useCreateLanguageMutation()
+	const toast = useToast()
 
 	const [createForm, setCreateForm] = useState({
 		code: "",
@@ -67,6 +69,7 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 			setCreateForm({ code: "", name: "", emoji: "" })
 			setCreateError(null)
 			setIsCreateOpen(false)
+			toast.success("Язык добавлен", name)
 		} catch (err) {
 			const status =
 				typeof (err as { status?: number })?.status === "number"
@@ -79,12 +82,21 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 
 			if (status === 409) {
 				setCreateError("Код языка уже существует")
+				toast.error("Ошибка добавления", "Код языка уже существует")
 				return
 			}
 
 			setCreateError(serverError || "Не удалось создать язык")
+			toast.error("Ошибка добавления", serverError || "Не удалось создать язык")
 		}
-	}, [createForm.code, createForm.emoji, createForm.name, createLanguage, setIsCreateOpen])
+	}, [
+		createForm.code,
+		createForm.emoji,
+		createForm.name,
+		createLanguage,
+		setIsCreateOpen,
+		toast,
+	])
 
 	const onClose = () => setIsCreateOpen(false)
 

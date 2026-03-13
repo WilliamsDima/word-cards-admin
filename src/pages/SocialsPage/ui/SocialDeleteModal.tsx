@@ -3,13 +3,18 @@ import styles from "../SocialsPage.module.scss"
 import Modal from "@shared/Modal/Modal"
 import Button from "@shared/Button/Button"
 import type { ISocial } from "@shared/api/services/appConfig/types"
+import type { ToastContextValue } from "@shared/Toast/types"
 
 type SocialDeleteModalProps = {
 	deleteTarget: ISocial | null
 	socialsData: ISocial[]
 	setDeleteTarget: (deleteTarget: ISocial | null) => void
 	setSocialsData: (socialsData: ISocial[]) => void
-	persist: (nextSocials: ISocial[], id?: number | string) => Promise<void>
+	persist: (
+		nextSocials: ISocial[],
+		id?: number | string,
+	) => Promise<{ ok: true } | { ok: false; err: unknown } | undefined>
+	toast: ToastContextValue
 }
 
 export const SocialDeleteModal: FC<SocialDeleteModalProps> = ({
@@ -18,6 +23,7 @@ export const SocialDeleteModal: FC<SocialDeleteModalProps> = ({
 	setDeleteTarget,
 	setSocialsData,
 	persist,
+	toast,
 }) => {
 	const onClose = () => setDeleteTarget(null)
 
@@ -26,8 +32,26 @@ export const SocialDeleteModal: FC<SocialDeleteModalProps> = ({
 		const next = socialsData.filter(it => it.id !== deleteTarget.id)
 		setSocialsData(next)
 		setDeleteTarget(null)
-		await persist(next, deleteTarget.id)
-	}, [deleteTarget, persist, socialsData, setDeleteTarget, setSocialsData])
+		const result = await persist(next, deleteTarget.id)
+		if (result?.ok) {
+			toast.success("Соцсеть удалена", deleteTarget.name || "Без названия")
+		} else if (result && !result.ok) {
+			const serverError =
+				(result.err as { data?: { data?: { error?: string } } })?.data?.data
+					?.error ?? null
+			toast.error(
+				"Ошибка удаления",
+				serverError || "Не удалось удалить соцсеть",
+			)
+		}
+	}, [
+		deleteTarget,
+		persist,
+		socialsData,
+		setDeleteTarget,
+		setSocialsData,
+		toast,
+	])
 
 	return (
 		<Modal

@@ -2,9 +2,10 @@
 import Modal from "@shared/Modal/Modal"
 import Button from "@shared/Button/Button"
 import styles from "../TranslationPage.module.scss"
-import type { LanguageItem } from "@shared/api/types"
 import { useDeleteLanguageMutation } from "@shared/api/services/languages/LanguagesQuery"
 import { DirtyMap } from "../TranslationPage"
+import { useToast } from "@shared/Toast/useToast"
+import type { LanguageItem } from "@shared/api/services/languages/types"
 
 type Props = {
 	deleteTarget: LanguageItem | null
@@ -19,16 +20,23 @@ const DeleteLanguageModal: React.FC<Props> = ({
 }) => {
 	const [deleteLanguage, { isLoading: isDeleting }] =
 		useDeleteLanguageMutation()
+	const toast = useToast()
 
 	const onConfirmDelete = useCallback(async () => {
 		if (!deleteTarget) return
 		try {
 			await deleteLanguage(deleteTarget.id).unwrap()
 			setDirtyMap(prev => ({ ...prev, [deleteTarget.code]: false }))
+			toast.success("Язык удалён", deleteTarget.name)
+		} catch (err) {
+			const serverError =
+				(err as { data?: { data?: { error?: string } } })?.data?.data?.error ??
+				null
+			toast.error("Ошибка удаления", serverError || "Не удалось удалить язык")
 		} finally {
 			setDeleteTarget(null)
 		}
-	}, [deleteLanguage, deleteTarget, setDeleteTarget, setDirtyMap])
+	}, [deleteLanguage, deleteTarget, setDeleteTarget, setDirtyMap, toast])
 
 	const onClose = () => {
 		setDeleteTarget(null)
