@@ -104,6 +104,14 @@
 	cursor: pointer;
 }
 
+.langHeaderContent {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	width: 100%;
+}
+
 .langInfo {
 	display: flex;
 	align-items: center;
@@ -175,20 +183,6 @@
 .badgeDirty {
 	background: rgba(colors.$color-warning, 0.2);
 	color: colors.$color-warning;
-}
-
-.chevron {
-	width: 10px;
-	height: 10px;
-	border-right: 2px solid colors.$color-text-secondary;
-	border-bottom: 2px solid colors.$color-text-secondary;
-	transform: rotate(45deg);
-	transition: transform 0.2s ease;
-	margin-right: 4px;
-}
-
-.chevronOpen {
-	transform: rotate(-135deg);
 }
 
 .langBody {

@@ -40,24 +40,17 @@
 	}
 }
 
+.headerContent {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	width: 100%;
+}
+
 .blockName {
 	margin: 0;
 	font-size: 1.3rem;
 	color: colors.$color-text-secondary;
-}
-
-.chevron {
-	margin-left: auto;
-	width: 8px;
-	height: 8px;
-	border-right: 2px solid colors.$color-text-secondary;
-	border-bottom: 2px solid colors.$color-text-secondary;
-	transform: rotate(45deg);
-	transition: transform 0.2s ease;
-}
-
-.chevron[data-open="true"] {
-	transform: rotate(-135deg);
 }
 
 .content {

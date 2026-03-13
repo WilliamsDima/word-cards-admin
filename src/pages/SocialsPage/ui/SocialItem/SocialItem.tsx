@@ -84,8 +84,8 @@ const SocialItem: FC<Props> = memo(
 		}, [onExpanded])
 
 		const renderHeader = useCallback(
-			(open: boolean) => (
-				<>
+			() => (
+				<div className={styles.headerContent}>
 					<Icon
 						kind='svg'
 						name='delete-red-64'
@@ -95,8 +95,7 @@ const SocialItem: FC<Props> = memo(
 					/>
 					<p className={styles.index}>{index + 1}.</p>
 					<p className={styles.blockName}>{title}</p>
-					<span className={styles.chevron} data-open={open} />
-				</>
+				</div>
 			),
 			[index, onDeleteHandler, title],
 		)

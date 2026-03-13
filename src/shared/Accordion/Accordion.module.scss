@@ -1,4 +1,6 @@
-﻿.accordion {
+@use "../../assets/styles/colors.scss" as colors;
+
+.accordion {
 	width: 100%;
 }
 
@@ -6,8 +8,33 @@
 	width: 100%;
 	background: transparent;
 	border: none;
-	padding: 0;
 	text-align: left;
+}
+
+.headerInner {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
+}
+
+.headerContent {
+	flex: 1;
+	min-width: 0;
+}
+
+.chevron {
+	width: 10px;
+	height: 10px;
+	border-right: 2px solid colors.$color-text-secondary;
+	border-bottom: 2px solid colors.$color-text-secondary;
+	transform: rotate(45deg);
+	transition: transform 0.2s ease;
+	flex-shrink: 0;
+}
+
+.chevronOpen {
+	transform: rotate(-135deg);
 }
 
 .content {

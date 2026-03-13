@@ -8,6 +8,7 @@ type Props = {
 	className?: string
 	headerClassName?: string
 	contentClassName?: string
+	chevronClassName?: string
 	defaultOpen?: boolean
 	open?: boolean
 	onOpenChange?: (open: boolean) => void
@@ -19,6 +20,7 @@ const Accordion: React.FC<Props> = ({
 	className,
 	headerClassName,
 	contentClassName,
+	chevronClassName,
 	defaultOpen = false,
 	open,
 	onOpenChange,
@@ -52,6 +54,13 @@ const Accordion: React.FC<Props> = ({
 		() => cn(styles.content, contentClassName),
 		[contentClassName],
 	)
+	const chevronClasses = useMemo(
+		() =>
+			cn(styles.chevron, chevronClassName, {
+				[styles.chevronOpen]: isOpen,
+			}),
+		[chevronClassName, isOpen],
+	)
 
 	return (
 		<div className={wrapperClassName} data-open={isOpen}>
@@ -61,7 +70,10 @@ const Accordion: React.FC<Props> = ({
 				onClick={handleToggle}
 				data-open={isOpen}
 			>
-				{headerNode}
+				<div className={styles.headerInner}>
+					<div className={styles.headerContent}>{headerNode}</div>
+					<span className={chevronClasses} />
+				</div>
 			</button>
 			<div className={contentClasses} data-open={isOpen}>
 				{children}

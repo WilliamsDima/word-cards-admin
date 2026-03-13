@@ -116,14 +116,6 @@ const LanguageListItem: React.FC<Props> = memo(
 			[isDirty],
 		)
 
-		const chevronStyles = useMemo(
-			() =>
-				cn(styles.chevron, {
-					[styles.chevronOpen]: isExpanded,
-				}),
-			[isExpanded],
-		)
-
 		const updatedAtInfo = useMemo(() => {
 			const parsed = new Date(language.updated_at)
 			const isValid = !Number.isNaN(parsed.getTime())
@@ -160,7 +152,7 @@ const LanguageListItem: React.FC<Props> = memo(
 
 		const renderHeader = useCallback(
 			() => (
-				<>
+				<div className={styles.langHeaderContent}>
 					<div className={styles.langInfo}>
 						<span className={styles.langEmoji}>
 							{localEmoji || language.emoji}
@@ -186,13 +178,11 @@ const LanguageListItem: React.FC<Props> = memo(
 						<span className={badgeStyles}>
 							{isDirty ? "Черновик" : "Синхронизировано"}
 						</span>
-						<span className={chevronStyles} />
 					</div>
-				</>
+				</div>
 			),
 			[
 				badgeStyles,
-				chevronStyles,
 				isDirty,
 				language.code,
 				language.emoji,
