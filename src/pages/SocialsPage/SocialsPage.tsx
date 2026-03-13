@@ -6,7 +6,6 @@
 	useState,
 } from "react"
 import styles from "./SocialsPage.module.scss"
-import type { ISocial, SocialKeys } from "@shared/api/types"
 import SocialItem from "./ui/SocialItem/SocialItem"
 import {
 	useGetAppConfigQuery,
@@ -16,6 +15,7 @@ import { Icon } from "@assets/icons/Icon"
 import PageHeader from "@shared/PageHeader/PageHeader"
 import Card from "@shared/Card/Card"
 import { SocialDeleteModal } from "./ui/SocialDeleteModal"
+import type { ISocial, SocialKeys } from "@shared/api/services/appConfig/types"
 
 function SocialsPage() {
 	const { data } = useGetAppConfigQuery()

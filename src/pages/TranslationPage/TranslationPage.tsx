@@ -1,7 +1,6 @@
 ﻿import React, { useCallback, useEffect, useMemo, useState } from "react"
 import Button from "@shared/Button/Button"
 import styles from "./TranslationPage.module.scss"
-import type { JsonValue, LanguageItem } from "@shared/api/types"
 import PageHeader from "@shared/PageHeader/PageHeader"
 import Card from "@shared/Card/Card"
 import { useGetLanguagesQuery } from "@shared/api/services/languages/LanguagesQuery"
@@ -9,6 +8,10 @@ import Loading from "@shared/Loading/Loading"
 import LanguageListItem from "./ui/LanguageListItem"
 import DeleteLanguageModal from "./ui/DeleteLanguageModal"
 import CreateLanguageModal from "./ui/CreateLanguageModal"
+import type {
+	JsonValue,
+	LanguageItem,
+} from "@shared/api/services/languages/types"
 
 const buildFallbackJson = (language: LanguageItem) => ({
 	meta: {

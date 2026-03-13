@@ -1,7 +1,7 @@
 ﻿import { baseRTK } from "@app/api/BaseRTK"
 import { toRtkQueryResult } from "@shared/api/RTK/rtk"
 import { languagesService } from "./LanguagesService"
-import type { LanguageItem, LanguagePayload, LanguagesMap } from "@shared/api/types"
+import type { LanguageItem, LanguagePayload, LanguagesMap } from "./types"
 
 export const languagesAPI = baseRTK.injectEndpoints({
 	endpoints: builder => ({
@@ -22,7 +22,9 @@ export const languagesAPI = baseRTK.injectEndpoints({
 			{ id: number; payload: LanguagePayload }
 		>({
 			async queryFn({ id, payload }) {
-				return toRtkQueryResult(await languagesService.updateLanguage(id, payload))
+				return toRtkQueryResult(
+					await languagesService.updateLanguage(id, payload),
+				)
 			},
 			invalidatesTags: ["languages"],
 		}),

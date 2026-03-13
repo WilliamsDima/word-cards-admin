@@ -1,11 +1,14 @@
 ﻿import React, { memo, useCallback, useMemo } from "react"
 import Button from "@shared/Button/Button"
 import { githubDarkTheme, JsonEditor } from "json-edit-react"
-import type { JsonValue, LanguageItem } from "@shared/api/types"
 import cn from "classnames"
 import styles from "../TranslationPage.module.scss"
 import { useUpdateLanguageMutation } from "@shared/api/services/languages/LanguagesQuery"
 import { DirtyMap, DraftMap } from "../TranslationPage"
+import type {
+	JsonValue,
+	LanguageItem,
+} from "@shared/api/services/languages/types"
 
 type Props = {
 	language: LanguageItem
@@ -92,6 +95,22 @@ const LanguageListItem: React.FC<Props> = memo(
 			[isExpanded],
 		)
 
+		const updatedAtInfo = useMemo(() => {
+			const parsed = new Date(language.updated_at)
+			const isValid = !Number.isNaN(parsed.getTime())
+			const today = new Date()
+			const isToday = isValid && parsed.toDateString() === today.toDateString()
+			const label = isValid
+				? parsed.toLocaleDateString("ru-RU", {
+						day: "2-digit",
+						month: "2-digit",
+						year: "numeric",
+					})
+				: "—"
+
+			return { label, isToday }
+		}, [language.updated_at])
+
 		return (
 			<article className={expandedStyles}>
 				<button
@@ -103,9 +122,17 @@ const LanguageListItem: React.FC<Props> = memo(
 						<span className={styles.langEmoji}>{language.emoji}</span>
 						<div className={styles.langText}>
 							<span className={styles.langName}>{language.name}</span>
-							<span className={styles.langMeta}>
-								{language.code.toUpperCase()}
-							</span>
+							<div className={styles.langMetaRow}>
+								<span className={styles.langMeta}>
+									{language.code.toUpperCase()}
+								</span>
+								<span className={styles.updatedAt}>
+									Обновлено: {updatedAtInfo.label}
+								</span>
+								{updatedAtInfo.isToday ? (
+									<span className={styles.updatedToday}>Сегодня</span>
+								) : null}
+							</div>
 						</div>
 					</div>
 					<div className={styles.langControls}>

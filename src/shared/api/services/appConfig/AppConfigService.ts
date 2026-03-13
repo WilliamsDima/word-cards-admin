@@ -1,5 +1,5 @@
 import { request } from "@shared/api/request"
-import type { IAplication } from "@shared/api/types"
+import type { IAplication } from "./types"
 
 class AppConfigService {
 	getConfig() {

@@ -1,8 +1,8 @@
 ﻿import React, { FC, useCallback } from "react"
 import styles from "../SocialsPage.module.scss"
-import type { ISocial } from "@shared/api/types"
 import Modal from "@shared/Modal/Modal"
 import Button from "@shared/Button/Button"
+import type { ISocial } from "@shared/api/services/appConfig/types"
 
 type SocialDeleteModalProps = {
 	deleteTarget: ISocial | null

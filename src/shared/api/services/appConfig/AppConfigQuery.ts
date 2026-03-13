@@ -1,7 +1,7 @@
 import { baseRTK } from "@app/api/BaseRTK"
 import { toRtkQueryResult } from "@shared/api/RTK/rtk"
 import { appConfigService } from "./AppConfigService"
-import type { IAplication } from "@shared/api/types"
+import type { IAplication } from "./types"
 
 export const appConfigAPI = baseRTK.injectEndpoints({
 	endpoints: builder => ({

@@ -1,9 +1,9 @@
 import React, { FC, memo, useMemo, useState } from "react"
 import Loading from "@shared/Loading/Loading"
 import styles from "./SocialItem.module.scss"
-import type { ISocial, SocialKeys } from "@shared/api/types"
 import Input from "@shared/Input/Input"
 import { Icon } from "@assets/icons/Icon"
+import type { ISocial, SocialKeys } from "@shared/api/services/appConfig/types"
 
 type Props = {
 	item: ISocial

@@ -133,9 +133,29 @@
 	font-weight: 600;
 }
 
+.langMetaRow {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
 .langMeta {
 	font-size: 1.2rem;
 	color: colors.$color-text-secondary;
+}
+
+.updatedAt {
+	font-size: 1.2rem;
+	color: colors.$color-text-secondary;
+}
+
+.updatedToday {
+	padding: 4px 8px;
+	border-radius: 999px;
+	font-size: 1.1rem;
+	background: rgba(colors.$color-primary, 0.2);
+	color: colors.$color-primary;
 }
 
 .langControls {
