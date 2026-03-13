@@ -192,25 +192,31 @@
 }
 
 .langBody {
-	display: none;
 	grid-template-columns: 1fr;
 	gap: 16px;
-	padding: 0 18px 18px;
+	padding: 0 18px 0;
 	max-height: 0;
 	opacity: 0;
 	transform: translateY(-6px);
 	overflow: hidden;
+	margin-top: 0;
+	pointer-events: none;
 	transition:
 		max-height 0.3s ease,
 		opacity 0.2s ease,
-		transform 0.2s ease;
+		transform 0.2s ease,
+		margin-top 0.2s ease,
+		padding 0.2s ease;
+	display: grid;
 }
 
 .expanded .langBody {
-	display: grid;
 	max-height: 900px;
 	opacity: 1;
 	transform: translateY(0);
+	margin-top: 12px;
+	padding: 0 18px 18px;
+	pointer-events: auto;
 }
 
 .metaEdit {
