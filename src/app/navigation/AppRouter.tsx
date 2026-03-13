@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+﻿import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import LoginPage from "@pages/LoginPage/LoginPage"
 import { AppRoutes } from "./routes"
@@ -15,6 +15,7 @@ import { useMeQuery } from "@shared/api/services/auth/AuthQuery"
 import { getAuthToken } from "@shared/lib/authToken"
 import SocialsPage from "@pages/SocialsPage/SocialsPage"
 import UserProfilePage from "@pages/UserProfilePage/UserProfilePage"
+import AppPreloader from "@shared/AppPreloader/AppPreloader"
 
 const AppRouter = () => {
 	const { setIsAdmin } = useActions()
@@ -41,12 +42,11 @@ const AppRouter = () => {
 			return
 		}
 
-		// TODO: admin
 		setIsAdmin(true)
 		setLoading(false)
 	}, [token, isLoading, isError, data, setIsAdmin])
 
-	if (loading) return <p>Загрузка...</p>
+	if (loading) return <AppPreloader />
 
 	return (
 		<BrowserRouter>
@@ -82,3 +82,4 @@ const AppRouter = () => {
 }
 
 export default AppRouter
+
