@@ -213,6 +213,27 @@
 	transform: translateY(0);
 }
 
+.metaEdit {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 12px;
+}
+
+.codeField {
+	display: grid;
+	gap: 6px;
+	align-content: start;
+}
+
+.codeValue {
+	padding: 10px 12px;
+	border-radius: 10px;
+	border: 1px solid colors.$color-border;
+	background: colors.$color-surface-2;
+	color: colors.$color-text-secondary;
+	font-size: 1.3rem;
+}
+
 .editorWrap {
 	border-radius: 14px;
 	border: 1px solid colors.$color-border-soft;
@@ -298,5 +319,9 @@
 	.langControls {
 		width: 100%;
 		justify-content: space-between;
+	}
+
+	.metaEdit {
+		grid-template-columns: 1fr;
 	}
 }

@@ -1,10 +1,11 @@
-﻿import React, { memo, useCallback, useMemo } from "react"
+﻿import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
 import Button from "@shared/Button/Button"
 import { githubDarkTheme, JsonEditor } from "json-edit-react"
 import cn from "classnames"
 import styles from "../TranslationPage.module.scss"
 import { useUpdateLanguageMutation } from "@shared/api/services/languages/LanguagesQuery"
 import { DirtyMap, DraftMap } from "../TranslationPage"
+import Input from "@shared/Input/Input"
 import type {
 	JsonValue,
 	LanguageItem,
@@ -38,6 +39,8 @@ const LanguageListItem: React.FC<Props> = memo(
 	}) => {
 		const [updateLanguage, { isLoading: isSaving }] =
 			useUpdateLanguageMutation()
+		const [localName, setLocalName] = useState(language.name)
+		const [localEmoji, setLocalEmoji] = useState(language.emoji)
 
 		const onDeleteHandler = () => onDelete(language)
 		const onResetHandler = () => onReset(language)
@@ -54,14 +57,14 @@ const LanguageListItem: React.FC<Props> = memo(
 					id: language.id,
 					payload: {
 						code: language.code,
-						emoji: language.emoji,
-						name: language.name,
+						emoji: localEmoji.trim(),
+						name: localName.trim(),
 						json: draft,
 					},
 				}).unwrap()
 				setDirtyMap(prev => ({ ...prev, [language.code]: false }))
 			},
-			[drafts, updateLanguage, setDirtyMap],
+			[drafts, updateLanguage, setDirtyMap, localEmoji, localName],
 		)
 
 		const onDelete = useCallback(
@@ -111,6 +114,22 @@ const LanguageListItem: React.FC<Props> = memo(
 			return { label, isToday }
 		}, [language.updated_at])
 
+		const metaDirty = useMemo(() => {
+			return (
+				localName.trim() !== language.name ||
+				localEmoji.trim() !== language.emoji
+			)
+		}, [language.emoji, language.name, localEmoji, localName])
+
+		const metaInvalid = useMemo(() => {
+			return !localName.trim() || !localEmoji.trim()
+		}, [localEmoji, localName])
+
+		useEffect(() => {
+			setLocalName(language.name)
+			setLocalEmoji(language.emoji)
+		}, [language.name, language.emoji])
+
 		return (
 			<article className={expandedStyles}>
 				<button
@@ -119,9 +138,13 @@ const LanguageListItem: React.FC<Props> = memo(
 					type='button'
 				>
 					<div className={styles.langInfo}>
-						<span className={styles.langEmoji}>{language.emoji}</span>
+						<span className={styles.langEmoji}>
+							{localEmoji || language.emoji}
+						</span>
 						<div className={styles.langText}>
-							<span className={styles.langName}>{language.name}</span>
+							<span className={styles.langName}>
+								{localName || language.name}
+							</span>
 							<div className={styles.langMetaRow}>
 								<span className={styles.langMeta}>
 									{language.code.toUpperCase()}
@@ -144,6 +167,30 @@ const LanguageListItem: React.FC<Props> = memo(
 				</button>
 
 				<div className={styles.langBody}>
+					<div className={styles.metaEdit}>
+						<label className={styles.field}>
+							<span className={styles.label}>Название</span>
+							<Input
+								value={localName}
+								onChange={e => setLocalName(e.target.value)}
+								placeholder={language.name}
+							/>
+						</label>
+						<label className={styles.field}>
+							<span className={styles.label}>Emoji</span>
+							<Input
+								value={localEmoji}
+								onChange={e => setLocalEmoji(e.target.value)}
+								placeholder={language.emoji}
+							/>
+						</label>
+						<div className={styles.codeField}>
+							<span className={styles.label}>Код языка</span>
+							<div className={styles.codeValue}>
+								{language.code.toUpperCase()}
+							</div>
+						</div>
+					</div>
 					<div className={styles.editorWrap}>
 						<JsonEditor
 							data={draft}
@@ -161,7 +208,7 @@ const LanguageListItem: React.FC<Props> = memo(
 					<div className={styles.actions}>
 						<Button
 							className={styles.primaryBtn}
-							disabled={!isDirty || isSaving}
+							disabled={(!isDirty && !metaDirty) || metaInvalid || isSaving}
 							onClick={onSaveHandler}
 						>
 							{isSaving ? "Сохранение..." : "Сохранить"}
