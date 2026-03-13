@@ -26,6 +26,11 @@ const routesNav = [
 		icon: <Icon kind='svg' name='app' width={20} height={20} />,
 	},
 	{
+		name: "Переводы",
+		route: AppRoutes.translation,
+		icon: <Icon kind='svg' name='translate' width={20} height={20} />,
+	},
+	{
 		name: "Соц. сети",
 		route: AppRoutes.socials,
 		icon: <Icon kind='svg' name='links' width={20} height={20} />,

@@ -5,7 +5,7 @@ export const AppRoutes = {
 	users: "/users",
 	userProfile: "/user/:id",
 	aplication: "/aplication",
-	translation: `/translation`,
+	translation: "/translation",
 	socials: `/socials`,
 	chats: "/chats",
 } as const

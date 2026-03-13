@@ -11,6 +11,7 @@ import LinksIcon from "@assets/icons/svg/links.svg?react"
 import LogoutIcon from "@assets/icons/svg/logout.svg?react"
 import SearchIcon from "@assets/icons/svg/search.svg?react"
 import SupportIcon from "@assets/icons/svg/support.svg?react"
+import TranslateIcon from "@assets/icons/svg/translate.svg?react"
 import UserIcon from "@assets/icons/svg/user.svg?react"
 import LogoWebp from "@assets/icons/webp/logo.webp"
 
@@ -27,6 +28,7 @@ export type SvgName =
 	| "logout"
 	| "search"
 	| "support"
+	| "translate"
 	| "user"
 export type WebpName = "logo"
 
@@ -101,6 +103,9 @@ export function Icon<K extends keyof KindMap>(props: { kind: K } & KindMap[K]) {
 
 		case "support":
 			return <SupportIcon width={width} height={height} {...svgProps} />
+
+		case "translate":
+			return <TranslateIcon width={width} height={height} {...svgProps} />
 
 		case "user":
 			return <UserIcon width={width} height={height} {...svgProps} />

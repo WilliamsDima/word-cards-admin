@@ -8,7 +8,7 @@ import UsersPage from "@pages/UsersPage/UsersPage"
 import AdminLayout from "@pages/AdminLayout/AdminLayout"
 import AplicationPage from "@pages/AplicationPage/AplicationPage"
 import ChatsPage from "@pages/ChatsPage/ChatsPage"
-// import TranslationPage from "@pages/TranslationPage/TranslationPage"
+import TranslationPage from "@pages/TranslationPage/TranslationPage"
 import { useActions } from "@shared/hooks/useActions"
 import { useAppSelector } from "@shared/hooks/useStore"
 import { useMeQuery } from "@shared/api/services/auth/AuthQuery"
@@ -64,7 +64,7 @@ const AppRouter = () => {
 						<Route path={AppRoutes.users} element={<UsersPage />} />
 						<Route path={AppRoutes.userProfile} element={<UserProfilePage />} />
 						<Route path={AppRoutes.aplication} element={<AplicationPage />} />
-						{/* <Route path={AppRoutes.translation} element={<TranslationPage />} /> */}
+						<Route path={AppRoutes.translation} element={<TranslationPage />} />
 						<Route path={AppRoutes.socials} element={<SocialsPage />} />
 						<Route path={AppRoutes.chats} element={<ChatsPage />} />
 
@@ -82,4 +82,3 @@ const AppRouter = () => {
 }
 
 export default AppRouter
-
