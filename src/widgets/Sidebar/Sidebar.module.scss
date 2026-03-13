@@ -17,6 +17,7 @@
 		padding: 16px;
 		align-items: center;
 		justify-content: space-between;
+		gap: 6px;
 
 		.title {
 			color: colors.$color-primary-light;
@@ -69,10 +70,10 @@
 			align-items: center;
 			background-color: rgba(colors.$color-white, 0.06);
 			border: 1px solid rgba(255, 255, 255, 0.06);
-			padding: 6px;
 			border-radius: 10px;
-			width: 40px;
-			height: 40px;
+			width: 36px;
+			height: 36px;
+			padding: 6px;
 			color: colors.$color-text-secondary;
 		}
 	}
@@ -298,7 +299,7 @@
 		}
 
 		.currentUser {
-			margin: 0 0 12px;
+			margin: 16px 12px;
 			padding: 10px;
 			justify-content: center;
 		}

@@ -1,110 +1,286 @@
-@use "../../assets/styles/colors.scss" as colors;
+﻿@use "../../assets/styles/colors.scss" as colors;
 @use "../../assets/styles/globalStyles.scss" as global;
 
 .page {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
+	height: 100%;
+	min-height: 0;
+	overflow: hidden;
 }
 
 .card {
-	padding: 24px;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	flex: 1;
+	min-height: 0;
+	overflow: hidden;
 }
 
-.json {
+.listHeader {
 	display: flex;
-	justify-content: flex-start;
-	align-items: center;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.addBtn {
+	background: rgba(255, 255, 255, 0.08);
+	border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.sectionTitle {
+	margin: 0;
+	font-size: 1.8rem;
+	font-weight: 600;
+}
+
+.sectionHint {
+	margin: 6px 0 0;
+	font-size: 1.3rem;
+	color: colors.$color-text-secondary;
+	max-width: 540px;
+}
+
+.list {
+	display: flex;
 	flex-direction: column;
+	gap: 12px;
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	@extend %scroll;
+}
 
+.loadingState {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	padding: 16px;
+	color: colors.$color-text-secondary;
+}
+
+.loadingSpinner {
+	width: 32px;
+	height: 32px;
+}
+
+.langCard {
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	border-radius: 18px;
+	overflow: hidden;
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+.expanded {
+	border-color: rgba(120, 255, 220, 0.3);
+	box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+}
+
+.langHeader {
 	width: 100%;
-	position: relative;
-	margin-bottom: 1rem;
-	min-height: 420px;
+	border: none;
+	background: transparent;
+	color: inherit;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 16px 18px;
+	text-align: left;
+	cursor: pointer;
+}
 
-	.fileNotFound {
-		margin-bottom: 1rem;
-	}
+.langInfo {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
 
-	.loader {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		position: absolute;
-		z-index: 1000;
-		width: 100%;
-		height: 100%;
-		border-radius: 0.5rem;
-		background-color: rgba($color: colors.$color-text-disabled, $alpha: 0.5);
-	}
+.langEmoji {
+	width: 40px;
+	height: 40px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 12px;
+	background: rgba(255, 255, 255, 0.08);
+	font-size: 20px;
+	box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.08);
+}
 
-	.editor {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-		height: auto;
-		min-height: 100%;
-		position: relative;
-		border-radius: 0.8rem;
-		overflow: auto;
-		border: 1px solid rgba(255, 255, 255, 0.06);
-		background: rgba(255, 255, 255, 0.02);
+.langText {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
 
-		.jsonEditor {
-			height: 100%;
-			overflow: auto;
-			&::-webkit-scrollbar {
-				width: 2px;
-				background-color: transparent;
-			}
+.langName {
+	font-size: 1.5rem;
+	font-weight: 600;
+}
 
-			&::-webkit-scrollbar-thumb {
-				background-color: colors.$color-primary;
-				border-radius: 5px;
-			}
-		}
+.langMeta {
+	font-size: 1.2rem;
+	color: colors.$color-text-secondary;
+}
 
-		&.error {
-			border: 1px solid colors.$color-error;
-		}
+.langControls {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
 
-		.language {
-			position: absolute;
-			z-index: 5;
-			right: 2rem;
-			bottom: 1rem;
+.badge {
+	padding: 6px 10px;
+	border-radius: 999px;
+	font-size: 1.1rem;
+	background: rgba(255, 255, 255, 0.08);
+	color: colors.$color-text-secondary;
+}
 
-			color: colors.$color-text-primary;
-			font-size: 16px;
-		}
+.badgeDirty {
+	background: rgba(255, 199, 120, 0.18);
+	color: colors.$color-warning;
+}
 
-		.error {
-			color: colors.$color-error;
-		}
+.chevron {
+	width: 10px;
+	height: 10px;
+	border-right: 2px solid rgba(255, 255, 255, 0.6);
+	border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+	transform: rotate(45deg);
+	transition: transform 0.2s ease;
+	margin-right: 4px;
+}
 
-		.dropdown {
-			position: absolute;
-			z-index: 100;
-			right: 2rem;
-			top: 1rem;
-		}
+.chevronOpen {
+	transform: rotate(-135deg);
+}
 
-		.fileName {
-			position: absolute;
-			z-index: 100;
-			left: 1rem;
-			top: 0.5rem;
-			color: colors.$color-text-secondary;
-		}
-	}
+.langBody {
+	display: none;
+	grid-template-columns: 1fr;
+	gap: 16px;
+	padding: 0 18px 18px;
+	max-height: 0;
+	opacity: 0;
+	transform: translateY(-6px);
+	overflow: hidden;
+	transition:
+		max-height 0.3s ease,
+		opacity 0.2s ease,
+		transform 0.2s ease;
+}
+
+.expanded .langBody {
+	display: grid;
+	max-height: 900px;
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.editorWrap {
+	border-radius: 14px;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	background: rgba(255, 255, 255, 0.02);
+	padding: 8px 10px 12px;
+	max-height: 420px;
+	overflow: auto;
+}
+
+.jsonEditor {
+	height: 100%;
 }
 
 .actions {
 	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
 	justify-content: flex-end;
 }
 
-.btn {
+.primaryBtn {
 	background-color: colors.$color-primary;
+}
+
+.ghostBtn {
+	background: rgba(255, 255, 255, 0.06);
+}
+
+.dangerBtn {
+	background: colors.$color-red;
+	color: colors.$color-white;
+}
+
+.empty {
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	text-align: center;
+	color: colors.$color-text-secondary;
+	padding: 24px;
+}
+
+.emptyTitle {
+	font-size: 1.6rem;
+	font-weight: 600;
+	color: colors.$color-text-primary;
+}
+
+.emptyText {
+	font-size: 1.3rem;
+	max-width: 320px;
+}
+
+.modalForm {
+	display: grid;
+	gap: 12px;
+}
+
+.field {
+	display: grid;
+	gap: 6px;
+}
+
+.label {
+	font-size: 1.2rem;
+	color: colors.$color-text-secondary;
+}
+
+.input {
+	width: 100%;
+	padding: 10px 12px;
+	border-radius: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: rgba(255, 255, 255, 0.04);
+	color: colors.$color-text-primary;
+	font-size: 1.3rem;
+	outline: none;
+
+	&:focus {
+		border-color: rgba(120, 255, 220, 0.35);
+		box-shadow: 0 0 0 2px rgba(120, 255, 220, 0.12);
+	}
+}
+
+@media (max-width: 720px) {
+	.langHeader {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.langControls {
+		width: 100%;
+		justify-content: space-between;
+	}
 }

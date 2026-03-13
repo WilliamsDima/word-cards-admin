@@ -95,6 +95,26 @@ export type AppLanguageType = {
 }
 export type AppLanguagesType = Record<TranslationKeys, AppLanguageType>
 
+export type JsonValue =
+	| Record<string, unknown>
+	| unknown[]
+	| string
+	| number
+	| boolean
+	| null
+
+export type LanguageItem = {
+	id: number
+	code: string
+	emoji: string
+	name: string
+	json: JsonValue
+}
+
+export type LanguagesMap = Record<string, LanguageItem>
+
+export type LanguagePayload = Omit<LanguageItem, "id">
+
 export interface IAplication {
 	about: IAbout
 	appName: string
