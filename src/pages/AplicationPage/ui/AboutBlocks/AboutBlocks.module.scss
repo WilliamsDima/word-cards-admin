@@ -33,6 +33,16 @@
 	border: 1px solid colors.$color-border-soft;
 }
 
+.ghostBtn {
+	background: colors.$color-surface-3;
+	border: 1px solid colors.$color-border-soft;
+}
+
+.dangerBtn {
+	background: colors.$color-red;
+	color: colors.$color-white;
+}
+
 .list {
 	display: flex;
 	flex-direction: column;

@@ -4,25 +4,25 @@ import Input from "@shared/Input/Input"
 import Button from "@shared/Button/Button"
 
 type Props = {
-	blockId: number
 	index: number
 	value: string
+	id: number
 	onChangePunkt: (id: number, index: number, value: string) => void
 	onRemovePunkt: (id: number, index: number) => void
 }
 
 const AboutBlockPunktRow: React.FC<Props> = memo(
-	({ blockId, index, value, onChangePunkt, onRemovePunkt }) => {
+	({ index, value, id, onChangePunkt, onRemovePunkt }) => {
 		const inputValue = useMemo(() => value, [value])
 		const onChangeHandler = useCallback(
 			(e: React.ChangeEvent<HTMLInputElement>) =>
-				onChangePunkt(blockId, index, e.target.value),
-			[blockId, index, onChangePunkt],
+				onChangePunkt(index, index, e.target.value),
+			[index, onChangePunkt],
 		)
 
 		const onRemoveHandler = useCallback(
-			() => onRemovePunkt(blockId, index),
-			[blockId, index, onRemovePunkt],
+			() => onRemovePunkt(id, index),
+			[index, id, onRemovePunkt],
 		)
 
 		return (

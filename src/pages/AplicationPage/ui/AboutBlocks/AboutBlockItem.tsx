@@ -14,7 +14,11 @@ type Props = {
 	isSaving: boolean
 	isNew: boolean
 	onToggle: (id: number) => void
-	onChangeField: (id: number, field: "blockName" | "text", value: string) => void
+	onChangeField: (
+		id: number,
+		field: "blockName" | "text",
+		value: string,
+	) => void
 	onChangePunkt: (id: number, index: number, value: string) => void
 	onAddPunkt: (id: number) => void
 	onRemovePunkt: (id: number, index: number) => void
@@ -73,10 +77,22 @@ const AboutBlockItem: React.FC<Props> = memo(
 			[isDirty, isSaving],
 		)
 
-		const onToggleHandler = useCallback(() => onToggle(block.id), [block.id, onToggle])
-		const onSaveHandler = useCallback(() => onSave(block.id), [block.id, onSave])
-		const onResetHandler = useCallback(() => onReset(block.id), [block.id, onReset])
-		const onDeleteHandler = useCallback(() => onDelete(block.id), [block.id, onDelete])
+		const onToggleHandler = useCallback(
+			() => onToggle(block.id),
+			[block.id, onToggle],
+		)
+		const onSaveHandler = useCallback(
+			() => onSave(block.id),
+			[block.id, onSave],
+		)
+		const onResetHandler = useCallback(
+			() => onReset(block.id),
+			[block.id, onReset],
+		)
+		const onDeleteHandler = useCallback(
+			() => onDelete(block.id),
+			[block.id, onDelete],
+		)
 		const onAddPunktHandler = useCallback(
 			() => onAddPunkt(block.id),
 			[block.id, onAddPunkt],
@@ -94,22 +110,21 @@ const AboutBlockItem: React.FC<Props> = memo(
 			[block.id, onChangeField],
 		)
 
-		const punktRows = useMemo(
-			() =>
-				(block.punkts ?? []).map((punkt, index) => (
-					<AboutBlockPunktRow
-						key={`${block.id}-punkt-${index}`}
-						blockId={block.id}
-						index={index}
-						value={punkt}
-						onChangePunkt={onChangePunkt}
-						onRemovePunkt={onRemovePunkt}
-					/>
-				)),
-			[block.id, block.punkts, onChangePunkt, onRemovePunkt],
+		const nameValue = useMemo(() => block.blockName ?? "", [block.blockName])
+		const textValue = useMemo(() => block.text ?? "", [block.text])
+		const nameLabel = useMemo(() => "Название блока", [])
+		const textLabel = useMemo(() => "Текст", [])
+		const punktTitle = useMemo(() => "Пункты", [])
+		const addPunktLabel = useMemo(() => "Добавить пункт", [])
+		const punktEmptyText = useMemo(() => "Нет пунктов — добавьте первый", [])
+		const saveLabel = useMemo(
+			() => (isSaving ? "Сохранение..." : "Сохранить"),
+			[isSaving],
 		)
+		const resetLabel = useMemo(() => "Отменить", [])
+		const deleteLabel = useMemo(() => "Удалить", [])
 
-		const header = useCallback(
+		const headerNode = useMemo(
 			() => (
 				<div className={styles.headerContent}>
 					<div className={styles.titleBlock}>
@@ -129,33 +144,40 @@ const AboutBlockItem: React.FC<Props> = memo(
 				className={styles.card}
 				headerClassName={styles.header}
 				contentClassName={styles.body}
-				header={header}
+				header={headerNode}
 			>
 				<div className={styles.fields}>
 					<label className={styles.field}>
-						<span className={styles.label}>Название блока</span>
-						<Input value={block.blockName ?? ""} onChange={onChangeName} />
+						<span className={styles.label}>{nameLabel}</span>
+						<Input value={nameValue} onChange={onChangeName} />
 					</label>
 					<label className={styles.field}>
-						<span className={styles.label}>Текст</span>
-						<Input value={block.text ?? ""} onChange={onChangeText} />
+						<span className={styles.label}>{textLabel}</span>
+						<Input value={textValue} onChange={onChangeText} />
 					</label>
 				</div>
 
 				<div className={styles.punktSection}>
 					<div className={styles.punktHeader}>
-						<p className={styles.punktTitle}>Пункты</p>
+						<p className={styles.punktTitle}>{punktTitle}</p>
 						<Button className={styles.punktAddBtn} onClick={onAddPunktHandler}>
-							Добавить пункт
+							{addPunktLabel}
 						</Button>
 					</div>
 					<div className={styles.punktList}>
-						{punktRows.length ? (
-							punktRows
+						{block?.punkts?.length ? (
+							(block.punkts ?? []).map((punkt, index) => (
+								<AboutBlockPunktRow
+									key={`${block.id}-punkt-${index}`}
+									id={block.id}
+									index={index}
+									value={punkt}
+									onChangePunkt={onChangePunkt}
+									onRemovePunkt={onRemovePunkt}
+								/>
+							))
 						) : (
-							<div className={styles.punktEmpty}>
-								Нет пунктов — добавьте первый
-							</div>
+							<div className={styles.punktEmpty}>{punktEmptyText}</div>
 						)}
 					</div>
 				</div>
@@ -166,17 +188,17 @@ const AboutBlockItem: React.FC<Props> = memo(
 						onClick={onSaveHandler}
 						disabled={isSaveDisabled}
 					>
-						{isSaving ? "Сохранение..." : "Сохранить"}
+						{saveLabel}
 					</Button>
 					<Button
 						className={styles.ghostBtn}
 						onClick={onResetHandler}
 						disabled={isResetDisabled}
 					>
-						Отменить
+						{resetLabel}
 					</Button>
 					<Button className={styles.dangerBtn} onClick={onDeleteHandler}>
-						Удалить
+						{deleteLabel}
 					</Button>
 				</div>
 			</Accordion>
