@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+﻿import React, { useMemo, useState } from "react"
 import styles from "./Sidebar.module.scss"
 import {
 	useLogoutMutation,
@@ -26,12 +26,16 @@ const routesNav = [
 		icon: <Icon kind='svg' name='app' width={20} height={20} />,
 	},
 	{
+		name: "Соц. сети",
+		route: AppRoutes.socials,
+		icon: <Icon kind='svg' name='links' width={20} height={20} />,
+	},
+	{
 		name: "Поддержка",
 		route: AppRoutes.chats,
 		icon: <Icon kind='svg' name='support' width={20} height={20} />,
 	},
 ]
-
 const Sidebar: React.FC = () => {
 	const navigation = useAppNavigate()
 	const location = useLocation()

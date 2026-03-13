@@ -7,6 +7,7 @@ import DeleteRed64Icon from "@assets/icons/svg/delete-red-64.svg?react"
 import DoneGreen48Icon from "@assets/icons/svg/done-green-48.svg?react"
 import GooglePlayIconIcon from "@assets/icons/svg/google-play-icon.svg?react"
 import GoogleIcon from "@assets/icons/svg/google.svg?react"
+import LinksIcon from "@assets/icons/svg/links.svg?react"
 import LogoutIcon from "@assets/icons/svg/logout.svg?react"
 import SearchIcon from "@assets/icons/svg/search.svg?react"
 import SupportIcon from "@assets/icons/svg/support.svg?react"
@@ -22,6 +23,7 @@ export type SvgName =
 	| "done-green-48"
 	| "google-play-icon"
 	| "google"
+	| "links"
 	| "logout"
 	| "search"
 	| "support"
@@ -87,6 +89,9 @@ export function Icon<K extends keyof KindMap>(props: { kind: K } & KindMap[K]) {
 
 		case "google":
 			return <GoogleIcon width={width} height={height} {...svgProps} />
+
+		case "links":
+			return <LinksIcon width={width} height={height} {...svgProps} />
 
 		case "logout":
 			return <LogoutIcon width={width} height={height} {...svgProps} />
