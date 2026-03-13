@@ -2,7 +2,7 @@
 import InputsApp from "./ui/InputsApp/InputsApp"
 import BooleanChange from "./ui/BooleanChange/BooleanChange"
 import PageHeader from "@shared/PageHeader/PageHeader"
-import Card from "@shared/Card/Card"
+import AboutBlocks from "./ui/AboutBlocks/AboutBlocks"
 
 function AplicationPage() {
 	return (
@@ -12,11 +12,13 @@ function AplicationPage() {
 				subtitle='Управление настройками приложения, ссылками и интеграциями.'
 			/>
 
-			<Card className={styles.card}>
+			<div className={styles.cards}>
 				<InputsApp />
 
 				<BooleanChange />
-			</Card>
+
+				<AboutBlocks />
+			</div>
 		</div>
 	)
 }

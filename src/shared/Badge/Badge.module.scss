@@ -1,0 +1,31 @@
+@use "../../assets/styles/colors.scss" as colors;
+
+.badge {
+	padding: 6px 10px;
+	border-radius: 999px;
+	font-size: 1.1rem;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	white-space: nowrap;
+}
+
+.neutral {
+	background: colors.$color-surface-3;
+	color: colors.$color-text-secondary;
+}
+
+.warning {
+	background: rgba(colors.$color-warning, 0.2);
+	color: colors.$color-warning;
+}
+
+.success {
+	background: rgba(colors.$color-success, 0.2);
+	color: colors.$color-success;
+}
+
+.info {
+	background: rgba(colors.$color-info, 0.2);
+	color: colors.$color-info;
+}

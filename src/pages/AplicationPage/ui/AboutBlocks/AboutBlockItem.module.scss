@@ -1,0 +1,174 @@
+@use "../../../../assets/styles/colors.scss" as colors;
+@use "../../../../assets/styles/globalStyles.scss" as global;
+
+.card {
+	background: colors.$color-surface-2;
+	border: 1px solid colors.$color-border-soft;
+	border-radius: 18px;
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+.card[data-open="true"] {
+	border-color: colors.$color-primary;
+	box-shadow: 0 18px 40px colors.$color-shadow;
+}
+
+.header {
+	width: 100%;
+	background: transparent;
+	border: none;
+	color: inherit;
+	padding: 16px 18px;
+	text-align: left;
+	cursor: pointer;
+}
+
+.headerContent {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	width: 100%;
+}
+
+.titleBlock {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.title {
+	margin: 0;
+	font-size: 1.5rem;
+	font-weight: 600;
+}
+
+.meta {
+	margin: 0;
+	font-size: 1.2rem;
+	color: colors.$color-text-secondary;
+}
+
+
+.body {
+	max-height: 0;
+	opacity: 0;
+	transform: translateY(-6px);
+	overflow: hidden;
+	margin-top: 0;
+	pointer-events: none;
+	padding: 0 18px 0;
+	transition:
+		max-height 0.3s ease,
+		opacity 0.2s ease,
+		transform 0.2s ease,
+		margin-top 0.2s ease,
+		padding 0.2s ease;
+	display: grid;
+	gap: 16px;
+}
+
+.body[data-open="true"] {
+	max-height: 1000px;
+	opacity: 1;
+	transform: translateY(0);
+	margin-top: 12px;
+	pointer-events: auto;
+	padding: 0 18px 18px;
+}
+
+.fields {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+}
+
+.field {
+	display: grid;
+	gap: 6px;
+}
+
+.label {
+	font-size: 1.2rem;
+	color: colors.$color-text-secondary;
+}
+
+.punktSection {
+	display: grid;
+	gap: 12px;
+}
+
+.punktHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.punktTitle {
+	margin: 0;
+	font-size: 1.4rem;
+	font-weight: 600;
+}
+
+.punktAddBtn {
+	background: colors.$color-surface-3;
+	border: 1px solid colors.$color-border-soft;
+}
+
+.punktList {
+	display: grid;
+	gap: 10px;
+}
+
+.punktRow {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 10px;
+	align-items: center;
+}
+
+.punktRemoveBtn {
+	background: colors.$color-surface-3;
+	border: 1px solid colors.$color-border-soft;
+	color: colors.$color-text-secondary;
+}
+
+.punktEmpty {
+	font-size: 1.2rem;
+	color: colors.$color-text-secondary;
+}
+
+.actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	justify-content: flex-end;
+}
+
+.primaryBtn {
+	background-color: colors.$color-primary;
+}
+
+.ghostBtn {
+	background: colors.$color-surface-3;
+	border: 1px solid colors.$color-border-soft;
+}
+
+.dangerBtn {
+	background: colors.$color-red;
+	color: colors.$color-white;
+}
+
+@media (max-width: 720px) {
+	.fields {
+		grid-template-columns: 1fr;
+	}
+
+	.headerContent {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}

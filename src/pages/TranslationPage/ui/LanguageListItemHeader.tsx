@@ -1,7 +1,7 @@
-﻿import React, { memo, useMemo } from "react"
+import React, { memo, useMemo } from "react"
 import styles from "../TranslationPage.module.scss"
 import type { LanguageItem } from "@shared/api/services/languages/types"
-import cn from "classnames"
+import Badge, { BadgeVariant } from "@shared/Badge/Badge"
 
 type Props = {
 	localEmoji: string
@@ -28,12 +28,20 @@ const LanguageListItemHeader: React.FC<Props> = memo(
 			return { label, isToday }
 		}, [language.updated_at])
 
-		const badgeStyles = useMemo(
-			() =>
-				cn(styles.badge, {
-					[styles.badgeDirty]: isDirty,
-				}),
+		const badgeLabel = useMemo(
+			() => (isDirty ? "Черновик" : "Синхронизировано"),
 			[isDirty],
+		)
+		const badgeVariant = useMemo<BadgeVariant>(
+			() => (isDirty ? "warning" : "neutral"),
+			[isDirty],
+		)
+		const todayBadge = useMemo(
+			() =>
+				updatedAtInfo.isToday ? (
+					<Badge label='Сегодня' variant='info' />
+				) : null,
+			[updatedAtInfo.isToday],
 		)
 
 		return (
@@ -53,16 +61,12 @@ const LanguageListItemHeader: React.FC<Props> = memo(
 							<span className={styles.updatedAt}>
 								Обновлено: {updatedAtInfo.label}
 							</span>
-							{updatedAtInfo.isToday ? (
-								<span className={styles.updatedToday}>Сегодня</span>
-							) : null}
+							{todayBadge}
 						</div>
 					</div>
 				</div>
 				<div className={styles.langControls}>
-					<span className={badgeStyles}>
-						{isDirty ? "Черновик" : "Синхронизировано"}
-					</span>
+					<Badge label={badgeLabel} variant={badgeVariant} />
 				</div>
 			</div>
 		)
