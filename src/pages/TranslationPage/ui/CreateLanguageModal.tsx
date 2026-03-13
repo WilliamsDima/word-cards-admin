@@ -3,6 +3,7 @@ import Modal from "@shared/Modal/Modal"
 import Button from "@shared/Button/Button"
 import styles from "../TranslationPage.module.scss"
 import { useCreateLanguageMutation } from "@shared/api/services/languages/LanguagesQuery"
+import Input from "@shared/Input/Input"
 
 type Props = {
 	open: boolean
@@ -110,8 +111,7 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 			<div className={styles.modalForm}>
 				<label className={styles.field}>
 					<span className={styles.label}>Код языка</span>
-					<input
-						className={styles.input}
+					<Input
 						placeholder='en'
 						value={createForm.code}
 						onChange={e => onChangeCreateForm("code", e.target.value)}
@@ -119,8 +119,7 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 				</label>
 				<label className={styles.field}>
 					<span className={styles.label}>Название</span>
-					<input
-						className={styles.input}
+					<Input
 						placeholder='English'
 						value={createForm.name}
 						onChange={e => onChangeCreateForm("name", e.target.value)}
@@ -128,8 +127,7 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 				</label>
 				<label className={styles.field}>
 					<span className={styles.label}>Emoji</span>
-					<input
-						className={styles.input}
+					<Input
 						placeholder='🌍'
 						value={createForm.emoji}
 						onChange={e => onChangeCreateForm("emoji", e.target.value)}

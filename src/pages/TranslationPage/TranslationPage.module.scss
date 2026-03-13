@@ -284,22 +284,6 @@
 	color: colors.$color-text-secondary;
 }
 
-.input {
-	width: 100%;
-	padding: 10px 12px;
-	border-radius: 10px;
-	border: 1px solid colors.$color-border;
-	background: colors.$color-surface-2;
-	color: colors.$color-text-primary;
-	font-size: 1.3rem;
-	outline: none;
-
-	&:focus {
-		border-color: colors.$color-primary;
-		box-shadow: 0 0 0 2px rgba(colors.$color-primary, 0.2);
-	}
-}
-
 .formError {
 	color: colors.$color-error;
 	font-size: 1.2rem;
