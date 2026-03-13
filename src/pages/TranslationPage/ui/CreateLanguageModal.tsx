@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useMemo, useState } from "react"
+﻿import React, { useCallback, useEffect, useMemo, useState } from "react"
 import Modal from "@shared/Modal/Modal"
 import Button from "@shared/Button/Button"
 import styles from "../TranslationPage.module.scss"
@@ -18,10 +18,19 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 		name: "",
 		emoji: "",
 	})
+	const [createError, setCreateError] = useState<string | null>(null)
+
+	useEffect(() => {
+		if (!open) {
+			setCreateError(null)
+		}
+	}, [open])
 
 	const canCreate = useMemo(
 		() =>
-			createForm.code.trim().length > 0 && createForm.name.trim().length > 0,
+			createForm.code.trim().length > 0 &&
+			createForm.name.trim().length > 0 &&
+			createForm.emoji.trim().length > 0,
 		[createForm],
 	)
 
@@ -31,6 +40,7 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 				...prev,
 				[field]: value,
 			}))
+			setCreateError(null)
 		},
 		[],
 	)
@@ -38,27 +48,42 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 	const onCreate = useCallback(async () => {
 		const code = createForm.code.trim().toLowerCase()
 		const name = createForm.name.trim()
-		const emoji = createForm.emoji.trim() || "🌍"
+		const emoji = createForm.emoji.trim()
 
-		if (!code || !name) return
+		if (!code || !name || !emoji) {
+			setCreateError("Заполните все поля")
+			return
+		}
 
-		await createLanguage({
-			code,
-			name,
-			emoji,
-			json: {},
-		}).unwrap()
+		try {
+			await createLanguage({
+				code,
+				name,
+				emoji,
+				json: {},
+			}).unwrap()
 
-		setCreateForm({ code: "", name: "", emoji: "" })
-		setIsCreateOpen(false)
-	}, [
-		createForm.code,
-		createForm.emoji,
-		setCreateForm,
-		setIsCreateOpen,
-		createForm.name,
-		createLanguage,
-	])
+			setCreateForm({ code: "", name: "", emoji: "" })
+			setCreateError(null)
+			setIsCreateOpen(false)
+		} catch (err) {
+			const status =
+				typeof (err as { status?: number })?.status === "number"
+					? (err as { status?: number }).status
+					: (err as { data?: { status?: number } })?.data?.status
+
+			const serverError =
+				(err as { data?: { data?: { error?: string } } })?.data?.data?.error ??
+				null
+
+			if (status === 409) {
+				setCreateError("Код языка уже существует")
+				return
+			}
+
+			setCreateError(serverError || "Не удалось создать язык")
+		}
+	}, [createForm.code, createForm.emoji, createForm.name, createLanguage, setIsCreateOpen])
 
 	const onClose = () => setIsCreateOpen(false)
 
@@ -110,6 +135,9 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 						onChange={e => onChangeCreateForm("emoji", e.target.value)}
 					/>
 				</label>
+				{createError ? (
+					<div className={styles.formError}>{createError}</div>
+				) : null}
 			</div>
 		</Modal>
 	)
