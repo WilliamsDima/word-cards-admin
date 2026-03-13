@@ -53,6 +53,7 @@
 }
 
 .dangerBtn {
-	background: linear-gradient(135deg, #ff5a6f, #cf6679);
+	background: colors.$color-red;
+	color: colors.$color-white;
 	box-shadow: 0 12px 24px rgba(207, 102, 121, 0.25);
 }
