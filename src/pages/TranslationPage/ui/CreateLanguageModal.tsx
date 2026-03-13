@@ -5,6 +5,7 @@ import styles from "../TranslationPage.module.scss"
 import { useCreateLanguageMutation } from "@shared/api/services/languages/LanguagesQuery"
 import { useToast } from "@shared/Toast/useToast"
 import Input from "@shared/Input/Input"
+import { isTranslationKey } from "@shared/api/services/languages/types"
 
 type Props = {
 	open: boolean
@@ -12,10 +13,6 @@ type Props = {
 }
 
 const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
-	const [createLanguage, { isLoading: isCreating }] =
-		useCreateLanguageMutation()
-	const toast = useToast()
-
 	const [createForm, setCreateForm] = useState({
 		code: "",
 		name: "",
@@ -23,18 +20,34 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 	})
 	const [createError, setCreateError] = useState<string | null>(null)
 
-	useEffect(() => {
-		if (!open) {
-			setCreateError(null)
-		}
-	}, [open])
+	const [createLanguage, { isLoading: isCreating }] =
+		useCreateLanguageMutation()
+	const toast = useToast()
 
+	const normalizedCode = useMemo(
+		() => createForm.code.trim().toLowerCase(),
+		[createForm.code],
+	)
+	const isCodeAllowed = useMemo(
+		() => isTranslationKey(normalizedCode),
+		[normalizedCode],
+	)
 	const canCreate = useMemo(
 		() =>
-			createForm.code.trim().length > 0 &&
+			normalizedCode.length > 0 &&
+			isCodeAllowed &&
 			createForm.name.trim().length > 0 &&
 			createForm.emoji.trim().length > 0,
-		[createForm],
+		[createForm.emoji, createForm.name, isCodeAllowed, normalizedCode],
+	)
+	const codeValidationError = useMemo(() => {
+		if (!normalizedCode.length) return null
+		if (isCodeAllowed) return null
+		return "Код языка не поддерживается"
+	}, [isCodeAllowed, normalizedCode])
+	const formError = useMemo(
+		() => createError ?? codeValidationError,
+		[codeValidationError, createError],
 	)
 
 	const onChangeCreateForm = useCallback(
@@ -67,12 +80,18 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 	)
 
 	const onCreate = useCallback(async () => {
-		const code = createForm.code.trim().toLowerCase()
+		const code = normalizedCode
 		const name = createForm.name.trim()
 		const emoji = createForm.emoji.trim()
 
 		if (!code || !name || !emoji) {
 			setCreateError("Заполните все поля")
+			return
+		}
+
+		if (!isCodeAllowed) {
+			setCreateError("Код языка не поддерживается")
+			toast.error("Ошибка добавления", "Код языка не поддерживается")
 			return
 		}
 
@@ -108,10 +127,11 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 			toast.error("Ошибка добавления", serverError || "Не удалось создать язык")
 		}
 	}, [
-		createForm.code,
 		createForm.emoji,
 		createForm.name,
 		createLanguage,
+		isCodeAllowed,
+		normalizedCode,
 		setIsCreateOpen,
 		toast,
 	])
@@ -122,6 +142,12 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 		() => !canCreate || isCreating,
 		[canCreate, isCreating],
 	)
+
+	useEffect(() => {
+		if (!open) {
+			setCreateError(null)
+		}
+	}, [open])
 
 	return (
 		<Modal
@@ -168,8 +194,8 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 						onChange={onChangeEmoji}
 					/>
 				</label>
-				{createError ? (
-					<div className={styles.formError}>{createError}</div>
+				{formError ? (
+					<div className={styles.formError}>{formError}</div>
 				) : null}
 			</div>
 		</Modal>

@@ -10,6 +10,7 @@ import type {
 	JsonValue,
 	LanguageItem,
 } from "@shared/api/services/languages/types"
+import { isTranslationKey } from "@shared/api/services/languages/types"
 import Accordion from "@shared/Accordion/Accordion"
 import LanguageListItemInputs from "./LanguageListItemInputs"
 import LanguageListItemHeader from "./LanguageListItemHeader"
@@ -40,21 +41,47 @@ const LanguageListItem: React.FC<Props> = memo(
 		setDirtyMap,
 		setDeleteTarget,
 	}) => {
-		const [updateLanguage, { isLoading: isSaving }] =
-			useUpdateLanguageMutation()
-		const toast = useToast()
 		const [localName, setLocalName] = useState(language.name)
 		const [localEmoji, setLocalEmoji] = useState(language.emoji)
 
-		const onDeleteHandler = () => onDelete(language)
-		const onResetHandler = () => onReset(language)
-		const onSaveHandler = () => onSave(language)
-		const onChangeJsonHandler = (value: unknown) =>
-			onChangeJson(language.code, value)
-		const onToggleHandler = () => onToggle(language.code)
+		const [updateLanguage, { isLoading: isSaving }] =
+			useUpdateLanguageMutation()
+		const toast = useToast()
+
+		const expandedStyles = useMemo(
+			() =>
+				cn(styles.langCard, {
+					[styles.expanded]: isExpanded,
+				}),
+			[isExpanded],
+		)
+
+		const isCodeAllowed = useMemo(
+			() => isTranslationKey(language.code),
+			[language.code],
+		)
+
+		const metaDirty = useMemo(() => {
+			return (
+				localName.trim() !== language.name ||
+				localEmoji.trim() !== language.emoji
+			)
+		}, [language.emoji, language.name, localEmoji, localName])
+
+		const metaInvalid = useMemo(() => {
+			return !localName.trim() || !localEmoji.trim()
+		}, [localEmoji, localName])
+
+		const isSaveDisabled = useMemo(() => {
+			return (!isDirty && !metaDirty) || metaInvalid || isSaving || !isCodeAllowed
+		}, [isCodeAllowed, isDirty, metaDirty, metaInvalid, isSaving])
 
 		const onSave = useCallback(
 			async (language: LanguageItem) => {
+				if (!isCodeAllowed) {
+					toast.error("Ошибка обновления", "Код языка не поддерживается")
+					return
+				}
 				const draft = drafts[language.code] ?? language.json
 				if (!draft) return
 				try {
@@ -79,7 +106,15 @@ const LanguageListItem: React.FC<Props> = memo(
 					)
 				}
 			},
-			[drafts, updateLanguage, setDirtyMap, localEmoji, localName, toast],
+			[
+				drafts,
+				updateLanguage,
+				setDirtyMap,
+				localEmoji,
+				localName,
+				toast,
+				isCodeAllowed,
+			],
 		)
 
 		const onDelete = useCallback(
@@ -89,28 +124,17 @@ const LanguageListItem: React.FC<Props> = memo(
 			[setDeleteTarget],
 		)
 
-		const expandedStyles = useMemo(
-			() =>
-				cn(styles.langCard, {
-					[styles.expanded]: isExpanded,
-				}),
-			[isExpanded],
+		const onDeleteHandler = useCallback(() => onDelete(language), [language, onDelete])
+		const onResetHandler = useCallback(() => onReset(language), [language, onReset])
+		const onSaveHandler = useCallback(() => onSave(language), [language, onSave])
+		const onChangeJsonHandler = useCallback(
+			(value: unknown) => onChangeJson(language.code, value),
+			[language.code, onChangeJson],
 		)
-
-		const metaDirty = useMemo(() => {
-			return (
-				localName.trim() !== language.name ||
-				localEmoji.trim() !== language.emoji
-			)
-		}, [language.emoji, language.name, localEmoji, localName])
-
-		const metaInvalid = useMemo(() => {
-			return !localName.trim() || !localEmoji.trim()
-		}, [localEmoji, localName])
-
-		const isSaveDisabled = useMemo(() => {
-			return (!isDirty && !metaDirty) || metaInvalid || isSaving
-		}, [isDirty, metaDirty, metaInvalid, isSaving])
+		const onToggleHandler = useCallback(
+			() => onToggle(language.code),
+			[language.code, onToggle],
+		)
 
 		const renderHeader = useCallback(
 			() => (
