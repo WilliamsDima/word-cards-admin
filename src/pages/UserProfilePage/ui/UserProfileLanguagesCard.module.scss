@@ -1,4 +1,5 @@
 ﻿@use "../../../assets/styles/colors.scss" as colors;
+@use "../../../assets/styles/globalStyles.scss" as global;
 
 .languagesCard {
 	padding: 20px;
@@ -37,6 +38,9 @@
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 	gap: 12px;
+	max-height: 320px;
+	overflow: auto;
+	@extend %scroll;
 }
 
 .languageItem {
