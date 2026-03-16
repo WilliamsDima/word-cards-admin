@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+﻿import React, { useCallback, useMemo, useState } from "react"
 import { useLocation, useParams } from "react-router-dom"
 import styles from "./UserProfilePage.module.scss"
 import type { IUser } from "@entities/api/users/types"
@@ -8,11 +8,13 @@ import UserProfileGridItem, {
 } from "./ui/UserProfileGridItem"
 import UserProfilePageGridsSkeleton from "./UserProfilePageGridsSkeleton"
 import UserProfilePageSkeleton from "./UserProfilePageSkeleton"
+import UserProfileLanguagesCard from "./ui/UserProfileLanguagesCard"
 
 const buildGrids = (
 	user: IUser | undefined,
 	createdAt: string,
 	id: string | undefined,
+	languagesValue: string,
 ) => [
 	{
 		title: "Account",
@@ -35,6 +37,7 @@ const buildGrids = (
 		rows: [
 			{ label: "User id", value: user?.id ?? id },
 			{ label: "Avatar", value: user?.image ? "Set" : "Not set" },
+			{ label: "Изучаемые языки", value: languagesValue },
 			{ label: "Notes", value: "N/A" },
 		],
 	},
@@ -44,9 +47,13 @@ const UserProfilePage = () => {
 	const { id } = useParams()
 	const location = useLocation()
 	const userFromState = (location.state as { user?: IUser } | undefined)?.user
+
+	const [languagesValue, setLanguagesValue] = useState<string>("Нет языков")
+
 	const { data, isLoading } = useGetUserByIdQuery(id ?? "", {
 		skip: !id,
 	})
+
 	const user: IUser | undefined = useMemo(
 		() => data ?? userFromState,
 		[data, userFromState],
@@ -64,8 +71,12 @@ const UserProfilePage = () => {
 	)
 
 	const grids: ProfileGridItemType[] = useMemo(() => {
-		return buildGrids(user, createdAt, id)
-	}, [createdAt, user, id])
+		return buildGrids(user, createdAt, id, languagesValue)
+	}, [createdAt, languagesValue, user, id])
+
+	const onLanguagesValueChange = useCallback((value: string) => {
+		setLanguagesValue(value)
+	}, [])
 
 	return (
 		<div className={styles.page}>
@@ -103,6 +114,11 @@ const UserProfilePage = () => {
 					grids.map(it => <UserProfileGridItem key={it.title} item={it} />)
 				)}
 			</div>
+
+			<UserProfileLanguagesCard
+				user={user}
+				onValueChange={onLanguagesValueChange}
+			/>
 		</div>
 	)
 }

@@ -10,6 +10,13 @@ class UsersService {
 	getUserById(id: string | number) {
 		return request<IUser>(`/users/${id}`, { method: "GET" })
 	}
+
+	updateUserLanguages(id: string | number, languages: number[]) {
+		return request<IUser>(`/users/${id}/languages`, {
+			method: "PUT",
+			json: { languages },
+		})
+	}
 }
 
 export const usersService = new UsersService()

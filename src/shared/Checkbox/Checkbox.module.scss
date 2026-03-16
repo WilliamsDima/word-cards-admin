@@ -1,0 +1,19 @@
+﻿@use "../../assets/styles/colors.scss" as colors;
+
+.checkbox {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	cursor: pointer;
+}
+
+.input {
+	width: 16px;
+	height: 16px;
+	accent-color: colors.$color-primary;
+}
+
+.label {
+	color: colors.$color-text-primary;
+	font-size: 13px;
+}

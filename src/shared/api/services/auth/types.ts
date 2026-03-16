@@ -4,6 +4,7 @@ export type AuthUser = {
 	picture: string
 	uid: string
 	id: number
+	languages: number[]
 }
 
 export type AuthLoginResponse = {

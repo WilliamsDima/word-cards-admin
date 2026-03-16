@@ -38,6 +38,13 @@
 	font-weight: 600;
 }
 
+.sectionTitleRow {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
 .sectionHint {
 	margin: 6px 0 0;
 	font-size: 1.3rem;

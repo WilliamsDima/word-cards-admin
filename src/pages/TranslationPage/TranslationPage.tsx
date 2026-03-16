@@ -5,6 +5,7 @@ import PageHeader from "@shared/PageHeader/PageHeader"
 import Card from "@shared/Card/Card"
 import { useGetLanguagesQuery } from "@shared/api/services/languages/LanguagesQuery"
 import Loading from "@shared/Loading/Loading"
+import Badge from "@shared/Badge/Badge"
 import LanguageListItem from "./ui/LanguageListItem"
 import DeleteLanguageModal from "./ui/DeleteLanguageModal"
 import CreateLanguageModal from "./ui/CreateLanguageModal"
@@ -42,6 +43,8 @@ function TranslationPage() {
 			? Object.values(data).sort((a, b) => a.name.localeCompare(b.name))
 			: []
 	}, [data])
+
+	const languagesCount = useMemo(() => languages.length, [languages])
 
 	const getDraft = useCallback(
 		(language: LanguageItem) => {
@@ -97,7 +100,10 @@ function TranslationPage() {
 			<Card className={styles.card}>
 				<div className={styles.listHeader}>
 					<div>
-						<h2 className={styles.sectionTitle}>Список языков</h2>
+						<div className={styles.sectionTitleRow}>
+							<h2 className={styles.sectionTitle}>Список языков</h2>
+							<Badge label={`Всего: ${languagesCount}`} variant='info' />
+						</div>
 						<p className={styles.sectionHint}>
 							Раскройте карточку, отредактируйте JSON и сохраните правки.
 						</p>
