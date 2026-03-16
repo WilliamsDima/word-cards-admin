@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react"
+﻿import React, { memo, useCallback, useMemo } from "react"
 import styles from "./AboutBlockItem.module.scss"
 import Input from "@shared/Input/Input"
 import Button from "@shared/Button/Button"
@@ -6,23 +6,22 @@ import Button from "@shared/Button/Button"
 type Props = {
 	index: number
 	value: string
-	id: number
-	onChangePunkt: (id: number, index: number, value: string) => void
-	onRemovePunkt: (id: number, index: number) => void
+	onChangePunkt: (index: number, value: string) => void
+	onRemovePunkt: (index: number) => void
 }
 
 const AboutBlockPunktRow: React.FC<Props> = memo(
-	({ index, value, id, onChangePunkt, onRemovePunkt }) => {
+	({ index, value, onChangePunkt, onRemovePunkt }) => {
 		const inputValue = useMemo(() => value, [value])
 		const onChangeHandler = useCallback(
 			(e: React.ChangeEvent<HTMLInputElement>) =>
-				onChangePunkt(index, index, e.target.value),
+				onChangePunkt(index, e.target.value),
 			[index, onChangePunkt],
 		)
 
 		const onRemoveHandler = useCallback(
-			() => onRemovePunkt(id, index),
-			[index, id, onRemovePunkt],
+			() => onRemovePunkt(index),
+			[index, onRemovePunkt],
 		)
 
 		return (
