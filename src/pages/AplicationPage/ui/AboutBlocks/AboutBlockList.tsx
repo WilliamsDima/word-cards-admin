@@ -94,19 +94,6 @@ const AboutBlockList: React.FC = memo(() => {
 		}
 	}, [data, serverBlocks, toast, updateConfig])
 
-	const renderBlockItems = useCallback(
-		() =>
-			serverBlocks.map(block => (
-				<AboutBlockItem
-					key={block.id}
-					block={block}
-					appConfig={data}
-					autoOpen={block.id === autoOpenId}
-				/>
-			)),
-		[autoOpenId, data, serverBlocks],
-	)
-
 	useEffect(() => {
 		if (autoOpenId === null) return
 		const exists = serverBlocks.some(block => block.id === autoOpenId)
@@ -164,7 +151,14 @@ const AboutBlockList: React.FC = memo(() => {
 					</div>
 				) : (
 					<div className={styles.list} ref={listRef}>
-						{renderBlockItems()}
+						{serverBlocks.map(block => (
+							<AboutBlockItem
+								key={block.id}
+								block={block}
+								appConfig={data}
+								autoOpen={block.id === autoOpenId}
+							/>
+						))}
 					</div>
 				)
 			) : null}

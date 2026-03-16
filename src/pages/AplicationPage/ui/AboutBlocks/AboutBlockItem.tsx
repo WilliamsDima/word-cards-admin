@@ -161,9 +161,9 @@ const AboutBlockItem: React.FC<Props> = memo(
 			setIsDeleteOpen(false)
 		}, [])
 
-		const nameLabel = useMemo(() => "Название блока", [])
-		const textLabel = useMemo(() => "Текст", [])
-		const punktTitle = useMemo(() => "Пункты", [])
+		const nameLabel = useMemo(() => "Название блока (ключ для перевода)", [])
+		const textLabel = useMemo(() => "Текст (ключ для перевода)", [])
+		const punktTitle = useMemo(() => "Пункты (ключ для перевода)", [])
 		const addPunktLabel = useMemo(() => "Добавить пункт", [])
 		const punktEmptyText = useMemo(() => "Нет пунктов - добавьте первый", [])
 		const saveLabel = useMemo(
