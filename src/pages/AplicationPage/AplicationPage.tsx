@@ -3,6 +3,7 @@ import InputsApp from "./ui/InputsApp/InputsApp"
 import BooleanChange from "./ui/BooleanChange/BooleanChange"
 import PageHeader from "@shared/PageHeader/PageHeader"
 import AboutBlocks from "./ui/AboutBlocks/AboutBlocks"
+import ShowVariants from "./ui/ShowVariants/ShowVariants"
 
 function AplicationPage() {
 	return (
@@ -17,6 +18,8 @@ function AplicationPage() {
 
 				<BooleanChange />
 
+				<ShowVariants />
+
 				<AboutBlocks />
 			</div>
 		</div>
@@ -24,3 +27,4 @@ function AplicationPage() {
 }
 
 export default AplicationPage
+

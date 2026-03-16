@@ -7,8 +7,7 @@ export type SelectOption = {
 }
 
 export type ShowVariantsOption = {
-	value: SelectOptionValue
-	keyTranslate?: string
+	value: string
 	label: string
 }
 
