@@ -6,21 +6,13 @@ import { useToast } from "@shared/Toast/useToast"
 import Card from "@shared/Card/Card"
 import Button from "@shared/Button/Button"
 import Checkbox from "@shared/Checkbox/Checkbox"
-import type { LanguageItem } from "@shared/api/services/languages/types"
 import type { IUser } from "@entities/api/users/types"
 
 type UserProfileLanguagesCardProps = {
 	user: IUser | undefined
-	onValueChange?: (value: string) => void
 }
 
-const isLanguageItem = (item: LanguageItem | undefined): item is LanguageItem =>
-	Boolean(item)
-
-const UserProfileLanguagesCard = ({
-	user,
-	onValueChange,
-}: UserProfileLanguagesCardProps) => {
+const UserProfileLanguagesCard = ({ user }: UserProfileLanguagesCardProps) => {
 	const [selectedLanguageIds, setSelectedLanguageIds] = useState<number[]>([])
 
 	const { data: languagesMap, isLoading: isLanguagesLoading } =
@@ -38,32 +30,6 @@ const UserProfileLanguagesCard = ({
 	const selectedLanguageSet = useMemo(() => {
 		return new Set(selectedLanguageIds)
 	}, [selectedLanguageIds])
-
-	const selectedLanguages = useMemo(() => {
-		if (!selectedLanguageIds.length || !languagesMap) return []
-		const allLanguages = Object.values(languagesMap)
-
-		return selectedLanguageIds
-			.map(languageId =>
-				allLanguages.find(language => language.id === languageId),
-			)
-			.filter(isLanguageItem)
-	}, [languagesMap, selectedLanguageIds])
-
-	const languagesValue = useMemo(() => {
-		if (!selectedLanguageIds.length) return "Нет языков"
-		if (isLanguagesLoading && !languagesMap) return "Загружаем..."
-		if (!languagesMap) return "Нет данных"
-
-		const languageNames = selectedLanguages.map(language => language.name)
-
-		return languageNames.length ? languageNames.join(", ") : "Нет данных"
-	}, [
-		isLanguagesLoading,
-		languagesMap,
-		selectedLanguageIds.length,
-		selectedLanguages,
-	])
 
 	const isDirty = useMemo(() => {
 		const baseLanguages = user?.languages ?? []
@@ -168,10 +134,6 @@ const UserProfileLanguagesCard = ({
 		if (!user) return
 		setSelectedLanguageIds(user.languages)
 	}, [user])
-
-	useEffect(() => {
-		onValueChange?.(languagesValue)
-	}, [languagesValue, onValueChange])
 
 	return (
 		<Card className={styles.languagesCard}>

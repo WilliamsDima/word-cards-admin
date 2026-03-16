@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useMemo, useState } from "react"
+﻿import React, { useMemo } from "react"
 import { useLocation, useParams } from "react-router-dom"
 import styles from "./UserProfilePage.module.scss"
 import type { IUser } from "@entities/api/users/types"
@@ -14,7 +14,6 @@ const buildGrids = (
 	user: IUser | undefined,
 	createdAt: string,
 	id: string | undefined,
-	languagesValue: string,
 ) => [
 	{
 		title: "Account",
@@ -37,7 +36,6 @@ const buildGrids = (
 		rows: [
 			{ label: "User id", value: user?.id ?? id },
 			{ label: "Avatar", value: user?.image ? "Set" : "Not set" },
-			{ label: "Изучаемые языки", value: languagesValue },
 			{ label: "Notes", value: "N/A" },
 		],
 	},
@@ -47,8 +45,6 @@ const UserProfilePage = () => {
 	const { id } = useParams()
 	const location = useLocation()
 	const userFromState = (location.state as { user?: IUser } | undefined)?.user
-
-	const [languagesValue, setLanguagesValue] = useState<string>("Нет языков")
 
 	const { data, isLoading } = useGetUserByIdQuery(id ?? "", {
 		skip: !id,
@@ -71,12 +67,8 @@ const UserProfilePage = () => {
 	)
 
 	const grids: ProfileGridItemType[] = useMemo(() => {
-		return buildGrids(user, createdAt, id, languagesValue)
-	}, [createdAt, languagesValue, user, id])
-
-	const onLanguagesValueChange = useCallback((value: string) => {
-		setLanguagesValue(value)
-	}, [])
+		return buildGrids(user, createdAt, id)
+	}, [createdAt, user, id])
 
 	return (
 		<div className={styles.page}>
@@ -115,10 +107,7 @@ const UserProfilePage = () => {
 				)}
 			</div>
 
-			<UserProfileLanguagesCard
-				user={user}
-				onValueChange={onLanguagesValueChange}
-			/>
+			<UserProfileLanguagesCard user={user} />
 		</div>
 	)
 }
