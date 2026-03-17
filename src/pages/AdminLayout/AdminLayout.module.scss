@@ -5,11 +5,11 @@
 	display: flex;
 	min-height: 100vh;
 	gap: 24px;
-	padding: 24px;
+	padding: 12px;
 
 	.main {
 		flex-grow: 1;
-		padding: 20px;
+		padding: 12px;
 		@extend %glassPanel;
 		height: calc(100vh - 48px);
 		display: flex;
@@ -23,7 +23,7 @@
 @media screen and (max-width: 900px) {
 	.wrapper {
 		flex-direction: column;
-		padding: 20px;
+		padding: 12px;
 
 		.main {
 			height: auto;

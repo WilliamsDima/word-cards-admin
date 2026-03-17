@@ -43,7 +43,7 @@
 
 .content {
 	width: 100%;
-	padding: 0 12px;
+	padding: 0;
 	max-height: 0;
 	opacity: 0;
 	overflow: hidden;
@@ -56,5 +56,5 @@
 .content[data-open="true"] {
 	max-height: 600px;
 	opacity: 1;
-	padding: 0 12px 12px;
+	padding: 0;
 }

@@ -36,7 +36,7 @@
 	display: grid;
 	grid-template-columns: 72px 1fr;
 	gap: 16px;
-	padding: 16px;
+	padding: 12px;
 	border-radius: 16px;
 	background: rgba(255, 255, 255, 0.04);
 	border: 1px solid rgba(255, 255, 255, 0.06);
@@ -72,7 +72,7 @@
 	gap: 8px;
 	text-align: center;
 	color: colors.$color-text-secondary;
-	padding: 24px;
+	padding: 12px;
 }
 
 .emptyIcon {

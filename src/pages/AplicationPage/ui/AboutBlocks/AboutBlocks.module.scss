@@ -2,7 +2,7 @@
 @use "../../../../assets/styles/globalStyles.scss" as global;
 
 .card {
-	padding: 24px;
+	padding: 12px;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
@@ -54,7 +54,7 @@
 	align-items: center;
 	justify-content: center;
 	gap: 12px;
-	padding: 16px;
+	padding: 12px;
 	color: colors.$color-text-secondary;
 }
 
@@ -71,7 +71,7 @@
 	gap: 8px;
 	text-align: center;
 	color: colors.$color-text-secondary;
-	padding: 24px;
+	padding: 12px;
 }
 
 .emptyTitle {

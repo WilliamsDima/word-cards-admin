@@ -4,7 +4,9 @@
 .page {
 	display: flex;
 	flex-direction: column;
-	gap: 24px;
+	gap: 14px;
+	flex: 1;
+	min-height: 0;
 }
 
 .header {
@@ -12,7 +14,7 @@
 	align-items: center;
 	gap: 20px;
 	@extend %glassPanel;
-	padding: 20px;
+	padding: 12px;
 }
 
 .avatar {
@@ -124,6 +126,8 @@
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
+	flex: 1;
+	min-height: 0;
 }
 
 .tabHeader {
@@ -158,11 +162,12 @@
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
+	flex: 1;
 	min-height: 0;
 }
 
 .card {
-	padding: 20px;
+	padding: 12px;
 	display: flex;
 	flex-direction: column;
 	gap: 12px;

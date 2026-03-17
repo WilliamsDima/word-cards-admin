@@ -9,12 +9,12 @@
 	align-items: center;
 	justify-content: center;
 	z-index: 1000;
-	padding: 24px;
+	padding: 12px;
 }
 
 .dialog {
 	width: min(520px, 100%);
-	padding: 24px;
+	padding: 12px;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
