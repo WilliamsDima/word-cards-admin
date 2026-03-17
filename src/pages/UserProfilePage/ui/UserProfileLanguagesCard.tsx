@@ -1,19 +1,32 @@
 ﻿import React, { useCallback, useEffect, useMemo, useState } from "react"
 import styles from "./UserProfileLanguagesCard.module.scss"
 import { useGetLanguagesQuery } from "@shared/api/services/languages/LanguagesQuery"
-import { useUpdateUserLanguagesMutation } from "@entities/api/users/UsersQuery"
+import {
+	useGetUserByIdQuery,
+	useUpdateUserLanguagesMutation,
+} from "@entities/api/users/UsersQuery"
 import { useToast } from "@shared/Toast/useToast"
 import Card from "@shared/Card/Card"
 import Button from "@shared/Button/Button"
 import Checkbox from "@shared/Checkbox/Checkbox"
 import type { IUser } from "@entities/api/users/types"
+import { useLocation, useParams } from "react-router-dom"
 
-type UserProfileLanguagesCardProps = {
-	user: IUser | undefined
-}
-
-const UserProfileLanguagesCard = ({ user }: UserProfileLanguagesCardProps) => {
+const UserProfileLanguagesCard = () => {
 	const [selectedLanguageIds, setSelectedLanguageIds] = useState<number[]>([])
+
+	const { id } = useParams()
+	const location = useLocation()
+	const userFromState = (location.state as { user?: IUser } | undefined)?.user
+
+	const { data } = useGetUserByIdQuery(id ?? "", {
+		skip: !id,
+	})
+
+	const user: IUser | undefined = useMemo(
+		() => data ?? userFromState,
+		[data, userFromState],
+	)
 
 	const { data: languagesMap, isLoading: isLanguagesLoading } =
 		useGetLanguagesQuery()
