@@ -14,6 +14,7 @@ const buildGrids = (
 	user: IUser | undefined,
 	createdAt: string,
 	id: string | undefined,
+	lastActiveAt: string,
 ) => [
 	{
 		title: "Account",
@@ -27,7 +28,7 @@ const buildGrids = (
 		title: "Activity",
 		rows: [
 			{ label: "Registered", value: createdAt },
-			{ label: "Last active", value: "N/A" },
+			{ label: "Last active", value: lastActiveAt },
 			{ label: "Status", value: "Active" },
 		],
 	},
@@ -66,9 +67,19 @@ const UserProfilePage = () => {
 		[user],
 	)
 
+	const lastActiveAt = useMemo(
+		() =>
+			user?.last_active_at
+				? new Intl.DateTimeFormat("ru-RU", { dateStyle: "medium" }).format(
+						new Date(user.last_active_at),
+					)
+				: "N/A",
+		[user],
+	)
+
 	const grids: ProfileGridItemType[] = useMemo(() => {
-		return buildGrids(user, createdAt, id)
-	}, [createdAt, user, id])
+		return buildGrids(user, createdAt, id, lastActiveAt)
+	}, [createdAt, user, id, lastActiveAt])
 
 	return (
 		<div className={styles.page}>

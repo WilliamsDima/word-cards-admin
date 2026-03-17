@@ -132,7 +132,7 @@ const UserProfileLanguagesCard = ({ user }: UserProfileLanguagesCardProps) => {
 
 	useEffect(() => {
 		if (!user) return
-		setSelectedLanguageIds(user.languages)
+		setSelectedLanguageIds(user.languages || [])
 	}, [user])
 
 	return (

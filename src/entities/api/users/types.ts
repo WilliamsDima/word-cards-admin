@@ -49,7 +49,8 @@ export interface IUser {
 	id: number
 	image: string
 	name: string
-	languages: number[]
+	last_active_at: string | null
+	languages: number[] | null
 }
 
 export type UpdateUserLanguagesPayload = {
