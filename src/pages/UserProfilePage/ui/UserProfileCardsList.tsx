@@ -7,7 +7,6 @@ import type { LanguageItem } from "@shared/api/services/languages/types"
 
 type Props = {
 	cards: UserCard[]
-	userId: number | string
 	languageByCode: Record<string, LanguageItem>
 	isLoading: boolean
 	onEdit: (card: UserCard) => void
@@ -16,7 +15,6 @@ type Props = {
 
 const UserProfileCardsList: React.FC<Props> = ({
 	cards,
-	userId,
 	languageByCode,
 	isLoading,
 	onEdit,
@@ -53,7 +51,6 @@ const UserProfileCardsList: React.FC<Props> = ({
 				<UserProfileCardItem
 					key={card.id}
 					card={card}
-					userId={userId}
 					language={languageByCode[card.language]}
 					onEdit={onEdit}
 					onDelete={onDelete}

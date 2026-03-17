@@ -1,5 +1,25 @@
 export type CardStatus = "READY" | "STUDY"
 
+export const statusLabels: Record<CardStatus, string> = {
+	READY: "Готово",
+	STUDY: "В изучении",
+}
+
+export const statusValues: Record<CardStatus, CardStatus> = {
+	READY: "READY",
+	STUDY: "STUDY",
+}
+
+export const statusVariants: Record<CardStatus, "success" | "warning"> = {
+	READY: "success",
+	STUDY: "warning",
+}
+
+export const statusOptions = [
+	{ label: statusLabels.STUDY, value: statusValues.STUDY },
+	{ label: statusLabels.READY, value: statusValues.READY },
+]
+
 export type UserCardItem = {
 	id: number
 	word: string

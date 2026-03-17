@@ -68,108 +68,9 @@
 	min-width: 180px;
 }
 
-.languagesList {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 10px;
-	max-height: 220px;
-	overflow: scroll;
-	@extend %scroll;
-}
-
 .languagesSelect {
 	position: relative;
 	min-width: 220px;
-}
-
-.languagesButton {
-	width: 100%;
-	padding: 10px 12px;
-	border-radius: 12px;
-	border: 1px solid colors.$color-border-soft;
-	background: colors.$color-surface-3;
-	color: colors.$color-text-secondary;
-	text-align: left;
-	cursor: pointer;
-	transition:
-		border-color 0.2s ease,
-		color 0.2s ease,
-		background 0.2s ease;
-}
-
-.languagesButtonActive {
-	width: 100%;
-	padding: 10px 12px;
-	border-radius: 12px;
-	border: 1px solid colors.$color-primary;
-	background: rgba(31, 177, 65, 0.12);
-	color: colors.$color-text-primary;
-	text-align: left;
-	cursor: pointer;
-}
-
-.languagesPanel {
-	position: absolute;
-	top: calc(100% + 8px);
-	left: 0;
-	right: 0;
-	z-index: 4;
-	padding: 12px;
-	border-radius: 14px;
-	border: 1px solid colors.$color-border-soft;
-	background: colors.$color-surface-2;
-	box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
-}
-
-.languagesPanelOpen {
-	position: absolute;
-	top: calc(100% + 8px);
-	left: 0;
-	right: 0;
-	z-index: 4;
-	padding: 12px;
-	border-radius: 14px;
-	border: 1px solid colors.$color-border-soft;
-	background: colors.$color-surface-2;
-	box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
-}
-
-.languageItem {
-	display: grid;
-	grid-template-columns: auto 1fr auto;
-	align-items: center;
-	gap: 8px;
-	padding: 8px 10px;
-	border-radius: 10px;
-	border: 1px solid rgba(255, 255, 255, 0.08);
-	background: rgba(255, 255, 255, 0.04);
-	color: colors.$color-text-primary;
-	cursor: pointer;
-	transition:
-		border-color 0.2s ease,
-		background 0.2s ease;
-
-	&:hover {
-		border-color: rgba(255, 255, 255, 0.2);
-		background: rgba(255, 255, 255, 0.06);
-	}
-}
-
-.languageCheckbox {
-	width: 14px;
-	height: 14px;
-	accent-color: colors.$color-primary;
-}
-
-.languageName {
-	font-weight: 500;
-}
-
-.languageCode {
-	font-size: 11px;
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
-	color: colors.$color-text-secondary;
 }
 
 .listWrapper {
@@ -266,16 +167,6 @@
 	color: colors.$color-text-secondary;
 }
 
-.metaItem {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	padding: 4px 8px;
-	border-radius: 999px;
-	background: rgba(255, 255, 255, 0.04);
-	border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
 .cardActions {
 	display: flex;
 	gap: 8px;
@@ -287,44 +178,29 @@
 }
 
 .iconButton {
-	width: 34px;
-	height: 34px;
-	display: inline-flex;
+	display: flex;
+	padding: 0.5rem;
 	align-items: center;
 	justify-content: center;
-	border-radius: 10px;
-	border: 1px solid colors.$color-border-soft;
 	background: colors.$color-surface-3;
 	cursor: pointer;
-	transition:
-		border-color 0.2s ease,
-		background 0.2s ease,
-		transform 0.2s ease;
-
-	&:hover {
-		border-color: rgba(255, 255, 255, 0.24);
-		transform: translateY(-1px);
-	}
+	border-radius: 4px;
 }
 
 .iconButtonEdit {
 	background: rgba(33, 150, 243, 0.12);
-	border: 1px solid rgba(33, 150, 243, 0.4);
 }
 
 .iconButtonStatusStudy {
 	background: rgba(255, 160, 0, 0.16);
-	border: 1px solid rgba(255, 160, 0, 0.4);
 }
 
 .iconButtonStatusReady {
 	background: rgba(76, 175, 80, 0.18);
-	border: 1px solid rgba(76, 175, 80, 0.4);
 }
 
 .iconButtonDanger {
 	background: rgba(255, 0, 47, 0.18);
-	border: 1px solid rgba(255, 0, 47, 0.5);
 }
 
 .itemsList {
@@ -353,9 +229,6 @@
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
 	margin-left: auto;
-}
-
-.accordionContent {
 }
 
 .itemRow {
@@ -441,6 +314,10 @@
 	gap: 12px;
 }
 
+.modal {
+	width: 60%;
+}
+
 .modalContent {
 	max-height: 70vh;
 	overflow: auto;
@@ -475,15 +352,21 @@
 }
 
 .removeBtn {
-	background: colors.$color-surface-3;
-	border: 1px solid colors.$color-border-soft;
-	color: colors.$color-text-secondary;
+	background: transparent;
+	border: none;
+	padding: 0.5rem;
+	border-radius: 4px;
 }
 
 .addItemBtn {
 	background: colors.$color-surface-3;
 	border: 1px dashed colors.$color-border-soft;
 	color: colors.$color-text-secondary;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 1rem;
+	border-radius: 6px;
 }
 
 @media (max-width: 720px) {

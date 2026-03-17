@@ -1,9 +1,10 @@
-import React, { useCallback, useMemo, useState } from "react"
+﻿import React, { useCallback, useMemo, useState } from "react"
 import styles from "./UserProfilePage.module.scss"
 import UserProfileLanguagesCard from "./ui/UserProfileLanguagesCard"
 import { UserProfileInfo } from "./ui/UserProfileInfo"
 import { UserProfileGrids } from "./ui/UserProfileGrids"
 import UserProfileCards from "./ui/UserProfileCards"
+import Button from "@shared/Button/Button"
 
 type ProfileTab = "cards" | "languages"
 
@@ -27,18 +28,13 @@ const UserProfilePage = () => {
 	)
 
 	const cardsTabClassName = useMemo(
-		() =>
-			activeTab === "cards"
-				? styles.tabButtonActive
-				: styles.tabButton,
+		() => (activeTab === "cards" ? styles.tabButtonActive : styles.tabButton),
 		[activeTab],
 	)
 
 	const languagesTabClassName = useMemo(
 		() =>
-			activeTab === "languages"
-				? styles.tabButtonActive
-				: styles.tabButton,
+			activeTab === "languages" ? styles.tabButtonActive : styles.tabButton,
 		[activeTab],
 	)
 
@@ -60,20 +56,16 @@ const UserProfilePage = () => {
 
 			<div className={styles.tabs}>
 				<div className={styles.tabHeader}>
-					<button
-						type='button'
-						className={cardsTabClassName}
-						onClick={onCardsTabClick}
-					>
+					<Button className={cardsTabClassName} onClick={onCardsTabClick}>
 						{tabLabels.cards}
-					</button>
-					<button
-						type='button'
+					</Button>
+
+					<Button
 						className={languagesTabClassName}
 						onClick={onLanguagesTabClick}
 					>
 						{tabLabels.languages}
-					</button>
+					</Button>
 				</div>
 
 				<div className={styles.tabContent}>

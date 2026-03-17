@@ -27,6 +27,11 @@
 	}
 }
 
+.selectedLabel {
+	flex: 1;
+	min-width: 0;
+}
+
 .arrow {
 	border: solid colors.$color-text-secondary;
 	border-width: 0 2px 2px 0;
@@ -38,6 +43,14 @@
 	&.open {
 		transform: rotate(-135deg);
 	}
+}
+
+.clear {
+	width: 18px;
+	height: 18px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .options {
@@ -60,6 +73,9 @@
 
 	.option {
 		padding: 10px 12px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 		cursor: pointer;
 		color: colors.$color-text-primary;
 		transition:
@@ -88,7 +104,12 @@
 	}
 }
 
-// Анимация появления
+.optionEmpty {
+	padding: 10px 12px;
+	color: colors.$color-text-secondary;
+	cursor: default;
+}
+
 @keyframes fadeIn {
 	from {
 		opacity: 0;

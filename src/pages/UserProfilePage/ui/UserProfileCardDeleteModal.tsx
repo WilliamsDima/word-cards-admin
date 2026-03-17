@@ -5,20 +5,21 @@ import styles from "./UserProfileCards.module.scss"
 import { useToast } from "@shared/Toast/useToast"
 import { useDeleteUserCardMutation } from "@shared/api/services/cards/CardsQuery"
 import type { UserCard } from "@shared/api/services/cards/types"
+import { useParams } from "react-router-dom"
 
 type Props = {
 	open: boolean
 	card: UserCard | null
-	userId: number | string
 	onClose: () => void
 }
 
 const UserProfileCardDeleteModal: React.FC<Props> = ({
 	open,
 	card,
-	userId,
 	onClose,
 }) => {
+	const { id } = useParams()
+
 	const [deleteCard, { isLoading }] = useDeleteUserCardMutation()
 	const toast = useToast()
 
@@ -32,9 +33,9 @@ const UserProfileCardDeleteModal: React.FC<Props> = ({
 	}, [onClose])
 
 	const onConfirmDelete = useCallback(async () => {
-		if (!card) return
+		if (!card || !id) return
 		try {
-			await deleteCard({ userId, cardId: card.id }).unwrap()
+			await deleteCard({ userId: id, cardId: card.id }).unwrap()
 			toast.success("Карточка удалена", descriptionLabel || "Без описания")
 			onClose()
 		} catch (err) {
@@ -46,7 +47,7 @@ const UserProfileCardDeleteModal: React.FC<Props> = ({
 				serverError || "Не удалось удалить карточку",
 			)
 		}
-	}, [card, deleteCard, descriptionLabel, onClose, toast, userId])
+	}, [card, deleteCard, descriptionLabel, onClose, toast, id])
 
 	return (
 		<Modal

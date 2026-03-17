@@ -9,14 +9,17 @@ import {
 	useCreateUserCardMutation,
 	useUpdateUserCardMutation,
 } from "@shared/api/services/cards/CardsQuery"
-import type {
-	CardStatus,
-	UserCard,
+import {
+	statusOptions,
+	type CardStatus,
+	type UserCard,
 } from "@shared/api/services/cards/types"
 import type { LanguageItem } from "@shared/api/services/languages/types"
 import UserProfileCardItemRow, {
 	EditableCardItem,
 } from "./UserProfileCardItemRow"
+import { useParams } from "react-router-dom"
+import { Icon } from "@assets/icons/Icon"
 
 type Mode = "create" | "edit"
 
@@ -35,7 +38,6 @@ type FormState = {
 type Props = {
 	open: boolean
 	mode: Mode
-	userId: number | string
 	card: UserCard | null
 	languages: LanguageItem[]
 	onClose: () => void
@@ -65,11 +67,12 @@ const buildItemsFromCard = (card: UserCard | null): EditableCardItem[] => {
 const UserProfileCardModal: React.FC<Props> = ({
 	open,
 	mode,
-	userId,
 	card,
 	languages,
 	onClose,
 }) => {
+	const { id } = useParams()
+
 	const [form, setForm] = useState<FormState>({
 		language: "",
 		description: "",
@@ -78,10 +81,8 @@ const UserProfileCardModal: React.FC<Props> = ({
 	})
 	const [formError, setFormError] = useState<string | null>(null)
 
-	const [createCard, { isLoading: isCreating }] =
-		useCreateUserCardMutation()
-	const [updateCard, { isLoading: isUpdating }] =
-		useUpdateUserCardMutation()
+	const [createCard, { isLoading: isCreating }] = useCreateUserCardMutation()
+	const [updateCard, { isLoading: isUpdating }] = useUpdateUserCardMutation()
 	const toast = useToast()
 
 	const languageOptions = useMemo<LanguageOption[]>(() => {
@@ -102,17 +103,9 @@ const UserProfileCardModal: React.FC<Props> = ({
 		)
 	}, [form.language, languageOptions])
 
-	const statusOptions = useMemo(
-		() => [
-			{ label: "В изучении", value: "STUDY" as CardStatus },
-			{ label: "Готово", value: "READY" as CardStatus },
-		],
-		[],
-	)
-
 	const selectedStatus = useMemo(() => {
 		return statusOptions.find(option => option.value === form.status)
-	}, [form.status, statusOptions])
+	}, [form.status])
 
 	const title = useMemo(() => {
 		return mode === "create" ? "Создать карточку" : "Редактировать карточку"
@@ -136,9 +129,7 @@ const UserProfileCardModal: React.FC<Props> = ({
 
 	const canSubmit = useMemo(() => {
 		return (
-			form.language.trim().length > 0 &&
-			form.items.length > 0 &&
-			!hasEmptyItems
+			form.language.trim().length > 0 && form.items.length > 0 && !hasEmptyItems
 		)
 	}, [form.items.length, form.language, hasEmptyItems])
 
@@ -171,16 +162,13 @@ const UserProfileCardModal: React.FC<Props> = ({
 		setFormError(null)
 	}, [])
 
-	const onStatusSelect = useCallback(
-		(option: { value: CardStatus }) => {
-			setForm(prev => ({
-				...prev,
-				status: option.value,
-			}))
-			setFormError(null)
-		},
-		[],
-	)
+	const onStatusSelect = useCallback((option: { value: CardStatus }) => {
+		setForm(prev => ({
+			...prev,
+			status: option.value,
+		}))
+		setFormError(null)
+	}, [])
 
 	const onAddItem = useCallback(() => {
 		setForm(prev => ({
@@ -215,6 +203,7 @@ const UserProfileCardModal: React.FC<Props> = ({
 	}, [])
 
 	const onSubmit = useCallback(async () => {
+		if (!id) return
 		const language = form.language.trim()
 		const description = form.description.trim()
 		const items = form.items.map(item => ({
@@ -230,7 +219,7 @@ const UserProfileCardModal: React.FC<Props> = ({
 		try {
 			if (mode === "create") {
 				await createCard({
-					userId,
+					userId: id,
 					language,
 					description: description || undefined,
 					status: form.status,
@@ -239,7 +228,7 @@ const UserProfileCardModal: React.FC<Props> = ({
 				toast.success("Карточка создана", description || language)
 			} else if (card) {
 				await updateCard({
-					userId,
+					userId: id,
 					cardId: card.id,
 					language,
 					description: description || undefined,
@@ -270,7 +259,7 @@ const UserProfileCardModal: React.FC<Props> = ({
 		onClose,
 		toast,
 		updateCard,
-		userId,
+		id,
 	])
 
 	useEffect(() => {
@@ -295,6 +284,7 @@ const UserProfileCardModal: React.FC<Props> = ({
 			onClose={onCloseModal}
 			title={title}
 			contentClassName={styles.modalContent}
+			className={styles.modal}
 			actions={
 				<>
 					<Button className={styles.ghostBtn} onClick={onCloseModal}>
@@ -357,14 +347,13 @@ const UserProfileCardModal: React.FC<Props> = ({
 							/>
 						))}
 					</div>
-					<Button
-						type='button'
+					<button
 						className={styles.addItemBtn}
 						onClick={onAddItem}
 						disabled={isSaving}
 					>
-						Добавить слово
-					</Button>
+						<Icon kind='svg' name='add-square-white' width={20} height={20} />
+					</button>
 				</div>
 
 				{formError ? <div className={styles.formError}>{formError}</div> : null}

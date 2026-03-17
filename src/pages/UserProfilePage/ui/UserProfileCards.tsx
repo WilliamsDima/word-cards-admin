@@ -14,7 +14,7 @@ import UserProfileCardsPagination from "./UserProfileCardsPagination"
 import UserProfileCardModal from "./UserProfileCardModal"
 import UserProfileCardDeleteModal from "./UserProfileCardDeleteModal"
 
-type StatusFilter = CardStatus | "ALL"
+export type StatusFilter = CardStatus | undefined
 
 const DEFAULT_LIMIT = 20
 
@@ -23,7 +23,7 @@ const UserProfileCards: React.FC = () => {
 
 	const [search, setSearch] = useState("")
 	const [debouncedSearch, setDebouncedSearch] = useState("")
-	const [statusFilter, setStatusFilter] = useState<StatusFilter>("ALL")
+	const [statusFilter, setStatusFilter] = useState<StatusFilter>()
 	const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
 	const [offset, setOffset] = useState(0)
 	const [isCreateOpen, setIsCreateOpen] = useState(false)
@@ -33,11 +33,15 @@ const UserProfileCards: React.FC = () => {
 	const { data: languagesMap, isLoading: isLanguagesLoading } =
 		useGetLanguagesQuery()
 
-	const { data: cardsData, isLoading, isFetching } = useGetUserCardsQuery(
+	const {
+		data: cardsData,
+		isLoading,
+		isFetching,
+	} = useGetUserCardsQuery(
 		{
 			userId: id ?? "",
 			search: debouncedSearch.trim() || undefined,
-			status: statusFilter === "ALL" ? undefined : statusFilter,
+			status: statusFilter ?? statusFilter,
 			languages: selectedLanguages.length ? selectedLanguages : undefined,
 			limit: DEFAULT_LIMIT,
 			offset,
@@ -51,9 +55,10 @@ const UserProfileCards: React.FC = () => {
 		setDebouncedSearch(value)
 	}, 400)
 
-	const userId = useMemo(() => id ?? "", [id])
-
-	const normalizedSearch = useMemo(() => debouncedSearch.trim(), [debouncedSearch])
+	const normalizedSearch = useMemo(
+		() => debouncedSearch.trim(),
+		[debouncedSearch],
+	)
 
 	const languages = useMemo<LanguageItem[]>(() => {
 		return languagesMap
@@ -76,8 +81,8 @@ const UserProfileCards: React.FC = () => {
 	)
 
 	const isCreateDisabled = useMemo(() => {
-		return !userId || languages.length === 0
-	}, [languages.length, userId])
+		return !id || languages.length === 0
+	}, [languages.length, id])
 
 	const isPaginationVisible = useMemo(() => total > DEFAULT_LIMIT, [total])
 
@@ -93,19 +98,8 @@ const UserProfileCards: React.FC = () => {
 		setStatusFilter(value)
 	}, [])
 
-	const onToggleLanguage = useCallback(
-		(event: React.ChangeEvent<HTMLInputElement>) => {
-			const code = String(event.target.value)
-			if (!code) return
-			setSelectedLanguages(prev =>
-				prev.includes(code) ? prev.filter(item => item !== code) : [...prev, code],
-			)
-		},
-		[],
-	)
-
-	const onClearLanguages = useCallback(() => {
-		setSelectedLanguages([])
+	const onLanguagesChange = useCallback((next: string[]) => {
+		setSelectedLanguages(next)
 	}, [])
 
 	const onOpenCreate = useCallback(() => {
@@ -118,10 +112,7 @@ const UserProfileCards: React.FC = () => {
 
 	const onOpenEdit = useCallback((card: UserCard) => {
 		setEditTarget(card)
-	}, [])
-
-	const onCloseEdit = useCallback(() => {
-		setEditTarget(null)
+		setIsCreateOpen(true)
 	}, [])
 
 	const onOpenDelete = useCallback((card: UserCard) => {
@@ -138,7 +129,7 @@ const UserProfileCards: React.FC = () => {
 
 	useEffect(() => {
 		setOffset(0)
-	}, [normalizedSearch, selectedLanguages, statusFilter, userId])
+	}, [normalizedSearch, selectedLanguages, statusFilter, id])
 
 	return (
 		<Card className={styles.cardsCard}>
@@ -169,14 +160,12 @@ const UserProfileCards: React.FC = () => {
 				languages={languages}
 				selectedLanguages={selectedLanguages}
 				isLanguagesLoading={isLanguagesLoading}
-				onToggleLanguage={onToggleLanguage}
-				onClearLanguages={onClearLanguages}
+				onLanguagesChange={onLanguagesChange}
 			/>
 
 			<div className={styles.listWrapper}>
 				<UserProfileCardsList
 					cards={cards}
-					userId={userId}
 					languageByCode={languageByCode}
 					isLoading={isListLoading}
 					onEdit={onOpenEdit}
@@ -195,24 +184,15 @@ const UserProfileCards: React.FC = () => {
 
 			<UserProfileCardModal
 				open={isCreateOpen}
-				mode='create'
-				userId={userId}
-				card={null}
+				mode={editTarget ? "edit" : "create"}
+				card={editTarget}
 				languages={languages}
 				onClose={onCloseCreate}
 			/>
-			<UserProfileCardModal
-				open={Boolean(editTarget)}
-				mode='edit'
-				userId={userId}
-				card={editTarget}
-				languages={languages}
-				onClose={onCloseEdit}
-			/>
+
 			<UserProfileCardDeleteModal
 				open={Boolean(deleteTarget)}
 				card={deleteTarget}
-				userId={userId}
 				onClose={onCloseDelete}
 			/>
 		</Card>

@@ -20,7 +20,7 @@ const Button: FC<IButton> = memo(props => {
 	)
 
 	return (
-		<button className={buttonClassName} {...rest}>
+		<button type='button' className={buttonClassName} {...rest}>
 			{children}
 		</button>
 	)

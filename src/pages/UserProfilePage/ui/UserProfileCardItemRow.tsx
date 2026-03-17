@@ -1,7 +1,7 @@
-import React, { useCallback } from "react"
+import React, { memo, useCallback } from "react"
 import styles from "./UserProfileCards.module.scss"
 import Input from "@shared/Input/Input"
-import Button from "@shared/Button/Button"
+import { Icon } from "@assets/icons/Icon"
 
 export type EditableCardItem = {
 	key: string
@@ -54,16 +54,16 @@ const UserProfileCardItemRow: React.FC<Props> = ({
 				onChange={onTranslateChange}
 				disabled={isDisabled}
 			/>
-			<Button
+			<button
 				type='button'
 				className={styles.removeBtn}
 				onClick={onRemoveClick}
 				disabled={isDisabled}
 			>
-				Удалить
-			</Button>
+				<Icon kind='svg' name='delete-red-64' width={20} height={20} />
+			</button>
 		</div>
 	)
 }
 
-export default UserProfileCardItemRow
+export default memo(UserProfileCardItemRow)
