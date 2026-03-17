@@ -2,6 +2,9 @@
 
 .accordion {
 	width: 100%;
+	border-radius: 12px;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: rgba(255, 255, 255, 0.03);
 }
 
 .header {
@@ -9,6 +12,7 @@
 	background: transparent;
 	border: none;
 	text-align: left;
+	padding: 10px 12px;
 }
 
 .headerInner {
@@ -39,4 +43,18 @@
 
 .content {
 	width: 100%;
+	padding: 0 12px;
+	max-height: 0;
+	opacity: 0;
+	overflow: hidden;
+	transition:
+		max-height 0.25s ease,
+		opacity 0.2s ease,
+		padding 0.2s ease;
+}
+
+.content[data-open="true"] {
+	max-height: 600px;
+	opacity: 1;
+	padding: 0 12px 12px;
 }

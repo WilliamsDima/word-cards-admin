@@ -90,6 +90,76 @@
 	gap: 16px;
 }
 
+.gridsHeaderButton {
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.gridsHeader {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	color: colors.$color-text-secondary;
+	font-size: 13px;
+}
+
+.gridsTitle {
+	font-weight: 600;
+	color: colors.$color-text-primary;
+}
+
+.gridsHint {
+	margin-left: auto;
+	font-size: 11px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: colors.$color-text-secondary;
+}
+
+.gridsContent {
+}
+
+.tabs {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.tabHeader {
+	display: flex;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.tabButton {
+	padding: 10px 14px;
+	border-radius: 12px;
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	background: rgba(255, 255, 255, 0.04);
+	color: colors.$color-text-secondary;
+	cursor: pointer;
+	transition:
+		border-color 0.2s ease,
+		color 0.2s ease,
+		background 0.2s ease;
+}
+
+.tabButtonActive {
+	padding: 10px 14px;
+	border-radius: 12px;
+	border: 1px solid colors.$color-primary;
+	background: rgba(31, 177, 65, 0.12);
+	color: colors.$color-text-primary;
+	cursor: pointer;
+}
+
+.tabContent {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	min-height: 0;
+}
 
 .card {
 	padding: 20px;

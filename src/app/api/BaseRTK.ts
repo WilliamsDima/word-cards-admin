@@ -11,6 +11,6 @@ export const baseRTK = createApi({
 			return headers
 		},
 	}),
-	tagTypes: ["users", "app", "translations", "auth", "languages"],
+	tagTypes: ["users", "app", "translations", "auth", "languages", "userCards"],
 	endpoints: () => ({}),
 })

@@ -1,0 +1,510 @@
+@use "../../../assets/styles/colors.scss" as colors;
+@use "../../../assets/styles/globalStyles.scss" as global;
+
+.cardsCard {
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	min-height: 0;
+}
+
+.cardsHeader {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.cardsHeaderText {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.cardsTitle {
+	margin: 0;
+	font-size: 18px;
+}
+
+.cardsHint {
+	margin: 0;
+	color: colors.$color-text-secondary;
+	font-size: 13px;
+	max-width: 560px;
+}
+
+.actionsRow {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.filters {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.filtersRow {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.searchWrapper {
+	min-width: 220px;
+	flex: 1;
+}
+
+.searchInput {
+	width: 100%;
+}
+
+.dropdown {
+	min-width: 180px;
+}
+
+.languagesList {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	max-height: 220px;
+	overflow: scroll;
+	@extend %scroll;
+}
+
+.languagesSelect {
+	position: relative;
+	min-width: 220px;
+}
+
+.languagesButton {
+	width: 100%;
+	padding: 10px 12px;
+	border-radius: 12px;
+	border: 1px solid colors.$color-border-soft;
+	background: colors.$color-surface-3;
+	color: colors.$color-text-secondary;
+	text-align: left;
+	cursor: pointer;
+	transition:
+		border-color 0.2s ease,
+		color 0.2s ease,
+		background 0.2s ease;
+}
+
+.languagesButtonActive {
+	width: 100%;
+	padding: 10px 12px;
+	border-radius: 12px;
+	border: 1px solid colors.$color-primary;
+	background: rgba(31, 177, 65, 0.12);
+	color: colors.$color-text-primary;
+	text-align: left;
+	cursor: pointer;
+}
+
+.languagesPanel {
+	position: absolute;
+	top: calc(100% + 8px);
+	left: 0;
+	right: 0;
+	z-index: 4;
+	padding: 12px;
+	border-radius: 14px;
+	border: 1px solid colors.$color-border-soft;
+	background: colors.$color-surface-2;
+	box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
+}
+
+.languagesPanelOpen {
+	position: absolute;
+	top: calc(100% + 8px);
+	left: 0;
+	right: 0;
+	z-index: 4;
+	padding: 12px;
+	border-radius: 14px;
+	border: 1px solid colors.$color-border-soft;
+	background: colors.$color-surface-2;
+	box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
+}
+
+.languageItem {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 10px;
+	border-radius: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: rgba(255, 255, 255, 0.04);
+	color: colors.$color-text-primary;
+	cursor: pointer;
+	transition:
+		border-color 0.2s ease,
+		background 0.2s ease;
+
+	&:hover {
+		border-color: rgba(255, 255, 255, 0.2);
+		background: rgba(255, 255, 255, 0.06);
+	}
+}
+
+.languageCheckbox {
+	width: 14px;
+	height: 14px;
+	accent-color: colors.$color-primary;
+}
+
+.languageName {
+	font-weight: 500;
+}
+
+.languageCode {
+	font-size: 11px;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: colors.$color-text-secondary;
+}
+
+.listWrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	flex: 1;
+	min-height: 0;
+	max-height: 520px;
+}
+
+.list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	max-height: 520px;
+	overflow: auto;
+	@extend %scroll;
+	padding-bottom: 24px;
+	box-sizing: border-box;
+}
+
+.loadingState {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	color: colors.$color-text-secondary;
+	font-size: 13px;
+	padding: 8px 0;
+}
+
+.empty {
+	padding: 16px;
+	border-radius: 12px;
+	border: 1px dashed rgba(255, 255, 255, 0.12);
+	color: colors.$color-text-secondary;
+	text-align: center;
+}
+
+.emptyTitle {
+	margin: 0 0 6px;
+	font-size: 15px;
+	color: colors.$color-text-primary;
+}
+
+.emptyText {
+	margin: 0;
+	font-size: 13px;
+}
+
+.cardItem {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 16px;
+	border-radius: 16px;
+	border: 1px solid colors.$color-border-soft;
+	background: colors.$color-surface-2;
+	position: relative;
+}
+
+.cardHeader {
+	display: flex;
+	justify-content: space-between;
+	gap: 12px;
+	flex-wrap: wrap;
+	align-items: flex-start;
+}
+
+.cardHeaderInfo {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	min-width: 220px;
+	padding-right: 120px;
+}
+
+.cardTitle {
+	margin: 0;
+	font-size: 16px;
+}
+
+.cardDescription {
+	margin: 0;
+	font-size: 13px;
+	color: colors.$color-text-secondary;
+}
+
+.cardMetaRow {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	font-size: 12px;
+	color: colors.$color-text-secondary;
+}
+
+.metaItem {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 4px 8px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cardActions {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	position: absolute;
+	top: 12px;
+	right: 12px;
+}
+
+.iconButton {
+	width: 34px;
+	height: 34px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10px;
+	border: 1px solid colors.$color-border-soft;
+	background: colors.$color-surface-3;
+	cursor: pointer;
+	transition:
+		border-color 0.2s ease,
+		background 0.2s ease,
+		transform 0.2s ease;
+
+	&:hover {
+		border-color: rgba(255, 255, 255, 0.24);
+		transform: translateY(-1px);
+	}
+}
+
+.iconButtonEdit {
+	background: rgba(33, 150, 243, 0.12);
+	border: 1px solid rgba(33, 150, 243, 0.4);
+}
+
+.iconButtonStatusStudy {
+	background: rgba(255, 160, 0, 0.16);
+	border: 1px solid rgba(255, 160, 0, 0.4);
+}
+
+.iconButtonStatusReady {
+	background: rgba(76, 175, 80, 0.18);
+	border: 1px solid rgba(76, 175, 80, 0.4);
+}
+
+.iconButtonDanger {
+	background: rgba(255, 0, 47, 0.18);
+	border: 1px solid rgba(255, 0, 47, 0.5);
+}
+
+.itemsList {
+	display: grid;
+	gap: 8px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.accordionHeaderButton {
+	display: flex;
+	align-items: center;
+}
+
+.accordionHeader {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 13px;
+	color: colors.$color-text-secondary;
+}
+
+.accordionHint {
+	font-size: 11px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	margin-left: auto;
+}
+
+.accordionContent {
+}
+
+.itemRow {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+	padding: 8px 10px;
+	border-radius: 10px;
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.itemWord {
+	font-weight: 600;
+	color: colors.$color-text-primary;
+}
+
+.itemTranslate {
+	color: colors.$color-text-secondary;
+	justify-self: end;
+	text-align: right;
+}
+
+.pagination {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.pageControls {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+
+.pageBtn {
+	padding: 6px 10px;
+	border-radius: 8px;
+	border: 1px solid colors.$color-border-soft;
+	background: colors.$color-surface-3;
+	color: colors.$color-text-primary;
+	cursor: pointer;
+	transition:
+		border-color 0.2s ease,
+		background 0.2s ease;
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: default;
+	}
+}
+
+.pageBtnActive {
+	background: colors.$color-primary;
+	border-color: colors.$color-primary;
+	color: colors.$color-white;
+}
+
+.pageInfo {
+	font-size: 12px;
+	color: colors.$color-text-secondary;
+}
+
+.primaryBtn {
+	background-color: colors.$color-primary;
+}
+
+.ghostBtn {
+	background: colors.$color-surface-3;
+	border: 1px solid colors.$color-border-soft;
+}
+
+.dangerBtn {
+	background: colors.$color-red;
+	color: colors.$color-white;
+}
+
+.modalForm {
+	display: grid;
+	gap: 12px;
+}
+
+.modalContent {
+	max-height: 70vh;
+	overflow: auto;
+	@extend %scroll;
+}
+
+.field {
+	display: grid;
+	gap: 6px;
+}
+
+.label {
+	font-size: 12px;
+	color: colors.$color-text-secondary;
+}
+
+.formError {
+	color: colors.$color-error;
+	font-size: 12px;
+}
+
+.itemsEditor {
+	display: grid;
+	gap: 10px;
+}
+
+.editorRow {
+	display: grid;
+	grid-template-columns: 1fr 1fr auto;
+	gap: 8px;
+	align-items: center;
+}
+
+.removeBtn {
+	background: colors.$color-surface-3;
+	border: 1px solid colors.$color-border-soft;
+	color: colors.$color-text-secondary;
+}
+
+.addItemBtn {
+	background: colors.$color-surface-3;
+	border: 1px dashed colors.$color-border-soft;
+	color: colors.$color-text-secondary;
+}
+
+@media (max-width: 720px) {
+	.cardHeader {
+		flex-direction: column;
+	}
+
+	.cardHeaderInfo {
+		padding-right: 0;
+	}
+
+	.itemRow {
+		grid-template-columns: 1fr;
+	}
+
+	.itemTranslate {
+		justify-self: start;
+		text-align: left;
+	}
+
+	.editorRow {
+		grid-template-columns: 1fr;
+	}
+}

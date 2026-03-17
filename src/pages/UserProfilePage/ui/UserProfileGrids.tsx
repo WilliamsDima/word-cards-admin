@@ -1,4 +1,4 @@
-﻿import React, { useMemo } from "react"
+import React, { useMemo } from "react"
 import { useLocation, useParams } from "react-router-dom"
 import styles from "../UserProfilePage.module.scss"
 import type { IUser } from "@entities/api/users/types"
@@ -7,6 +7,7 @@ import UserProfileGridItem, {
 	ProfileGridItemType,
 } from "../ui/UserProfileGridItem"
 import UserProfilePageGridsSkeleton from "../UserProfilePageGridsSkeleton"
+import Accordion from "@shared/Accordion/Accordion"
 
 const buildGrids = (
 	user: IUser | undefined,
@@ -80,12 +81,24 @@ export const UserProfileGrids = () => {
 	}, [createdAt, user, id, lastActiveAt])
 
 	return (
-		<div className={styles.grid}>
-			{showSkeleton ? (
-				<UserProfilePageGridsSkeleton />
-			) : (
-				grids.map(it => <UserProfileGridItem key={it.title} item={it} />)
-			)}
-		</div>
+		<Accordion
+			header={
+				<div className={styles.gridsHeader}>
+					<span className={styles.gridsTitle}>Данные профиля</span>
+				</div>
+			}
+			className={styles.gridsAccordion}
+			headerClassName={styles.gridsHeaderButton}
+			contentClassName={styles.gridsContent}
+			defaultOpen={false}
+		>
+			<div className={styles.grid}>
+				{showSkeleton ? (
+					<UserProfilePageGridsSkeleton />
+				) : (
+					grids.map(it => <UserProfileGridItem key={it.title} item={it} />)
+				)}
+			</div>
+		</Accordion>
 	)
 }

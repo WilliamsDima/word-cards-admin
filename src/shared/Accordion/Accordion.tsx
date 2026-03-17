@@ -25,7 +25,7 @@ const Accordion: React.FC<Props> = ({
 	open,
 	onOpenChange,
 }) => {
-	const [innerOpen, setInnerOpen] = useState(defaultOpen)
+	const [innerOpen, setInnerOpen] = useState(() => defaultOpen)
 	const isControlled = useMemo(() => open !== undefined, [open])
 	const isOpen = useMemo(
 		() => (isControlled ? (open ?? false) : innerOpen),
