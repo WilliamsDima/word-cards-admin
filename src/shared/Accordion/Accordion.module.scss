@@ -43,8 +43,8 @@
 
 .content {
 	width: 100%;
-	padding: 0;
 	max-height: 0;
+	padding: 0;
 	opacity: 0;
 	overflow: hidden;
 	transition:
@@ -56,5 +56,5 @@
 .content[data-open="true"] {
 	max-height: 600px;
 	opacity: 1;
-	padding: 0;
+	padding: 12px;
 }

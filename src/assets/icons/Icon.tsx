@@ -14,6 +14,7 @@ import GooglePlayIconIcon from "@assets/icons/svg/google-play-icon.svg?react"
 import GoogleIcon from "@assets/icons/svg/google.svg?react"
 import LinksIcon from "@assets/icons/svg/links.svg?react"
 import LogoutIcon from "@assets/icons/svg/logout.svg?react"
+import QuestionCircleIcon from "@assets/icons/svg/question-circle.svg?react"
 import SearchIcon from "@assets/icons/svg/search.svg?react"
 import SupportIcon from "@assets/icons/svg/support.svg?react"
 import TranslateIcon from "@assets/icons/svg/translate.svg?react"
@@ -36,6 +37,7 @@ export type SvgName =
 	| "google"
 	| "links"
 	| "logout"
+	| "question-circle"
 	| "search"
 	| "support"
 	| "translate"
@@ -122,6 +124,9 @@ export function Icon<K extends keyof KindMap>(props: { kind: K } & KindMap[K]) {
 
 		case "logout":
 			return <LogoutIcon width={width} height={height} {...svgProps} />
+
+		case "question-circle":
+			return <QuestionCircleIcon width={width} height={height} {...svgProps} />
 
 		case "search":
 			return <SearchIcon width={width} height={height} {...svgProps} />

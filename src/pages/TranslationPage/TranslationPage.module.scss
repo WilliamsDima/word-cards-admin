@@ -106,7 +106,7 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: 16px;
-	padding: 16px 18px;
+	padding: 12px;
 	text-align: left;
 	cursor: pointer;
 }
@@ -194,8 +194,7 @@
 	max-height: 900px;
 	opacity: 1;
 	transform: translateY(0);
-	margin-top: 12px;
-	padding: 0 18px 18px;
+	padding: 12px;
 	pointer-events: auto;
 }
 
@@ -227,6 +226,7 @@
 	padding: 8px 10px 12px;
 	max-height: 420px;
 	overflow: auto;
+	@extend %scroll;
 }
 
 .jsonEditor {
