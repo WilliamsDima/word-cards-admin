@@ -1,0 +1,42 @@
+﻿@use "../../assets/styles/colors.scss" as colors;
+
+.tooltip {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: help;
+}
+
+.content {
+	position: absolute;
+	bottom: calc(100% + 8px);
+	right: 0;
+	min-width: 220px;
+	max-width: 320px;
+	padding: 10px 12px;
+	border-radius: 12px;
+	background: colors.$color-surface-2;
+	border: 1px solid colors.$color-border-soft;
+	color: colors.$color-text-primary;
+	font-size: 12px;
+	line-height: 1.4;
+	box-shadow: 0 18px 32px rgba(0, 0, 0, 0.35);
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(4px);
+	transition:
+		opacity 0.2s ease,
+		transform 0.2s ease,
+		visibility 0.2s ease;
+	pointer-events: none;
+	z-index: 10;
+}
+
+.tooltip:hover .content,
+.tooltip:focus .content,
+.tooltip:focus-within .content {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}

@@ -291,6 +291,12 @@
 	color: colors.$color-text-secondary;
 }
 
+.labelRow {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
 .formError {
 	color: colors.$color-error;
 	font-size: 1.2rem;

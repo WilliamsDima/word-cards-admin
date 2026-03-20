@@ -5,7 +5,11 @@ import styles from "../TranslationPage.module.scss"
 import { useCreateLanguageMutation } from "@shared/api/services/languages/LanguagesQuery"
 import { useToast } from "@shared/Toast/useToast"
 import Input from "@shared/Input/Input"
-import { isTranslationKey } from "@shared/api/services/languages/types"
+import {
+	isTranslationKey,
+	TRANSLATION_KEYS,
+} from "@shared/api/services/languages/types"
+import Tooltip from "@shared/Tooltip/Tooltip"
 
 type Props = {
 	open: boolean
@@ -27,6 +31,10 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 	const normalizedCode = useMemo(
 		() => createForm.code.trim().toLowerCase(),
 		[createForm.code],
+	)
+	const translationKeysText = useMemo(
+		() => `Доступные коды: ${TRANSLATION_KEYS.join(", ")}`,
+		[],
 	)
 	const isCodeAllowed = useMemo(
 		() => isTranslationKey(normalizedCode),
@@ -171,7 +179,10 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 		>
 			<div className={styles.modalForm}>
 				<label className={styles.field}>
-					<span className={styles.label}>Код языка</span>
+					<span className={styles.labelRow}>
+						<span className={styles.label}>Код языка</span>
+						<Tooltip>{translationKeysText}</Tooltip>
+					</span>
 					<Input
 						placeholder='en'
 						value={createForm.code}
