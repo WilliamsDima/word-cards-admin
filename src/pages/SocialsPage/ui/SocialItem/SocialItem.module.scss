@@ -2,7 +2,6 @@
 @use "../../../../assets/styles/globalStyles.scss" as global;
 
 .group {
-	padding: 12px;
 	border-radius: 16px;
 	background: rgba(255, 255, 255, 0.03);
 	border: 1px solid rgba(255, 255, 255, 0.06);
@@ -22,7 +21,7 @@
 	width: 100%;
 	text-align: left;
 	cursor: pointer;
-	padding: 0;
+	padding: 12px;
 
 	svg {
 		cursor: pointer;
@@ -59,11 +58,6 @@
 	opacity: 0;
 	transform: translateY(-4px);
 	margin-top: 0;
-	transition:
-		max-height 0.25s ease,
-		opacity 0.25s ease,
-		transform 0.25s ease,
-		margin-top 0.25s ease;
 	pointer-events: none;
 	flex-direction: column;
 	gap: 12px;
@@ -74,7 +68,6 @@
 	max-height: 600px;
 	opacity: 1;
 	transform: translateY(0);
-	margin-top: 12px;
 	pointer-events: auto;
 }
 
