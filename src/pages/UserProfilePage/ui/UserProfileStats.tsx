@@ -2,23 +2,17 @@
 import { useParams } from "react-router-dom"
 import styles from "./UserProfileStats.module.scss"
 import Card from "@shared/Card/Card"
-import Dropdown from "@shared/Dropdown/Dropdown"
-import Skeleton from "@shared/Skeleton/Skeleton"
 import { useGetUserYearStatsQuery } from "@shared/api/services/userStats/UserStatsQuery"
+import { dateService } from "@shared/lib/date"
+import UserProfileStatsHeader from "./UserProfileStatsHeader"
+import UserProfileStatsSection from "./UserProfileStatsSection"
+import UserProfileStatsSkeleton from "./UserProfileStatsSkeleton"
+import type { StatItem, YearOption } from "./UserProfileStats.types"
 
-const YEARS_RANGE = 2
+const YEARS_RANGE = 5
 
-type YearOption = {
-	label: string
-	value: number
-}
-
-type StatItem = {
-	id: string
-	label: string
-	value: string
-	hint?: string
-}
+const formatNumber = (value: number | null | undefined) =>
+	value?.toLocaleString("ru-RU") || ""
 
 const UserProfileStats = () => {
 	const { id } = useParams()
@@ -54,34 +48,11 @@ const UserProfileStats = () => {
 
 	const isBusy = useMemo(() => isLoading || isFetching, [isFetching, isLoading])
 
-	const monthLabels = useMemo(
-		() => [
-			"Январь",
-			"Февраль",
-			"Март",
-			"Апрель",
-			"Май",
-			"Июнь",
-			"Июль",
-			"Август",
-			"Сентябрь",
-			"Октябрь",
-			"Ноябрь",
-			"Декабрь",
-		],
-		[],
-	)
-
 	const bestMonthLabel = useMemo(() => {
 		if (!data?.best_month) return "—"
-		const monthName = monthLabels[data.best_month - 1]
-		return monthName ?? "—"
-	}, [data, monthLabels])
-
-	const formatNumber = useCallback((value: number | null | undefined) => {
-		if (typeof value !== "number") return "—"
-		return value.toLocaleString("ru-RU")
-	}, [])
+		const monthLabel = dateService.getMonthLabel(data.best_month)
+		return monthLabel ?? "—"
+	}, [data])
 
 	const primaryMetrics = useMemo<StatItem[]>(() => {
 		if (!data) return []
@@ -113,7 +84,7 @@ const UserProfileStats = () => {
 				value: formatNumber(data.ads_viewed),
 			},
 		]
-	}, [data, formatNumber])
+	}, [data])
 
 	const highlightMetrics = useMemo<StatItem[]>(() => {
 		if (!data) return []
@@ -138,7 +109,7 @@ const UserProfileStats = () => {
 				hint: "Дней подряд в приложении",
 			},
 		]
-	}, [bestMonthLabel, data, formatNumber])
+	}, [bestMonthLabel, data])
 
 	const errorMessage = useMemo(() => {
 		if (!error) return ""
@@ -157,35 +128,13 @@ const UserProfileStats = () => {
 
 	return (
 		<Card className={styles.statsCard}>
-			<div className={styles.statsHeader}>
-				<div className={styles.statsTitleBlock}>
-					<h2 className={styles.statsTitle}>Статистика пользователя</h2>
-					<p className={styles.statsSubtitle}>
-						Сводка по ключевым событиям и достижениям за выбранный год.
-					</p>
-				</div>
-				<div className={styles.statsControls}>
-					<span className={styles.statsControlLabel}>Год</span>
-					<Dropdown
-						options={yearOptions}
-						selected={selectedYearOption}
-						onSelect={onYearSelect}
-						labelKey='label'
-						valueKey='value'
-					/>
-				</div>
-			</div>
+			<UserProfileStatsHeader
+				yearOptions={yearOptions}
+				selectedYearOption={selectedYearOption}
+				onYearSelect={onYearSelect}
+			/>
 
-			{isBusy && !data ? (
-				<div className={styles.statsSkeleton}>
-					<Skeleton className={styles.skeletonTile} />
-					<Skeleton className={styles.skeletonTile} />
-					<Skeleton className={styles.skeletonTile} />
-					<Skeleton className={styles.skeletonTile} />
-					<Skeleton className={styles.skeletonTile} />
-					<Skeleton className={styles.skeletonTile} />
-				</div>
-			) : null}
+			{isBusy && !data ? <UserProfileStatsSkeleton /> : null}
 
 			{errorMessage ? (
 				<div className={styles.errorState}>{errorMessage}</div>
@@ -197,35 +146,16 @@ const UserProfileStats = () => {
 
 			{data && !isBusy ? (
 				<div className={styles.statsBody}>
-					<div className={styles.section}>
-						<h3 className={styles.sectionTitle}>Активность</h3>
-						<div className={styles.metricsGrid}>
-							{primaryMetrics.map(metric => (
-								<div key={metric.id} className={styles.metricCard}>
-									<div className={styles.metricValue}>{metric.value}</div>
-									<div className={styles.metricLabel}>{metric.label}</div>
-									{metric.hint ? (
-										<div className={styles.metricHint}>{metric.hint}</div>
-									) : null}
-								</div>
-							))}
-						</div>
-					</div>
-
-					<div className={styles.section}>
-						<h3 className={styles.sectionTitle}>Достижения</h3>
-						<div className={styles.highlightsGrid}>
-							{highlightMetrics.map(metric => (
-								<div key={metric.id} className={styles.highlightCard}>
-									<div className={styles.metricValue}>{metric.value}</div>
-									<div className={styles.metricLabel}>{metric.label}</div>
-									{metric.hint ? (
-										<div className={styles.metricHint}>{metric.hint}</div>
-									) : null}
-								</div>
-							))}
-						</div>
-					</div>
+					<UserProfileStatsSection
+						title='Активность'
+						items={primaryMetrics}
+						variant='primary'
+					/>
+					<UserProfileStatsSection
+						title='Достижения'
+						items={highlightMetrics}
+						variant='highlight'
+					/>
 				</div>
 			) : null}
 		</Card>

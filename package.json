@@ -14,6 +14,7 @@
     "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.12.2",
     "classnames": "^2.5.1",
+    "dayjs": "^1.11.20",
     "firebase": "^12.0.0",
     "js-base64": "^3.7.8",
     "json-edit-react": "^1.29.0",
