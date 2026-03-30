@@ -8,6 +8,7 @@ import UserProfileGridItem, {
 } from "../ui/UserProfileGridItem"
 import UserProfilePageGridsSkeleton from "../UserProfilePageGridsSkeleton"
 import Accordion from "@shared/Accordion/Accordion"
+import { dateService } from "@shared/lib/date"
 
 const buildGrids = (
 	user: IUser | undefined,
@@ -59,9 +60,7 @@ export const UserProfileGrids = () => {
 	const createdAt = useMemo(
 		() =>
 			user?.created_at
-				? new Intl.DateTimeFormat("ru-RU", { dateStyle: "medium" }).format(
-						new Date(user.created_at),
-					)
+				? dateService.format(user.created_at, { dateStyle: "medium" }) ?? "—"
 				: "N/A",
 		[user],
 	)
@@ -69,9 +68,8 @@ export const UserProfileGrids = () => {
 	const lastActiveAt = useMemo(
 		() =>
 			user?.last_active_at
-				? new Intl.DateTimeFormat("ru-RU", { dateStyle: "medium" }).format(
-						new Date(user.last_active_at),
-					)
+				? dateService.format(user.last_active_at, { dateStyle: "medium" }) ??
+					"—"
 				: "N/A",
 		[user],
 	)

@@ -17,7 +17,7 @@ const formatNumber = (value: number | null | undefined) =>
 const UserProfileStats = () => {
 	const { id } = useParams()
 	const [selectedYear, setSelectedYear] = useState<number>(() =>
-		new Date().getFullYear(),
+		dateService.getCurrentYear(),
 	)
 
 	const { data, isLoading, isFetching, error } = useGetUserYearStatsQuery(
@@ -29,7 +29,7 @@ const UserProfileStats = () => {
 	)
 
 	const yearOptions = useMemo<YearOption[]>(() => {
-		const currentYear = new Date().getFullYear()
+		const currentYear = dateService.getCurrentYear()
 		return Array.from({ length: YEARS_RANGE }, (_value, index) => {
 			const value = currentYear - index
 			return {

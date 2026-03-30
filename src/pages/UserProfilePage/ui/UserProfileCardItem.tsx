@@ -15,6 +15,7 @@ import { Icon } from "@assets/icons/Icon"
 import cn from "classnames"
 import Button from "@shared/Button/Button"
 import { useParams } from "react-router-dom"
+import { dateService } from "@shared/lib/date"
 
 type Props = {
 	card: UserCard
@@ -71,17 +72,21 @@ const UserProfileCardItem: React.FC<Props> = ({
 	)
 
 	const createdAt = useMemo(() => {
-		return `Создано: ${new Intl.DateTimeFormat("ru-RU", {
-			dateStyle: "medium",
-			timeStyle: "short",
-		}).format(new Date(card.date))}`
+		const label =
+			dateService.format(card.date, {
+				dateStyle: "medium",
+				timeStyle: "short",
+			}) ?? "—"
+		return `Создано: ${label}`
 	}, [card.date])
 
 	const updatedAt = useMemo(() => {
-		return `Обновлено: ${new Intl.DateTimeFormat("ru-RU", {
-			dateStyle: "medium",
-			timeStyle: "short",
-		}).format(new Date(card.updated_at))}`
+		const label =
+			dateService.format(card.updated_at, {
+				dateStyle: "medium",
+				timeStyle: "short",
+			}) ?? "—"
+		return `Обновлено: ${label}`
 	}, [card.updated_at])
 
 	const itemsCount = useMemo(() => card.items.length, [card.items.length])

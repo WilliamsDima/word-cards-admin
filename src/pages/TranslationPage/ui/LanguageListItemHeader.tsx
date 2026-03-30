@@ -2,6 +2,7 @@ import React, { memo, useMemo } from "react"
 import styles from "../TranslationPage.module.scss"
 import type { LanguageItem } from "@shared/api/services/languages/types"
 import Badge, { BadgeVariant } from "@shared/Badge/Badge"
+import { dateService } from "@shared/lib/date"
 
 type Props = {
 	localEmoji: string
@@ -13,18 +14,13 @@ type Props = {
 const LanguageListItemHeader: React.FC<Props> = memo(
 	({ localEmoji, localName, isDirty, language }) => {
 		const updatedAtInfo = useMemo(() => {
-			const parsed = new Date(language.updated_at)
-			const isValid = !Number.isNaN(parsed.getTime())
-			const today = new Date()
-			const isToday = isValid && parsed.toDateString() === today.toDateString()
-			const label = isValid
-				? parsed.toLocaleDateString("ru-RU", {
-						day: "2-digit",
-						month: "2-digit",
-						year: "numeric",
-					})
-				: "—"
-
+			const label =
+				dateService.format(language.updated_at, {
+					day: "2-digit",
+					month: "2-digit",
+					year: "numeric",
+				}) ?? "—"
+			const isToday = dateService.isSameDay(language.updated_at)
 			return { label, isToday }
 		}, [language.updated_at])
 

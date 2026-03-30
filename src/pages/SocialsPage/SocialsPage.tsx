@@ -17,6 +17,7 @@ import Card from "@shared/Card/Card"
 import { SocialDeleteModal } from "./ui/SocialDeleteModal"
 import type { ISocial, SocialKeys } from "@shared/api/services/appConfig/types"
 import { useToast } from "@shared/Toast/useToast"
+import { dateService } from "@shared/lib/date"
 
 function SocialsPage() {
 	const { data } = useGetAppConfigQuery()
@@ -54,7 +55,7 @@ function SocialsPage() {
 	)
 
 	const onAdd = useCallback(() => {
-		const tempId = `temp-${Date.now()}`
+		const tempId = `temp-${dateService.getTimestamp()}`
 		setSocialsData(prev => [
 			...prev,
 			{

@@ -1,9 +1,10 @@
-import React, { FC, memo } from "react"
+import React, { FC, memo, useMemo } from "react"
 import styles from "./UserItem.module.scss"
 import cn from "classnames"
 import { IUser } from "@entities/api/users/types"
 import { AppRoutes } from "@app/navigation/routes"
 import { useAppNavigate } from "@shared/hooks/useAppNavigate"
+import { dateService } from "@shared/lib/date"
 
 type Props = {
 	user: IUser
@@ -20,6 +21,11 @@ export const UserItem: FC<Props> = memo(({ user }) => {
 			openProfile()
 		}
 	}
+
+	const dateRegistration = useMemo(
+		() => dateService.format(user.created_at, { dateStyle: "medium" }) ?? "—",
+		[user],
+	)
 
 	return (
 		<li
@@ -55,11 +61,7 @@ export const UserItem: FC<Props> = memo(({ user }) => {
 				<div className={cn(styles.info)}>
 					<div className={styles.infoItem}>
 						<p>дата регистрации: </p>
-						<h3 className={styles.name}>
-							{new Intl.DateTimeFormat("ru-RU", {
-								dateStyle: "medium",
-							}).format(new Date(user.created_at))}
-						</h3>
+						<h3 className={styles.name}>{dateRegistration}</h3>
 					</div>
 
 					<div className={styles.infoItem}>

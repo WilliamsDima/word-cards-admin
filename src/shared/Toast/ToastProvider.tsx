@@ -3,6 +3,7 @@ import styles from "./Toast.module.scss"
 import cn from "classnames"
 import type { ToastContextValue, ToastInput, ToastItem } from "./types"
 import { ToastContext } from "./ToastContext"
+import { dateService } from "@shared/lib/date"
 
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
@@ -21,7 +22,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const push = useCallback(
 		(toast: ToastInput) => {
-			const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+			const id = `${dateService.getTimestamp()}-${Math.random().toString(36).slice(2, 8)}`
 			const item: ToastItem = {
 				id,
 				variant: toast.variant ?? "info",

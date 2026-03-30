@@ -20,6 +20,7 @@ import UserProfileCardItemRow, {
 } from "./UserProfileCardItemRow"
 import { useParams } from "react-router-dom"
 import { Icon } from "@assets/icons/Icon"
+import { dateService } from "@shared/lib/date"
 
 type Mode = "create" | "edit"
 
@@ -44,7 +45,7 @@ type Props = {
 }
 
 const createTempItemKey = () => {
-	return `temp-${Date.now()}-${Math.random().toString(16).slice(2)}`
+	return `temp-${dateService.getTimestamp()}-${Math.random().toString(16).slice(2)}`
 }
 
 const createEmptyItem = (): EditableCardItem => {
