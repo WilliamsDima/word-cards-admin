@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useActionState } from "react"
 import {
 	useGoogleLoginMutation,
 	useLazyMeQuery,
@@ -14,8 +14,6 @@ function LoginPage() {
 	const { setIsAdmin } = useActions()
 	const [googleLogin] = useGoogleLoginMutation()
 	const [fetchMe] = useLazyMeQuery()
-	const [googleLoading, setGoogleLoading] = useState(false)
-	const [googleError, setGoogleError] = useState<string | null>(null)
 
 	const getErrorMessage = (err: unknown) => {
 		if (err && typeof err === "object" && "status" in err) {
@@ -36,22 +34,22 @@ function LoginPage() {
 		return err instanceof Error ? err.message : "Login error"
 	}
 
-	const onGoogleLogin = async () => {
-		setGoogleLoading(true)
-		setGoogleError(null)
-		try {
-			const { idToken } = await signInWithGoogle()
-			await googleLogin({ idToken }).unwrap()
-			await fetchMe().unwrap()
-			setIsAdmin(true)
-		} catch (err) {
-			clearAuthToken()
-			setIsAdmin(false)
-			setGoogleError(getErrorMessage(err))
-		} finally {
-			setGoogleLoading(false)
-		}
-	}
+	const [googleError, loginAction, googleLoading] = useActionState(
+		async (_prevState: string | null) => {
+			try {
+				const { idToken } = await signInWithGoogle()
+				await googleLogin({ idToken }).unwrap()
+				await fetchMe().unwrap()
+				setIsAdmin(true)
+				return null
+			} catch (err) {
+				clearAuthToken()
+				setIsAdmin(false)
+				return getErrorMessage(err)
+			}
+		},
+		null,
+	)
 
 	return (
 		<div className={styles.container}>
@@ -82,7 +80,7 @@ function LoginPage() {
 					<Button
 						className={styles.btn}
 						type='button'
-						onClick={onGoogleLogin}
+						onClick={loginAction}
 						disabled={googleLoading}
 					>
 						<span>

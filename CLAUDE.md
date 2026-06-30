@@ -58,9 +58,13 @@ Everything funnels into the one `baseRTK` API (`app/api/BaseRTK.ts`) — don't c
 - Decision priority on conflicts: 1) nearest existing pattern next to the code you're touching, 2) reusable layers (`shared`/`entities`/`features`/`widgets`), 3) `RULES.md`, 4) a new abstraction — only once skipping one would cause real duplication.
 - TypeScript: no `any`, default to `const` over `let`.
 - React: reuse an existing component before writing a new one; no inline functions or inline style objects in JSX; `.map()` directly in JSX is fine for list rendering as long as it has no new business logic; don't assign JSX to a variable without real cause; split a component into sibling files once it grows large.
+- JSX event handlers: never wrap a zero-argument function in an arrow just to call it — write `onClick={fn}` not `onClick={() => fn()}`. Use an arrow wrapper only when you need to pass or transform arguments (e.g. `onClick={(e) => fn(e.currentTarget.value)}`) or when the native event must not reach the handler.
 - Memoization: stabilize state/prop-derived values and handlers with `useMemo`/`useCallback` per existing style; plain JSX/list elements don't need extra memoization.
 - Styling: reuse colors from `src/assets/styles/colors.scss` (add new ones centrally, not locally); static styles live in a sibling `*.module.scss`, not inline.
 - UI text defaults to Russian; if a file already uses Russian strings in a given encoding, don't change that without reason.
 - Hook order inside a component when applicable: `useNavigation`, `useRoutes`, `useActions`, `useAppDispatch`, `useAppSelector`, `useState`, query/API hooks, other custom hooks, `useMemo`, `useCallback`, `useEffect`.
 - Component responsibility: keep an action's logic inside the component that owns it (e.g. a delete modal owns its own delete logic); only lift logic up when it's genuinely reused or is real cross-cutting orchestration.
 - Prefer small, local, incremental diffs over refactors; don't introduce a new entity/layer/abstraction the task doesn't actually need a second use for.
+- Conditional rendering: never use `{condition && <X />}` (`&&` renders `0` or other falsy values as text) or `{condition ? <X /> : null}`. Always use `{condition ? <X /> : <></>}` when the false branch renders nothing.
+- No inline object/array literals in JSX props: `classes={{ btn: styles.btn }}` or `style={[styles.a, { transform: [...] }]}` allocates a new reference on every render. Extract static values to a `const` outside the component; dynamic values go in `useMemo`.
+- Extract every self-contained UI block to its own component file: modals, bottom sheets, sidebars, or any block with its own purpose should not be inlined in the parent's JSX — create a dedicated component and import it.

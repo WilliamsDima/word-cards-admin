@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useActionState, useCallback, useEffect, useMemo, useState } from "react"
 import Modal from "@shared/Modal/Modal"
 import Button from "@shared/Button/Button"
 import Dropdown from "@shared/Dropdown/Dropdown"
@@ -80,11 +80,60 @@ const UserProfileCardModal: React.FC<Props> = ({
 		status: "STUDY",
 		items: [createEmptyItem()],
 	})
-	const [formError, setFormError] = useState<string | null>(null)
 
-	const [createCard, { isLoading: isCreating }] = useCreateUserCardMutation()
-	const [updateCard, { isLoading: isUpdating }] = useUpdateUserCardMutation()
+	const [createCard] = useCreateUserCardMutation()
+	const [updateCard] = useUpdateUserCardMutation()
 	const toast = useToast()
+
+	const [formError, submitAction, isPending] = useActionState(
+		async (_prevState: string | null) => {
+			if (!id) return null
+			const language = form.language.trim()
+			const description = form.description.trim()
+			const items = form.items.map(item => ({
+				word: item.word.trim(),
+				translate: item.translate.trim(),
+			}))
+
+			if (!language || items.some(item => !item.word || !item.translate)) {
+				return "Заполните все поля"
+			}
+
+			try {
+				if (mode === "create") {
+					await createCard({
+						userId: id,
+						language,
+						description: description || undefined,
+						status: form.status,
+						items,
+					}).unwrap()
+					toast.success("Карточка создана", description || language)
+				} else if (card) {
+					await updateCard({
+						userId: id,
+						cardId: card.id,
+						language,
+						description: description || undefined,
+						items,
+					}).unwrap()
+					toast.success("Карточка обновлена", description || language)
+				}
+				onClose()
+				return null
+			} catch (err) {
+				const serverError =
+					(err as { data?: { data?: { error?: string } } })?.data?.data
+						?.error ?? null
+				toast.error(
+					"Ошибка сохранения",
+					serverError || "Не удалось сохранить карточку",
+				)
+				return serverError || "Не удалось сохранить карточку"
+			}
+		},
+		null,
+	)
 
 	const languageOptions = useMemo<LanguageOption[]>(() => {
 		return languages.map(language => ({
@@ -113,14 +162,9 @@ const UserProfileCardModal: React.FC<Props> = ({
 	}, [mode])
 
 	const submitLabel = useMemo(() => {
-		if (mode === "create") return isCreating ? "Создание..." : "Создать"
-		return isUpdating ? "Сохранение..." : "Сохранить"
-	}, [isCreating, isUpdating, mode])
-
-	const isSaving = useMemo(
-		() => isCreating || isUpdating,
-		[isCreating, isUpdating],
-	)
+		if (!isPending) return mode === "create" ? "Создать" : "Сохранить"
+		return mode === "create" ? "Создание..." : "Сохранение..."
+	}, [isPending, mode])
 
 	const hasEmptyItems = useMemo(() => {
 		return form.items.some(item => {
@@ -134,10 +178,7 @@ const UserProfileCardModal: React.FC<Props> = ({
 		)
 	}, [form.items.length, form.language, hasEmptyItems])
 
-	const isSubmitDisabled = useMemo(
-		() => isSaving || !canSubmit,
-		[canSubmit, isSaving],
-	)
+	const isSubmitDisabled = isPending || !canSubmit
 
 	const onCloseModal = useCallback(() => {
 		onClose()
@@ -145,38 +186,21 @@ const UserProfileCardModal: React.FC<Props> = ({
 
 	const onDescriptionChange = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
-			const value = event.target.value
-			setForm(prev => ({
-				...prev,
-				description: value,
-			}))
-			setFormError(null)
+			setForm(prev => ({ ...prev, description: event.target.value }))
 		},
 		[],
 	)
 
 	const onLanguageSelect = useCallback((option: LanguageOption) => {
-		setForm(prev => ({
-			...prev,
-			language: option.value,
-		}))
-		setFormError(null)
+		setForm(prev => ({ ...prev, language: option.value }))
 	}, [])
 
 	const onStatusSelect = useCallback((option: { value: CardStatus }) => {
-		setForm(prev => ({
-			...prev,
-			status: option.value,
-		}))
-		setFormError(null)
+		setForm(prev => ({ ...prev, status: option.value }))
 	}, [])
 
 	const onAddItem = useCallback(() => {
-		setForm(prev => ({
-			...prev,
-			items: [...prev.items, createEmptyItem()],
-		}))
-		setFormError(null)
+		setForm(prev => ({ ...prev, items: [...prev.items, createEmptyItem()] }))
 	}, [])
 
 	const onItemChange = useCallback(
@@ -187,7 +211,6 @@ const UserProfileCardModal: React.FC<Props> = ({
 					item.key === key ? { ...item, [field]: value } : item,
 				),
 			}))
-			setFormError(null)
 		},
 		[],
 	)
@@ -195,73 +218,9 @@ const UserProfileCardModal: React.FC<Props> = ({
 	const onItemRemove = useCallback((key: string) => {
 		setForm(prev => {
 			const nextItems = prev.items.filter(item => item.key !== key)
-			return {
-				...prev,
-				items: nextItems.length ? nextItems : [createEmptyItem()],
-			}
+			return { ...prev, items: nextItems.length ? nextItems : [createEmptyItem()] }
 		})
-		setFormError(null)
 	}, [])
-
-	const onSubmit = useCallback(async () => {
-		if (!id) return
-		const language = form.language.trim()
-		const description = form.description.trim()
-		const items = form.items.map(item => ({
-			word: item.word.trim(),
-			translate: item.translate.trim(),
-		}))
-
-		if (!language || items.some(item => !item.word || !item.translate)) {
-			setFormError("Заполните все поля")
-			return
-		}
-
-		try {
-			if (mode === "create") {
-				await createCard({
-					userId: id,
-					language,
-					description: description || undefined,
-					status: form.status,
-					items,
-				}).unwrap()
-				toast.success("Карточка создана", description || language)
-			} else if (card) {
-				await updateCard({
-					userId: id,
-					cardId: card.id,
-					language,
-					description: description || undefined,
-					items,
-				}).unwrap()
-				toast.success("Карточка обновлена", description || language)
-			}
-			setFormError(null)
-			onClose()
-		} catch (err) {
-			const serverError =
-				(err as { data?: { data?: { error?: string } } })?.data?.data?.error ??
-				null
-			setFormError(serverError || "Не удалось сохранить карточку")
-			toast.error(
-				"Ошибка сохранения",
-				serverError || "Не удалось сохранить карточку",
-			)
-		}
-	}, [
-		card,
-		createCard,
-		form.description,
-		form.items,
-		form.language,
-		form.status,
-		mode,
-		onClose,
-		toast,
-		updateCard,
-		id,
-	])
 
 	useEffect(() => {
 		if (!open) return
@@ -276,7 +235,6 @@ const UserProfileCardModal: React.FC<Props> = ({
 			status: nextStatus,
 			items,
 		})
-		setFormError(null)
 	}, [card, defaultLanguage, open])
 
 	return (
@@ -293,7 +251,7 @@ const UserProfileCardModal: React.FC<Props> = ({
 					</Button>
 					<Button
 						className={styles.primaryBtn}
-						onClick={onSubmit}
+						onClick={submitAction}
 						disabled={isSubmitDisabled}
 					>
 						{submitLabel}
@@ -344,14 +302,14 @@ const UserProfileCardModal: React.FC<Props> = ({
 								item={item}
 								onChange={onItemChange}
 								onRemove={onItemRemove}
-								isDisabled={isSaving}
+								isDisabled={isPending}
 							/>
 						))}
 					</div>
 					<button
 						className={styles.addItemBtn}
 						onClick={onAddItem}
-						disabled={isSaving}
+						disabled={isPending}
 					>
 						<Icon kind='svg' name='add-square-white' width={20} height={20} />
 					</button>

@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useMemo, useState } from "react"
+﻿import React, { useActionState, useCallback, useMemo, useState } from "react"
 import Modal from "@shared/Modal/Modal"
 import Button from "@shared/Button/Button"
 import styles from "../TranslationPage.module.scss"
@@ -22,10 +22,8 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 		name: "",
 		emoji: "",
 	})
-	const [createError, setCreateError] = useState<string | null>(null)
 
-	const [createLanguage, { isLoading: isCreating }] =
-		useCreateLanguageMutation()
+	const [createLanguage] = useCreateLanguageMutation()
 	const toast = useToast()
 
 	const normalizedCode = useMemo(
@@ -53,18 +51,56 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 		if (isCodeAllowed) return null
 		return "Код языка не поддерживается"
 	}, [isCodeAllowed, normalizedCode])
-	const formError = useMemo(
-		() => createError ?? codeValidationError,
-		[codeValidationError, createError],
+
+	const [createError, createAction, isPending] = useActionState(
+		async (_prevState: string | null) => {
+			const code = normalizedCode
+			const name = createForm.name.trim()
+			const emoji = createForm.emoji.trim()
+
+			if (!code || !name || !emoji) return "Заполните все поля"
+
+			if (!isCodeAllowed) {
+				toast.error("Ошибка добавления", "Код языка не поддерживается")
+				return "Код языка не поддерживается"
+			}
+
+			try {
+				await createLanguage({ code, name, emoji, json: {} }).unwrap()
+				setCreateForm({ code: "", name: "", emoji: "" })
+				setIsCreateOpen(false)
+				toast.success("Язык добавлен", name)
+				return null
+			} catch (err) {
+				const status =
+					typeof (err as { status?: number })?.status === "number"
+						? (err as { status?: number }).status
+						: (err as { data?: { status?: number } })?.data?.status
+
+				const serverError =
+					(err as { data?: { data?: { error?: string } } })?.data?.data
+						?.error ?? null
+
+				if (status === 409) {
+					toast.error("Ошибка добавления", "Код языка уже существует")
+					return "Код языка уже существует"
+				}
+
+				toast.error(
+					"Ошибка добавления",
+					serverError || "Не удалось создать язык",
+				)
+				return serverError || "Не удалось создать язык"
+			}
+		},
+		null,
 	)
+
+	const formError = createError ?? codeValidationError
 
 	const onChangeCreateForm = useCallback(
 		(field: "code" | "name" | "emoji", value: string) => {
-			setCreateForm(prev => ({
-				...prev,
-				[field]: value,
-			}))
-			setCreateError(null)
+			setCreateForm(prev => ({ ...prev, [field]: value }))
 		},
 		[],
 	)
@@ -87,75 +123,9 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 		[onChangeCreateForm],
 	)
 
-	const onCreate = useCallback(async () => {
-		const code = normalizedCode
-		const name = createForm.name.trim()
-		const emoji = createForm.emoji.trim()
-
-		if (!code || !name || !emoji) {
-			setCreateError("Заполните все поля")
-			return
-		}
-
-		if (!isCodeAllowed) {
-			setCreateError("Код языка не поддерживается")
-			toast.error("Ошибка добавления", "Код языка не поддерживается")
-			return
-		}
-
-		try {
-			await createLanguage({
-				code,
-				name,
-				emoji,
-				json: {},
-			}).unwrap()
-
-			setCreateForm({ code: "", name: "", emoji: "" })
-			setCreateError(null)
-			setIsCreateOpen(false)
-			toast.success("Язык добавлен", name)
-		} catch (err) {
-			const status =
-				typeof (err as { status?: number })?.status === "number"
-					? (err as { status?: number }).status
-					: (err as { data?: { status?: number } })?.data?.status
-
-			const serverError =
-				(err as { data?: { data?: { error?: string } } })?.data?.data?.error ??
-				null
-
-			if (status === 409) {
-				setCreateError("Код языка уже существует")
-				toast.error("Ошибка добавления", "Код языка уже существует")
-				return
-			}
-
-			setCreateError(serverError || "Не удалось создать язык")
-			toast.error("Ошибка добавления", serverError || "Не удалось создать язык")
-		}
-	}, [
-		createForm.emoji,
-		createForm.name,
-		createLanguage,
-		isCodeAllowed,
-		normalizedCode,
-		setIsCreateOpen,
-		toast,
-	])
-
 	const onClose = useCallback(() => setIsCreateOpen(false), [setIsCreateOpen])
 
-	const isCreateDisabled = useMemo(
-		() => !canCreate || isCreating,
-		[canCreate, isCreating],
-	)
-
-	useEffect(() => {
-		if (!open) {
-			setCreateError(null)
-		}
-	}, [open])
+	const isCreateDisabled = !canCreate || isPending
 
 	return (
 		<Modal
@@ -169,10 +139,10 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 					</Button>
 					<Button
 						className={styles.primaryBtn}
-						onClick={onCreate}
+						onClick={createAction}
 						disabled={isCreateDisabled}
 					>
-						{isCreating ? "Создание..." : "Создать"}
+						{isPending ? "Создание..." : "Создать"}
 					</Button>
 				</>
 			}
