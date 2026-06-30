@@ -6,7 +6,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `word-cards-admin` is the admin panel for the Word Cards flashcard app — it talks to the same backend as the mobile client (sibling repos `dictionary-back` and `language-dictionary`). It manages arbitrary users, their flashcards, supported languages/translations, global app config, and other admin-only data, calling the backend's `/admin/...` and management endpoints.
 
-Full project rules live in `RULES.md` (Russian) — read it before non-trivial changes. This file summarizes what an agent needs most; it does not repeat it in full.
+Full project rules live in `RULES.md` (Russian). Don't read it end to end — use the **Task routing** table below to jump to the section(s) that matter for your task.
+
+## Task routing
+
+Classify your task, then read only the listed `RULES.md` section(s) — section numbers refer to its `##` headers.
+
+| Task | Read in `RULES.md` | Template / reference |
+|---|---|---|
+| New endpoint integration (consume a new/changed backend route) | §3 Where to put code | nearest existing `shared/api/services/<name>/` pair — see this file's "Data fetching: Service + Query pairing" section |
+| New page/route | §2 Quick route through the project, §3 Where to put code | `app/navigation/routes.ts`, `AdminLayout` |
+| Auth/routing-gate change | — (covered in this file's "Routing & auth gating" and "Auth flow" sections) | `AppRouter.tsx` — treat as a critical change |
+| New or changed reusable UI component | §4 Mandatory code rules | check `shared/` first per §2 |
+| Styling/visual tweak | §4 "Стили и UI" subsection | `src/assets/styles/colors.scss` |
+| Pure refactor / bug fix, no new abstraction | §9 Antipatterns, §10 Criterion of a good change | — |
+
+§7 (how the agent should work without wandering) is short, general workflow advice worth reading once regardless of task. §8 (checks before done) is already summarized in this file's Commands section.
 
 ## Commands
 
