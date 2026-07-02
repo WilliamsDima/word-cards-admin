@@ -71,7 +71,7 @@ Everything funnels into the one `baseRTK` API (`app/api/BaseRTK.ts`) — don't c
 ## Conventions (full detail in `RULES.md`)
 
 - Decision priority on conflicts: 1) nearest existing pattern next to the code you're touching, 2) reusable layers (`shared`/`entities`/`features`/`widgets`), 3) `RULES.md`, 4) a new abstraction — only once skipping one would cause real duplication.
-- TypeScript: no `any`, default to `const` over `let`.
+- TypeScript: no `any`; `let` is fully banned (enforced by an ESLint error in `eslint.config.js` via `no-restricted-syntax` on `VariableDeclaration[kind="let"]`) — always use `const`.
 - React: reuse an existing component before writing a new one; no inline functions or inline style objects in JSX; `.map()` directly in JSX is fine for list rendering as long as it has no new business logic; don't assign JSX to a variable without real cause; split a component into sibling files once it grows large.
 - JSX event handlers: never wrap a zero-argument function in an arrow just to call it — write `onClick={fn}` not `onClick={() => fn()}`. Use an arrow wrapper only when you need to pass or transform arguments (e.g. `onClick={(e) => fn(e.currentTarget.value)}`) or when the native event must not reach the handler.
 - Memoization: stabilize state/prop-derived values and handlers with `useMemo`/`useCallback` per existing style; plain JSX/list elements don't need extra memoization.

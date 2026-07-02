@@ -21,6 +21,13 @@ export default tseslint.config([
 		},
 		rules: {
 			"@typescript-eslint/no-explicit-any": "off",
+			"no-restricted-syntax": [
+				"error",
+				{
+					selector: "VariableDeclaration[kind=\"let\"]",
+					message: "Использование `let` запрещено. Используйте `const`; если значение действительно должно переприсваиваться, пересмотрите подход (например, вынесите логику в функцию или используйте `reduce`).",
+				},
+			],
 		},
 	},
 ])
