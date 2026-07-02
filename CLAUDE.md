@@ -68,6 +68,8 @@ Every domain API in `shared/api/services/<name>/` follows the same two-file spli
 
 Everything funnels into the one `baseRTK` API (`app/api/BaseRTK.ts`) — don't create a second `createApi` instance; inject new endpoints into `baseRTK` instead. New admin endpoints generally target `/admin/users/{userId}/...` paths matching the backend's admin routes.
 
+Never call a `use*Query` hook (or a custom hook wrapping one) inside a component that renders multiple times in a list/table (a row, list item, or card in a `.map()`) — each instance would open its own RTK Query subscription, causing refetches after `keepUnusedDataFor` expires on remount/virtualization. Fetch once in the container/page (single `use*Query` call there), build a lookup via `useMemo` if needed, and pass resolved data down via props. `use*Mutation` hooks (trigger-only, no data subscription) are fine to call per-row for that row's own action. Full rule: `RULES.md` §4 "Data fetching".
+
 ## Conventions (full detail in `RULES.md`)
 
 - Decision priority on conflicts: 1) nearest existing pattern next to the code you're touching, 2) reusable layers (`shared`/`entities`/`features`/`widgets`), 3) `RULES.md`, 4) a new abstraction — only once skipping one would cause real duplication.
@@ -75,6 +77,7 @@ Everything funnels into the one `baseRTK` API (`app/api/BaseRTK.ts`) — don't c
 - React: reuse an existing component before writing a new one; no inline functions or inline style objects in JSX; `.map()` directly in JSX is fine for list rendering as long as it has no new business logic; don't assign JSX to a variable without real cause; split a component into sibling files once it grows large.
 - JSX event handlers: never wrap a zero-argument function in an arrow just to call it — write `onClick={fn}` not `onClick={() => fn()}`. Use an arrow wrapper only when you need to pass or transform arguments (e.g. `onClick={(e) => fn(e.currentTarget.value)}`) or when the native event must not reach the handler.
 - Memoization: stabilize state/prop-derived values and handlers with `useMemo`/`useCallback` per existing style; plain JSX/list elements don't need extra memoization.
+- Never pass an inline arrow function (new reference every render) as a callback prop into a list/table render function or a `.map()`-rendered row/card — it defeats `React.memo` on the child and causes needless re-renders. Wrap the handler in `useCallback` in the parent and wrap the row/item component in `React.memo`; if the callback must close over the loop variable (e.g. a row `id`), keep that variable in the `useCallback` deps at the parent, or push the logic into its own memoized child that receives the variable as a prop instead of via closure.
 - Styling: reuse colors from `src/assets/styles/colors.scss` (add new ones centrally, not locally); static styles live in a sibling `*.module.scss`, not inline.
 - UI text defaults to Russian; if a file already uses Russian strings in a given encoding, don't change that without reason.
 - Hook order inside a component when applicable: `useNavigation`, `useRoutes`, `useActions`, `useAppDispatch`, `useAppSelector`, `useState`, query/API hooks, other custom hooks, `useMemo`, `useCallback`, `useEffect`.

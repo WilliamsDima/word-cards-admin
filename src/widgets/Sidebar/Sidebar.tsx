@@ -7,14 +7,19 @@ import {
 import { clearAuthToken, getAuthToken } from "@shared/lib/authToken"
 import { useActions } from "@shared/hooks/useActions"
 import { useAppNavigate } from "@shared/hooks/useAppNavigate"
-import { AppRoutes } from "@app/navigation/routes"
+import { AppRoutes, RouteParams } from "@app/navigation/routes"
 import { useLocation } from "react-router-dom"
 import cn from "classnames"
 import Button from "@shared/Button/Button"
 import { Icon } from "@assets/icons/Icon"
 import Skeleton from "@shared/Skeleton/Skeleton"
+import SidebarNavItem from "./SidebarNavItem"
 
-const routesNav = [
+export type NoParamsRoutePath = {
+	[K in keyof RouteParams]: RouteParams[K] extends undefined ? K : never
+}[keyof RouteParams]
+
+const routesNav: { name: string; route: NoParamsRoutePath; icon: React.ReactNode }[] = [
 	{
 		name: "Пользователи",
 		route: AppRoutes.users,
@@ -78,6 +83,11 @@ const Sidebar: React.FC = () => {
 		}
 	}, [logoutRequest, setIsAdmin])
 
+	const onNavItemClick = useCallback(
+		(route: NoParamsRoutePath) => navigation(route),
+		[navigation],
+	)
+
 	const sidebarStyles = useMemo(
 		() =>
 			cn(styles.sidebar, {
@@ -92,9 +102,8 @@ const Sidebar: React.FC = () => {
 			className: cn(styles.navItem, {
 				[styles.navItemActive]: currentRoute.includes(item.route),
 			}),
-			onClick: () => navigation(item.route),
 		}))
-	}, [currentRoute, navigation])
+	}, [currentRoute])
 
 	return (
 		<aside className={sidebarStyles}>
@@ -109,19 +118,16 @@ const Sidebar: React.FC = () => {
 				</button>
 			</div>
 			<nav className={styles.nav}>
-				{navItems.map(it => {
-					return (
-						<button
-							key={it.route}
-							className={it.className}
-							onClick={it.onClick}
-						>
-							{it.icon}
-
-							<span>{it.name}</span>
-						</button>
-					)
-				})}
+				{navItems.map(it => (
+					<SidebarNavItem
+						key={it.route}
+						route={it.route}
+						name={it.name}
+						icon={it.icon}
+						className={it.className}
+						onClick={onNavItemClick}
+					/>
+				))}
 			</nav>
 			<button className={styles.currentUser} onClick={toProfile} type='button'>
 				<span className={styles.currentAvatar}>
