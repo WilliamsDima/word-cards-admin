@@ -5,10 +5,11 @@ import { UserProfileInfo } from "./ui/UserProfileInfo"
 import { UserProfileGrids } from "./ui/UserProfileGrids"
 import UserProfileCards from "./ui/UserProfileCards"
 import UserProfileStats from "./ui/UserProfileStats"
+import UserProfileAchievements from "./ui/UserProfileAchievements"
 import Button from "@shared/Button/Button"
 import cn from "classnames"
 
-type ProfileTab = "cards" | "languages" | "stats"
+type ProfileTab = "cards" | "languages" | "stats" | "achievements"
 
 const tabs: Record<ProfileTab, { label: string; component: ReactNode }> = {
 	cards: {
@@ -20,8 +21,12 @@ const tabs: Record<ProfileTab, { label: string; component: ReactNode }> = {
 		component: <UserProfileLanguagesCard />,
 	},
 	stats: {
-		label: "Языки пользователя",
+		label: "Статистика пользователя",
 		component: <UserProfileStats />,
+	},
+	achievements: {
+		label: "Достижения",
+		component: <UserProfileAchievements />,
 	},
 }
 

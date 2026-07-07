@@ -20,6 +20,7 @@ export const baseRTK = createApi({
 		"userCards",
 		"userStats",
 		"achievements",
+		"userAchievements",
 	],
 	endpoints: () => ({}),
 })
