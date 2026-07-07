@@ -1,4 +1,5 @@
 import type { ImgHTMLAttributes, SVGAttributes } from "react"
+import AchievementIcon from "@assets/icons/svg/achievement.svg?react"
 import AddSquareGreen64Icon from "@assets/icons/svg/add-square-green-64.svg?react"
 import AddSquareWhiteIcon from "@assets/icons/svg/add-square-white.svg?react"
 import AppIcon from "@assets/icons/svg/app.svg?react"
@@ -22,6 +23,7 @@ import UserIcon from "@assets/icons/svg/user.svg?react"
 import LogoWebp from "@assets/icons/webp/logo.webp"
 
 export type SvgName =
+	| "achievement"
 	| "add-square-green-64"
 	| "add-square-white"
 	| "app"
@@ -80,6 +82,9 @@ export function Icon<K extends keyof KindMap>(props: { kind: K } & KindMap[K]) {
 	const { name, width, height } = svgProps
 
 	switch (name) {
+		case "achievement":
+			return <AchievementIcon width={width} height={height} {...svgProps} />
+
 		case "add-square-green-64":
 			return <AddSquareGreen64Icon width={width} height={height} {...svgProps} />
 

@@ -41,6 +41,11 @@ const routesNav: { name: string; route: NoParamsRoutePath; icon: React.ReactNode
 		icon: <Icon kind='svg' name='links' width={20} height={20} />,
 	},
 	{
+		name: "Достижения",
+		route: AppRoutes.achievements,
+		icon: <Icon kind='svg' name='achievement' width={20} height={20} />,
+	},
+	{
 		name: "Поддержка",
 		route: AppRoutes.chats,
 		icon: <Icon kind='svg' name='support' width={20} height={20} />,

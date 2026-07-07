@@ -16,6 +16,7 @@ import { getAuthToken } from "@shared/lib/authToken"
 import SocialsPage from "@pages/SocialsPage/SocialsPage"
 import UserProfilePage from "@pages/UserProfilePage/UserProfilePage"
 import AppPreloader from "@shared/AppPreloader/AppPreloader"
+import AchievementsPage from "@pages/AchievementsPage/AchievementsPage"
 
 const AppRouter = () => {
 	const { setIsAdmin } = useActions()
@@ -67,6 +68,10 @@ const AppRouter = () => {
 						<Route path={AppRoutes.translation} element={<TranslationPage />} />
 						<Route path={AppRoutes.socials} element={<SocialsPage />} />
 						<Route path={AppRoutes.chats} element={<ChatsPage />} />
+						<Route
+							path={AppRoutes.achievements}
+							element={<AchievementsPage />}
+						/>
 
 						<Route path={AppRoutes.notFount} element={<NotFoundPage />} />
 					</Route>

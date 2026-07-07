@@ -8,6 +8,7 @@ export const AppRoutes = {
 	translation: "/translation",
 	socials: `/socials`,
 	chats: "/chats",
+	achievements: "/achievements",
 } as const
 
 export type AppRouteKey = keyof typeof AppRoutes
@@ -23,4 +24,5 @@ export interface RouteParams {
 	[AppRoutes.chats]: undefined
 	[AppRoutes.translation]: undefined
 	[AppRoutes.socials]: undefined
+	[AppRoutes.achievements]: undefined
 }

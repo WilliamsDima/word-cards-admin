@@ -1,0 +1,264 @@
+@use "../../assets/styles/colors.scss" as colors;
+@use "../../assets/styles/globalStyles.scss" as global;
+
+.page {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	height: 100%;
+	min-height: 0;
+	overflow: hidden;
+}
+
+.card {
+	padding: 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	flex: 1;
+	min-height: 0;
+	overflow: hidden;
+}
+
+.listHeader {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.addBtn {
+	background: colors.$color-surface-3;
+	border: 1px solid colors.$color-border-soft;
+}
+
+.sectionTitle {
+	margin: 0;
+	font-size: 1.8rem;
+	font-weight: 600;
+}
+
+.sectionTitleRow {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.sectionHint {
+	margin: 6px 0 0;
+	font-size: 1.3rem;
+	color: colors.$color-text-secondary;
+	max-width: 560px;
+}
+
+.loadingState {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	padding: 12px;
+	color: colors.$color-text-secondary;
+}
+
+.loadingSpinner {
+	width: 32px;
+	height: 32px;
+}
+
+.listWrapper {
+	flex: 1;
+	min-height: 0;
+	display: flex;
+	overflow: hidden;
+}
+
+.list {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	@extend %scroll;
+}
+
+.listHead {
+	display: grid;
+	grid-template-columns: 56px 1.2fr 1.6fr 1.6fr 90px 90px 110px 100px;
+	gap: 12px;
+	align-items: center;
+	padding: 8px 12px;
+	font-size: 1.1rem;
+	color: colors.$color-text-secondary;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.row {
+	display: grid;
+	grid-template-columns: 56px 1.2fr 1.6fr 1.6fr 90px 90px 110px 100px;
+	gap: 12px;
+	align-items: center;
+	padding: 10px 12px;
+	border-radius: 14px;
+	border: 1px solid colors.$color-border-soft;
+	background: colors.$color-surface-2;
+	font-size: 1.3rem;
+}
+
+.colIcon {
+	display: flex;
+	align-items: center;
+}
+
+.colCode {
+	color: colors.$color-text-secondary;
+	overflow-wrap: anywhere;
+}
+
+.colTitle {
+	font-weight: 600;
+	overflow-wrap: anywhere;
+}
+
+.colMetric {
+	color: colors.$color-text-secondary;
+}
+
+.colThreshold,
+.colOrder {
+	text-align: center;
+}
+
+.colActive {
+	display: flex;
+}
+
+.colActions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+}
+
+.iconBadge {
+	width: 36px;
+	height: 36px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10px;
+	background: colors.$color-surface-3;
+	font-size: 18px;
+	box-shadow: inset 0 0 12px colors.$color-shadow;
+}
+
+.iconButton {
+	display: flex;
+	padding: 0.5rem;
+	align-items: center;
+	justify-content: center;
+	background: colors.$color-surface-3;
+	cursor: pointer;
+	border-radius: 4px;
+}
+
+.iconButtonEdit {
+	background: rgba(33, 150, 243, 0.12);
+}
+
+.iconButtonDanger {
+	background: rgba(255, 0, 47, 0.18);
+}
+
+.empty {
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	text-align: center;
+	color: colors.$color-text-secondary;
+	padding: 12px;
+}
+
+.emptyTitle {
+	font-size: 1.6rem;
+	font-weight: 600;
+	color: colors.$color-text-primary;
+}
+
+.emptyText {
+	font-size: 1.3rem;
+	max-width: 320px;
+}
+
+.modal {
+	width: 60%;
+}
+
+.modalContent {
+	max-height: 70vh;
+	overflow: auto;
+	@extend %scroll;
+}
+
+.modalForm {
+	display: grid;
+	gap: 12px;
+}
+
+.metaEdit {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+}
+
+.field {
+	display: grid;
+	gap: 6px;
+}
+
+.label {
+	font-size: 1.2rem;
+	color: colors.$color-text-secondary;
+}
+
+.formError {
+	color: colors.$color-error;
+	font-size: 1.2rem;
+}
+
+.primaryBtn {
+	background-color: colors.$color-primary;
+}
+
+.ghostBtn {
+	background: colors.$color-surface-3;
+	border: 1px solid colors.$color-border-soft;
+}
+
+.dangerBtn {
+	background: colors.$color-red;
+	color: colors.$color-white;
+}
+
+@media (max-width: 900px) {
+	.listHead {
+		display: none;
+	}
+
+	.row {
+		grid-template-columns: 1fr;
+		gap: 6px;
+	}
+
+	.colActions {
+		justify-content: flex-start;
+	}
+
+	.metaEdit {
+		grid-template-columns: 1fr;
+	}
+}

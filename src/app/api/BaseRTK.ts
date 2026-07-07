@@ -19,6 +19,7 @@ export const baseRTK = createApi({
 		"languages",
 		"userCards",
 		"userStats",
+		"achievements",
 	],
 	endpoints: () => ({}),
 })
