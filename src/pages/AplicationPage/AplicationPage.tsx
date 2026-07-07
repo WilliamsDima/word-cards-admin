@@ -4,6 +4,7 @@ import BooleanChange from "./ui/BooleanChange/BooleanChange"
 import PageHeader from "@shared/PageHeader/PageHeader"
 import AboutBlocks from "./ui/AboutBlocks/AboutBlocks"
 import ShowVariants from "./ui/ShowVariants/ShowVariants"
+import YearInReview from "./ui/YearInReview/YearInReview"
 
 function AplicationPage() {
 	return (
@@ -21,6 +22,8 @@ function AplicationPage() {
 				<ShowVariants />
 
 				<AboutBlocks />
+
+				<YearInReview />
 			</div>
 		</div>
 	)

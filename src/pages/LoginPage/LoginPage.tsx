@@ -1,4 +1,4 @@
-import React, { useActionState } from "react"
+import React, { startTransition, useActionState, useCallback } from "react"
 import {
 	useGoogleLoginMutation,
 	useLazyMeQuery,
@@ -51,6 +51,12 @@ function LoginPage() {
 		null,
 	)
 
+	const handleLogin = useCallback(() => {
+		startTransition(() => {
+			loginAction()
+		})
+	}, [loginAction])
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.glow} />
@@ -80,7 +86,7 @@ function LoginPage() {
 					<Button
 						className={styles.btn}
 						type='button'
-						onClick={loginAction}
+						onClick={handleLogin}
 						disabled={googleLoading}
 					>
 						<span>

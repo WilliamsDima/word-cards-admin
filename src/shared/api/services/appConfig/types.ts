@@ -40,6 +40,47 @@ export interface IAbout {
 	blocks: IBlock[]
 }
 
+export const YEAR_IN_REVIEW_SLIDE_IDS = [
+	"intro",
+	"cards_added",
+	"cards_learned",
+	"practice_sessions",
+	"streak",
+	"daily_tasks",
+	"app_opens",
+	"cards_reviewed",
+	"languages",
+	"outro",
+] as const
+
+export type YearInReviewSlideId = (typeof YEAR_IN_REVIEW_SLIDE_IDS)[number]
+
+export interface IYearInReviewWindow {
+	start_month: number
+	start_day: number
+	end_month: number
+	end_day: number
+	end_hour: number
+	end_minute: number
+}
+
+export interface IYearInReviewTranslation {
+	title: string
+	description: string
+}
+
+export interface IYearInReviewSlide {
+	id: YearInReviewSlideId
+	enabled: boolean
+	sort_order: number
+	translations: Record<string, IYearInReviewTranslation>
+}
+
+export interface IYearInReviewConfig {
+	window: IYearInReviewWindow
+	slides: IYearInReviewSlide[]
+}
+
 export interface IAplication {
 	about: IAbout
 	appName: string
@@ -53,5 +94,6 @@ export interface IAplication {
 	showVariantsList: ShowVariantsOption[]
 	privacy_policy_link: string
 	showVKAuth: boolean
+	year_in_review: IYearInReviewConfig
 	updated_at: string
 }

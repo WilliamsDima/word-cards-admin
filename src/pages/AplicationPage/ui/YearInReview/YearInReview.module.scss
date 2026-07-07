@@ -1,0 +1,232 @@
+@use "../../../../assets/styles/colors.scss" as colors;
+@use "../../../../assets/styles/globalStyles.scss" as global;
+
+.card {
+	padding: 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.title {
+	margin: 0;
+	font-size: 1.8rem;
+	font-weight: 600;
+}
+
+.subtitle {
+	margin: 6px 0 0;
+	font-size: 1.3rem;
+	color: colors.$color-text-secondary;
+	max-width: 540px;
+}
+
+.windowBlock,
+.slidesBlock {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	padding: 14px;
+	border-radius: 16px;
+	background: colors.$color-surface-2;
+	border: 1px solid colors.$color-border-soft;
+}
+
+.windowHeader {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.blockTitle {
+	margin: 0;
+	font-size: 1.5rem;
+	font-weight: 600;
+}
+
+.blockSubtitle {
+	margin: 4px 0 0;
+	font-size: 1.2rem;
+	color: colors.$color-text-secondary;
+	max-width: 520px;
+}
+
+.loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	padding: 12px;
+	color: colors.$color-text-secondary;
+}
+
+.spinner {
+	width: 28px;
+	height: 28px;
+}
+
+.empty {
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	text-align: center;
+	color: colors.$color-text-secondary;
+	padding: 12px;
+}
+
+.emptyTitle {
+	font-size: 1.4rem;
+	font-weight: 600;
+	color: colors.$color-text-primary;
+}
+
+.emptyText {
+	font-size: 1.2rem;
+	max-width: 320px;
+}
+
+.windowFields {
+	display: grid;
+	grid-template-columns: repeat(6, minmax(0, 1fr));
+	gap: 12px;
+}
+
+.field {
+	display: grid;
+	gap: 6px;
+}
+
+.label {
+	font-size: 1.2rem;
+	color: colors.$color-text-secondary;
+}
+
+.actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	justify-content: flex-end;
+}
+
+.primaryBtn {
+	background-color: colors.$color-primary;
+}
+
+.ghostBtn {
+	background: colors.$color-surface-3;
+	border: 1px solid colors.$color-border-soft;
+}
+
+.dangerBtn {
+	background: colors.$color-red;
+	color: colors.$color-white;
+}
+
+.slidesList {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.slideCard {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 14px;
+	border-radius: 14px;
+	background: colors.$color-surface-3;
+	border: 1px solid colors.$color-border-soft;
+}
+
+.slideHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.titleBlock {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.meta {
+	margin: 0;
+	font-size: 1.2rem;
+	color: colors.$color-text-secondary;
+}
+
+.slideFields {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 16px;
+}
+
+.languageTabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 12px;
+}
+
+.languageTab {
+	padding: 6px 12px;
+	border-radius: 999px;
+	font-size: 1.2rem;
+	color: colors.$color-text-secondary;
+	background: colors.$color-surface-3;
+	border: 1px solid colors.$color-border-soft;
+	cursor: pointer;
+}
+
+.languageTabFilled {
+	color: colors.$color-text-primary;
+}
+
+.languageTabActive {
+	color: colors.$color-white;
+	background: colors.$color-primary;
+	border-color: colors.$color-primary;
+}
+
+.slideModal {
+	max-width: 560px;
+}
+
+.slideModalContent {
+	display: grid;
+	gap: 12px;
+}
+
+.slideModalFields {
+	display: grid;
+	gap: 12px;
+}
+
+@media (max-width: 720px) {
+	.header {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.windowFields {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.windowHeader {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
