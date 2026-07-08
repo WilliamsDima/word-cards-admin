@@ -28,6 +28,7 @@ const Skeleton: FC<SkeletonProps> = memo(
 		)
 
 		return (
+			// eslint-disable-next-line react/forbid-dom-props -- width/height приходят из пропсов динамически, статическим CSS-модулем их не задать
 			<span className={skeletonClassName} style={style} />
 		)
 	},
