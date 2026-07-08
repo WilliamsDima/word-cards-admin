@@ -1,10 +1,6 @@
-import {
-	getAuth,
-	GoogleAuthProvider,
-	onIdTokenChanged,
-	signInWithPopup,
-} from "firebase/auth"
-import { getFirebaseApp, getFirebaseMissingEnv } from "./firebase"
+import { GoogleAuthProvider, onIdTokenChanged, signInWithPopup } from "firebase/auth"
+import { getFirebaseApp } from "./firebase"
+import { getAuthClient } from "./authClient"
 import { setAuthToken } from "../lib/authToken"
 import { authService } from "@shared/api/services/auth/AuthService"
 
@@ -23,21 +19,12 @@ const syncUserWithBackend = async (idToken: string) => {
 	return result.data
 }
 
-const getAuthClient = () => {
-	const app = getFirebaseApp()
-	if (!app) {
-		const missing = getFirebaseMissingEnv()
-		throw new Error(`Firebase env is missing: ${missing.join(", ")}`)
-	}
-	return getAuth(app)
-}
-
 export const initFirebaseAuthTokenSync = () => {
 	if (tokenState.listenerReady) return false
 	const app = getFirebaseApp()
 	if (!app) return false
 
-	const auth = getAuth(app)
+	const auth = getAuthClient()
 	tokenState.listenerReady = true
 
 	onIdTokenChanged(auth, async user => {
@@ -57,6 +44,23 @@ export const initFirebaseAuthTokenSync = () => {
 			// keep the last known token
 		}
 	})
+
+	// Firebase's own proactive refresh timer is scheduled with setTimeout and
+	// gets paused while the tab is backgrounded or the machine sleeps, which
+	// is how a session ends up with a stale/expired ID token mid-use. Asking
+	// for the token again on tab focus lets the SDK notice the token expired
+	// and mint a new one (firing onIdTokenChanged above) before the user
+	// issues the next API request.
+	if (typeof document !== "undefined") {
+		document.addEventListener("visibilitychange", () => {
+			if (document.visibilityState !== "visible") return
+			const user = auth.currentUser
+			if (!user) return
+			user.getIdToken().catch(() => {
+				// handled by the reactive 401 refresh in the API layer
+			})
+		})
+	}
 
 	return true
 }

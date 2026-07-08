@@ -1,4 +1,5 @@
 import { getAuthToken } from "@shared/lib/authToken"
+import { refreshAuthToken } from "@shared/config/authClient"
 import type { ServiceResult } from "./result"
 import { http } from "./http"
 
@@ -11,11 +12,11 @@ type RequestOptions = {
 	skipAuth?: boolean
 }
 
-export const request = async <T>(
+const sendRequest = async <T>(
 	path: string,
-	options: RequestOptions = {},
+	options: RequestOptions,
+	token: string | null,
 ): Promise<ServiceResult<T>> => {
-	const token = options.skipAuth ? null : (options.authToken ?? getAuthToken())
 	const headers = {
 		...(options.headers ?? {}),
 		...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -64,4 +65,25 @@ export const request = async <T>(
 			},
 		}
 	}
+}
+
+export const request = async <T>(
+	path: string,
+	options: RequestOptions = {},
+): Promise<ServiceResult<T>> => {
+	// A caller-supplied token (e.g. the Google sign-in sync call) or an
+	// explicit opt-out is never eligible for the stale-token retry below —
+	// there is no cached session token to refresh in that flow.
+	const usesCachedToken = !options.skipAuth && options.authToken === undefined
+	const token = options.skipAuth ? null : (options.authToken ?? getAuthToken())
+
+	const result = await sendRequest<T>(path, options, token)
+	if (result.ok || result.error.status !== 401 || !usesCachedToken) return result
+
+	// The cached Firebase ID token expired mid-session. Force a fresh one
+	// and retry exactly once instead of surfacing a 401 the user can't act on.
+	const freshToken = await refreshAuthToken()
+	if (!freshToken || freshToken === token) return result
+
+	return sendRequest<T>(path, options, freshToken)
 }
