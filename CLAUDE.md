@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## About the project
 
-`word-cards-admin` is the admin panel for the Word Cards flashcard app — it talks to the same backend as the mobile client (sibling repos `dictionary-back` and `language-dictionary`). It manages arbitrary users, their flashcards, supported languages/translations, global app config, and other admin-only data, calling the backend's `/admin/...` and management endpoints.
+`word-cards-admin` is the admin panel for the Word Cards flashcard app — it talks to the same backend as the mobile client (sibling repos `dictionary-backend` and `language-dictionary`). It manages arbitrary users, their flashcards, supported languages/translations, global app config, and other admin-only data, calling the backend's `/admin/...` and management endpoints.
 
 Full project rules live in `RULES.md` (Russian). Don't read it end to end — use the **Task routing** table below to jump to the section(s) that matter for your task.
 
@@ -56,7 +56,7 @@ Firebase Google Sign-In (popup) on the client, same identity provider as the mob
 1. `shared/config/firebaseAuth.ts` calls `signInWithGoogle()` (popup) and separately runs `initFirebaseAuthTokenSync()`, which subscribes to `onIdTokenChanged` for the whole app lifetime.
 2. On every token change it stores the ID token via `shared/lib/authToken` and syncs it to the backend through `authService.googleSync` (hits the same `/users/sync`-style endpoint the mobile app uses).
 3. `shared/api/request.ts` attaches `Authorization: Bearer <token>` (from `authToken`) to every request automatically; `BaseRTK.ts`'s `fetchBaseQuery` does the same for any endpoint that doesn't go through a `Service`.
-4. Backend authorization (admin-only vs per-user) is enforced server-side (see `dictionary-back`); this app does not re-implement permission checks beyond gating which routes render.
+4. Backend authorization (admin-only vs per-user) is enforced server-side (see `dictionary-backend`); this app does not re-implement permission checks beyond gating which routes render.
 
 ### Data fetching: Service + Query pairing
 
