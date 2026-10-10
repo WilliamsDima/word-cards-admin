@@ -1,69 +1,32 @@
-# React + TypeScript + Vite
+# Word Cards Admin
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Админ-панель приложения **Word Cards**: пользователи, их карточки и статистика, достижения, языки и переводы интерфейса, конфиг мобильного приложения.
 
-Currently, two official plugins are available:
+**Открыть админку: https://wordcards-admin.duckdns.org**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Вход — через Google, пускает только аккаунты с правами админа (Firebase custom claim `admin=true`).
 
-## Expanding the ESLint configuration
+## Как устроено
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React + TypeScript + Vite, Redux Toolkit / RTK Query, Feature-Sliced Design.
+- Данные — из бэкенда [dictionary-backend](https://github.com/WilliamsDima/dictionary-backend), API: https://wordcards-api.duckdns.org
+- Хостинг — тот же VPS, что и бэкенд: Caddy раздаёт собранные файлы по HTTPS. Подробности про сервер — в `dictionary-backend/deploy/SERVER.md`.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Деплой
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+Автоматический: любой push в `master` → GitHub Actions (`.github/workflows/deploy.yml`) собирает админку и выкладывает её на сервер (~1–2 минуты). Ход и логи — во вкладке **Actions** репозитория.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Настройки сборки берутся из GitHub Secrets (`VITE_API_BASE_URL`, `VITE_FIREBASE_*`, `DEPLOY_*`), а не из `.env`.
+
+## Локальная разработка
+
+Менеджер пакетов — **npm** (`package-lock.json`).
+
+```bash
+npm ci            # установить зависимости
+npm run dev       # dev-сервер на http://localhost:5173
+npm run build     # проверка типов + сборка в dist/
+npm run lint      # ESLint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Нужен файл `.env` (не в git) с `VITE_API_BASE_URL` и `VITE_FIREBASE_*`. Сейчас в нём адрес прод-API, для локального бэкенда — раскомментировать локальный адрес.
