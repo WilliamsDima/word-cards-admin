@@ -1,5 +1,5 @@
 ﻿import { request } from "@shared/api/request"
-import type { LanguageItem, LanguagePayload, LanguagesMap } from "@shared/api/types"
+import type { LanguageItem, LanguagePayload, LanguagesMap } from "./types"
 
 class LanguagesService {
 	getLanguages() {
