@@ -1,5 +1,4 @@
-﻿import React from "react"
-import styles from "./UserProfileStats.module.scss"
+﻿import styles from "./UserProfileStats.module.scss"
 import Skeleton from "@shared/Skeleton/Skeleton"
 
 const UserProfileStatsSkeleton = () => {

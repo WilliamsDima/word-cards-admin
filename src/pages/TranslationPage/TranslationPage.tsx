@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useMemo, useState } from "react"
+﻿import { useCallback, useEffect, useMemo, useState } from "react"
 import Button from "@shared/Button/Button"
 import styles from "./TranslationPage.module.scss"
 import PageHeader from "@shared/PageHeader/PageHeader"

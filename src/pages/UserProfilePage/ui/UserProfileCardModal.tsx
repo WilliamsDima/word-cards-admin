@@ -16,7 +16,7 @@ import {
 } from "@shared/api/services/cards/types"
 import type { LanguageItem } from "@shared/api/services/languages/types"
 import UserProfileCardItemRow, {
-	EditableCardItem,
+	type EditableCardItem,
 } from "./UserProfileCardItemRow"
 import { useParams } from "react-router-dom"
 import { Icon } from "@assets/icons/Icon"

@@ -1,4 +1,4 @@
-﻿import React, { ReactNode, useCallback, useState } from "react"
+﻿import { type ReactNode, useCallback, useState } from "react"
 import styles from "./UserProfilePage.module.scss"
 import UserProfileLanguagesCard from "./ui/UserProfileLanguagesCard"
 import { UserProfileInfo } from "./ui/UserProfileInfo"

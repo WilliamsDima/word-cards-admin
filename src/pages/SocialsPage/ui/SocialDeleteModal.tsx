@@ -1,4 +1,4 @@
-﻿import React, { FC, useCallback } from "react"
+﻿import { type FC, useCallback } from "react"
 import styles from "../SocialsPage.module.scss"
 import Modal from "@shared/Modal/Modal"
 import Button from "@shared/Button/Button"

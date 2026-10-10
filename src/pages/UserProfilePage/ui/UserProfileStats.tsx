@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useMemo, useState } from "react"
+﻿import { useCallback, useMemo, useState } from "react"
 import { useParams } from "react-router-dom"
 import styles from "./UserProfileStats.module.scss"
 import Card from "@shared/Card/Card"

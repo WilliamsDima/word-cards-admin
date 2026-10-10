@@ -1,7 +1,7 @@
 import { baseRTK } from "@app/api/BaseRTK"
 import { toRtkQueryResult } from "@shared/api/RTK/rtk"
 import { usersService } from "./UsersServices"
-import { IUser, UpdateUserLanguagesPayload } from "./types"
+import type { IUser, UpdateUserLanguagesPayload } from "./types"
 
 export const usersAPI = baseRTK.injectEndpoints({
 	endpoints: builder => ({

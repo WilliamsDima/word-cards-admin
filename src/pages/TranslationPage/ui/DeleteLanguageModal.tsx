@@ -3,7 +3,7 @@ import Modal from "@shared/Modal/Modal"
 import Button from "@shared/Button/Button"
 import styles from "../TranslationPage.module.scss"
 import { useDeleteLanguageMutation } from "@shared/api/services/languages/LanguagesQuery"
-import { DirtyMap } from "../TranslationPage"
+import type { DirtyMap } from "../TranslationPage"
 import { useToast } from "@shared/Toast/useToast"
 import type { LanguageItem } from "@shared/api/services/languages/types"
 

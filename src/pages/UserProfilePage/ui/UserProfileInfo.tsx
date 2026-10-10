@@ -1,4 +1,4 @@
-﻿import React, { useMemo } from "react"
+﻿import { useMemo } from "react"
 import { useLocation, useParams } from "react-router-dom"
 import styles from "../UserProfilePage.module.scss"
 import type { IUser } from "@entities/api/users/types"

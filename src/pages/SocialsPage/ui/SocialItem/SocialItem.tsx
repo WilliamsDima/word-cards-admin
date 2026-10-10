@@ -1,4 +1,4 @@
-﻿import React, { FC, memo, useCallback, useMemo, useState } from "react"
+﻿import React, { type FC, memo, useCallback, useMemo, useState } from "react"
 import Loading from "@shared/Loading/Loading"
 import styles from "./SocialItem.module.scss"
 import Input from "@shared/Input/Input"

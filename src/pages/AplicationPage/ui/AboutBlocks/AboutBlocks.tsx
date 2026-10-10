@@ -1,4 +1,3 @@
-import React from "react"
 import styles from "./AboutBlocks.module.scss"
 import Card from "@shared/Card/Card"
 import AboutBlockList from "./AboutBlockList"

@@ -1,6 +1,6 @@
 import { UsersList } from "@features/Users/ui/UsersList/UsersList"
 import UsersListFilter from "@widgets/UsersListFilter/UsersListFilter"
-import React, { useState } from "react"
+import { useState } from "react"
 import styles from "./UsersPage.module.scss"
 import { useDebounce } from "@shared/hooks/useDebounce"
 import PageHeader from "@shared/PageHeader/PageHeader"

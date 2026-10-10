@@ -3,7 +3,7 @@ import styles from "./YearInReview.module.scss"
 import Button from "@shared/Button/Button"
 import Input from "@shared/Input/Input"
 import Checkbox from "@shared/Checkbox/Checkbox"
-import Badge, { BadgeVariant } from "@shared/Badge/Badge"
+import Badge, { type BadgeVariant } from "@shared/Badge/Badge"
 import { useUpdateAppConfigMutation } from "@shared/api/services/appConfig/AppConfigQuery"
 import { useToast } from "@shared/Toast/useToast"
 import type {

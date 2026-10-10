@@ -1,4 +1,3 @@
-import React from "react"
 import styles from "./ChatsPage.module.scss"
 import Card from "@shared/Card/Card"
 

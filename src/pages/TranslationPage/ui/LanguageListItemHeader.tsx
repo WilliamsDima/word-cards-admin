@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react"
 import styles from "../TranslationPage.module.scss"
 import type { LanguageItem } from "@shared/api/services/languages/types"
-import Badge, { BadgeVariant } from "@shared/Badge/Badge"
+import Badge, { type BadgeVariant } from "@shared/Badge/Badge"
 import { dateService } from "@shared/lib/date"
 
 type Props = {

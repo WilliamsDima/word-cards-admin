@@ -1,4 +1,4 @@
-import React, { FC, memo, SVGProps } from "react"
+import { type FC, memo, type SVGProps } from "react"
 import styles from "./Loading.module.scss"
 import cn from "classnames"
 

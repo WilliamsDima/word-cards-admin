@@ -1,5 +1,4 @@
-﻿import React from "react"
-import styles from "./AppPreloader.module.scss"
+﻿import styles from "./AppPreloader.module.scss"
 
 const AppPreloader = () => {
 	return (

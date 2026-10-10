@@ -1,4 +1,4 @@
-import { AppRoutePath, RouteParams } from "@app/navigation/routes"
+import type { AppRoutePath, RouteParams } from "@app/navigation/routes"
 import { useNavigate } from "react-router-dom"
 
 type PathToParams<T extends AppRoutePath> = T extends keyof RouteParams

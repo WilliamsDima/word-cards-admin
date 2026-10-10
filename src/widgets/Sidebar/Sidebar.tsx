@@ -7,7 +7,7 @@ import {
 import { clearAuthToken, getAuthToken } from "@shared/lib/authToken"
 import { useActions } from "@shared/hooks/useActions"
 import { useAppNavigate } from "@shared/hooks/useAppNavigate"
-import { AppRoutes, RouteParams } from "@app/navigation/routes"
+import { AppRoutes, type RouteParams } from "@app/navigation/routes"
 import { useLocation } from "react-router-dom"
 import cn from "classnames"
 import Button from "@shared/Button/Button"

@@ -2,7 +2,7 @@ import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
 import styles from "./YearInReview.module.scss"
 import Input from "@shared/Input/Input"
 import Button from "@shared/Button/Button"
-import Badge, { BadgeVariant } from "@shared/Badge/Badge"
+import Badge, { type BadgeVariant } from "@shared/Badge/Badge"
 import Loading from "@shared/Loading/Loading"
 import {
 	useGetAppConfigQuery,

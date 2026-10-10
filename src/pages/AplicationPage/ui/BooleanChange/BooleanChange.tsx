@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import styles from "./BooleanChange.module.scss"
-import Select, { type SingleValue, StylesConfig } from "react-select"
+import Select, { type SingleValue, type StylesConfig } from "react-select"
 import {
 	useGetAppConfigQuery,
 	useUpdateAppConfigMutation,

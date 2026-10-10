@@ -1,4 +1,3 @@
-import React from "react"
 import styles from "./MainPage.module.scss"
 import PageHeader from "@shared/PageHeader/PageHeader"
 import Card from "@shared/Card/Card"

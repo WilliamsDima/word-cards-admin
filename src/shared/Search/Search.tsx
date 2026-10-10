@@ -1,5 +1,5 @@
 import cn from "classnames"
-import React, { FC, memo, InputHTMLAttributes } from "react"
+import React, { type FC, memo, type InputHTMLAttributes } from "react"
 import styles from "./Search.module.scss"
 import { Icon } from "@assets/icons/Icon"
 

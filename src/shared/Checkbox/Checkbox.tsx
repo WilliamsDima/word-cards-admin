@@ -1,4 +1,4 @@
-﻿import React, { FC, InputHTMLAttributes, memo, useMemo } from "react"
+﻿import React, { type FC, type InputHTMLAttributes, memo, useMemo } from "react"
 import cn from "classnames"
 import styles from "./Checkbox.module.scss"
 

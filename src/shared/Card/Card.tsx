@@ -1,4 +1,4 @@
-import React, { FC, HTMLAttributes } from "react"
+import React, { type FC, type HTMLAttributes } from "react"
 import cn from "classnames"
 import styles from "./Card.module.scss"
 

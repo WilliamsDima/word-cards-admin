@@ -1,5 +1,5 @@
 import { request } from "@shared/api/request"
-import { IUser } from "./types"
+import type { IUser } from "./types"
 
 class UsersService {
 	getUsers(search?: string) {

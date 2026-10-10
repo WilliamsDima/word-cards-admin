@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, memo, useMemo } from "react"
+import { type CSSProperties, type FC, memo, useMemo } from "react"
 import cn from "classnames"
 import styles from "./Skeleton.module.scss"
 

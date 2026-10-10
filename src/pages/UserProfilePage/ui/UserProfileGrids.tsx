@@ -1,10 +1,10 @@
-import React, { useMemo } from "react"
+import { useMemo } from "react"
 import { useLocation, useParams } from "react-router-dom"
 import styles from "../UserProfilePage.module.scss"
 import type { IUser } from "@entities/api/users/types"
 import { useGetUserByIdQuery } from "@entities/api/users/UsersQuery"
 import UserProfileGridItem, {
-	ProfileGridItemType,
+	type ProfileGridItemType,
 } from "../ui/UserProfileGridItem"
 import UserProfilePageGridsSkeleton from "../UserProfilePageGridsSkeleton"
 import Accordion from "@shared/Accordion/Accordion"

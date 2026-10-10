@@ -2,7 +2,7 @@ import {
 	useGetAppConfigQuery,
 	useUpdateAppConfigMutation,
 } from "@shared/api/services/appConfig/AppConfigQuery"
-import { ChangeEvent, useCallback, useEffect, useState } from "react"
+import { type ChangeEvent, useCallback, useEffect, useState } from "react"
 import { useToast } from "@shared/Toast/useToast"
 
 export const INPUTS = {

@@ -1,5 +1,5 @@
-import { AppRouteKey, AppRoutes, RouteParams } from "@app/navigation/routes"
-import { Link, LinkProps } from "react-router-dom"
+import { type AppRouteKey, AppRoutes, type RouteParams } from "@app/navigation/routes"
+import { Link, type LinkProps } from "react-router-dom"
 
 type TypedLinkProps<T extends AppRouteKey> = Omit<LinkProps, "to"> & {
 	route: T

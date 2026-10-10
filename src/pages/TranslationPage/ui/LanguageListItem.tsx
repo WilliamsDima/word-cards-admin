@@ -4,7 +4,7 @@ import { githubDarkTheme, JsonEditor } from "json-edit-react"
 import cn from "classnames"
 import styles from "../TranslationPage.module.scss"
 import { useUpdateLanguageMutation } from "@shared/api/services/languages/LanguagesQuery"
-import { DirtyMap, DraftMap } from "../TranslationPage"
+import type { DirtyMap, DraftMap } from "../TranslationPage"
 import { useToast } from "@shared/Toast/useToast"
 import type {
 	JsonValue,

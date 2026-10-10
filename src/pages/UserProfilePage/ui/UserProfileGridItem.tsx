@@ -1,4 +1,4 @@
-import React, { FC, memo } from "react"
+import { type FC, memo } from "react"
 import styles from "../UserProfilePage.module.scss"
 import Card from "@shared/Card/Card"
 

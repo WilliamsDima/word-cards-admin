@@ -1,4 +1,4 @@
-﻿import React, { FC, memo, useMemo } from "react"
+﻿import React, { type FC, memo, useMemo } from "react"
 import cn from "classnames"
 import styles from "./Tooltip.module.scss"
 import { Icon } from "@assets/icons/Icon"

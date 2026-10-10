@@ -1,4 +1,3 @@
-import React from "react"
 import styles from "./UsersList.module.scss"
 import { UserItem } from "../UserItem/UserItem"
 import { useGetUsersQuery } from "@entities/api/users/UsersQuery"

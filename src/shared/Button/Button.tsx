@@ -1,5 +1,5 @@
 import cn from "classnames"
-import React, { FC, memo, ButtonHTMLAttributes, useMemo } from "react"
+import React, { type FC, memo, type ButtonHTMLAttributes, useMemo } from "react"
 import styles from "./Button.module.scss"
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {

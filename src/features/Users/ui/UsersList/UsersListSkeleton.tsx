@@ -1,4 +1,3 @@
-import React from "react"
 import styles from "./UsersList.module.scss"
 import Skeleton from "@shared/Skeleton/Skeleton"
 
