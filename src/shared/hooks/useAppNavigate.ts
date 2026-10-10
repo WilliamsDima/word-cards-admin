@@ -16,9 +16,8 @@ export function useAppNavigate() {
 	) => {
 		const [params, options] = rest
 		const resolvedPath = params
-			? (Object.entries(params) as [keyof typeof params, string][]).reduce(
-					(acc, [key, value]) =>
-						acc.replace(`:${String(key)}`, String(value)),
+			? Object.entries(params).reduce(
+					(acc, [key, value]) => acc.replace(`:${key}`, String(value)),
 					path as string,
 				)
 			: (path as string)

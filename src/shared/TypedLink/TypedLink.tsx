@@ -3,7 +3,7 @@ import { Link, type LinkProps } from "react-router-dom"
 
 type TypedLinkProps<T extends AppRouteKey> = Omit<LinkProps, "to"> & {
 	route: T
-	params?: RouteParams[T]
+	params?: RouteParams[(typeof AppRoutes)[T]]
 }
 
 export function TypedLink<T extends AppRouteKey>({
