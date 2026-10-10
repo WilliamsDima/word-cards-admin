@@ -35,6 +35,8 @@ npm run icons     # node scripts/generate-icons.mjs - regenerate icon assets
 
 No test runner is configured in this repo (no test script/framework in `package.json`) — there is nothing to run as "a single test" today. Per `RULES.md`: run `npm run lint` after any change; also run `npm run build` if the change touches types, imports, page wiring, or API contracts.
 
+Deploy is automatic: `.github/workflows/deploy.yml` builds on push to `master` (or manual `workflow_dispatch`) and streams `dist/` over SSH to the server, where Caddy serves it at https://wordcards-admin.duckdns.org (the server-side forced command unpacks it). No `.env` in CI — build vars come only from repo secrets. Secrets: `VITE_API_BASE_URL`, `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_APP_ID` (required), `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_MEASUREMENT_ID` (optional), `DEPLOY_SSH_KEY`, `DEPLOY_HOST`, `DEPLOY_KNOWN_HOSTS`.
+
 ## Architecture
 
 Feature-Sliced Design, same layering convention as the other frontend in this monorepo group (`language-dictionary`): `app → pages → widgets → features → entities → shared`, imported via Vite/TS path aliases `@app`, `@pages`, `@widgets`, `@features`, `@entities`, `@shared`, `@assets` (defined in both `vite.config.ts` and `tsconfig`). Don't reach into a higher layer from a lower one.
