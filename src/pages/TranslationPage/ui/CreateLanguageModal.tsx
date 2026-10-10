@@ -52,8 +52,8 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 		return "Код языка не поддерживается"
 	}, [isCodeAllowed, normalizedCode])
 
-	const [createError, createAction, isPending] = useActionState(
-		async (_prevState: string | null) => {
+	const [createError, createAction, isPending] = useActionState<string | null>(
+		async () => {
 			const code = normalizedCode
 			const name = createForm.name.trim()
 			const emoji = createForm.emoji.trim()

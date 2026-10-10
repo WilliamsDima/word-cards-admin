@@ -34,8 +34,8 @@ function LoginPage() {
 		return err instanceof Error ? err.message : "Login error"
 	}
 
-	const [googleError, loginAction, googleLoading] = useActionState(
-		async (_prevState: string | null) => {
+	const [googleError, loginAction, googleLoading] = useActionState<string | null>(
+		async () => {
 			try {
 				const { idToken } = await signInWithGoogle()
 				await googleLogin({ idToken }).unwrap()

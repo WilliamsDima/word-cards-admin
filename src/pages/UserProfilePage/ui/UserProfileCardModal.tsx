@@ -85,8 +85,8 @@ const UserProfileCardModal: React.FC<Props> = ({
 	const [updateCard] = useUpdateUserCardMutation()
 	const toast = useToast()
 
-	const [formError, submitAction, isPending] = useActionState(
-		async (_prevState: string | null) => {
+	const [formError, submitAction, isPending] = useActionState<string | null>(
+		async () => {
 			if (!id) return null
 			const language = form.language.trim()
 			const description = form.description.trim()
