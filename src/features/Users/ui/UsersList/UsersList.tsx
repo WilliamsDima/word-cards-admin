@@ -35,9 +35,9 @@ export const UsersList = ({ search }: Props) => {
 						<span className={styles.emptyIcon}>
 							<Icon kind='svg' name='user' width={28} height={28} />
 						</span>
-						<p className={styles.emptyTitle}>Пользователи не найдены</p>
+						<p className={styles.emptyTitle}>РџРѕР»СЊР·РѕРІР°С‚РµР»Рё РЅРµ РЅР°Р№РґРµРЅС‹</p>
 						<p className={styles.emptyText}>
-							Проверьте фильтры или попробуйте обновить список.
+							РџСЂРѕРІРµСЂСЊС‚Рµ С„РёР»СЊС‚СЂС‹ РёР»Рё РїРѕРїСЂРѕР±СѓР№С‚Рµ РѕР±РЅРѕРІРёС‚СЊ СЃРїРёСЃРѕРє.
 						</p>
 					</div>
 				)}
