@@ -24,7 +24,8 @@ body {
 
 body {
 	background: colors.$gradient-app;
-	font-family: "Manrope", "Segoe UI", "Roboto", "Helvetica Neue", Arial,
+	// "Twemoji Country Flags" — только флаги (unicode-range), см. полифилл в main.tsx
+	font-family: "Twemoji Country Flags", "Manrope", "Segoe UI", "Roboto", "Helvetica Neue", Arial,
 		sans-serif;
 	color: colors.$color-white;
 	font-size: 1.4rem;

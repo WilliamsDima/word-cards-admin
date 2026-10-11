@@ -5,6 +5,12 @@ import App from "./App"
 import { Provider } from "react-redux"
 import { store } from "./store"
 import { initFirebaseAuthTokenSync } from "@shared/config/firebaseAuth"
+import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill"
+import countryFlagsFontUrl from "country-flag-emoji-polyfill/dist/TwemojiCountryFlags.woff2?url"
+
+// Windows (Chrome/Edge) не рисует emoji-флаги и показывает вместо них буквы (RU, US...).
+// Полифилл подключает шрифт с флагами только там, где их нет; шрифт берём из бандла, без CDN.
+polyfillCountryFlagEmojis("Twemoji Country Flags", countryFlagsFontUrl)
 
 initFirebaseAuthTokenSync()
 
