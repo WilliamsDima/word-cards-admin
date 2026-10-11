@@ -10,6 +10,8 @@ type RequestOptions = {
 	json?: unknown
 	authToken?: string | null
 	skipAuth?: boolean
+	/** Таймаут запроса в мс (по умолчанию — общий таймаут http-клиента) */
+	timeout?: number
 }
 
 const sendRequest = async <T>(
@@ -29,6 +31,7 @@ const sendRequest = async <T>(
 			headers,
 			data: options.json !== undefined ? options.json : (options.body ?? null),
 			validateStatus: () => true,
+			...(options.timeout !== undefined ? { timeout: options.timeout } : {}),
 		})
 
 		if (res.status < 200 || res.status >= 300) {
