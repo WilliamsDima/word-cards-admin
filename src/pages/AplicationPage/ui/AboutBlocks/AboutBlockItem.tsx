@@ -9,15 +9,21 @@ import Badge, { type BadgeVariant } from "@shared/Badge/Badge"
 import { useUpdateAppConfigMutation } from "@shared/api/services/appConfig/AppConfigQuery"
 import { useToast } from "@shared/Toast/useToast"
 import AboutBlockDeleteModal from "./AboutBlockDeleteModal"
+import TranslationKeyPreview from "@shared/TranslationKeyPreview/TranslationKeyPreview"
+import {
+	resolveTranslationPreview,
+	type TranslationDictionary,
+} from "@shared/lib/translationPreview"
 
 type Props = {
 	block: IBlock
 	appConfig: IAplication | undefined
+	translations: TranslationDictionary | null
 	autoOpen: boolean
 }
 
 const AboutBlockItem: React.FC<Props> = memo(
-	({ block, appConfig, autoOpen }) => {
+	({ block, appConfig, translations, autoOpen }) => {
 		const [name, setName] = useState(block.blockName ?? "")
 		const [text, setText] = useState(block.text ?? "")
 		const [punkts, setPunkts] = useState<string[]>(block.punkts ?? [])
@@ -45,6 +51,26 @@ const AboutBlockItem: React.FC<Props> = memo(
 				(punkt, index) => (punkt ?? "").trim() !== (punkts[index] ?? "").trim(),
 			)
 		}, [block.blockName, block.punkts, block.text, name, punkts, text])
+
+		const namePreview = useMemo(
+			() => resolveTranslationPreview(translations, name),
+			[name, translations],
+		)
+
+		const textPreview = useMemo(
+			() => resolveTranslationPreview(translations, text),
+			[text, translations],
+		)
+
+		const isNameKeyMissing = useMemo(
+			() => namePreview?.status === "missing",
+			[namePreview],
+		)
+
+		const isTextKeyMissing = useMemo(
+			() => textPreview?.status === "missing",
+			[textPreview],
+		)
 
 		const isDraft = useMemo(() => {
 			const hasName = name.trim().length > 0
@@ -197,6 +223,7 @@ const AboutBlockItem: React.FC<Props> = memo(
 						<div className={styles.headerContent}>
 							<div className={styles.titleBlock}>
 								<p className={styles.title}>{title}</p>
+								<TranslationKeyPreview preview={namePreview} />
 								<p className={styles.meta}>{meta}</p>
 							</div>
 							<Badge label={badgeText} variant={badgeVariant} />
@@ -206,11 +233,21 @@ const AboutBlockItem: React.FC<Props> = memo(
 					<div className={styles.fields}>
 						<label className={styles.field}>
 							<span className={styles.label}>{nameLabel}</span>
-							<Input value={name} onChange={onChangeName} />
+							<Input
+								value={name}
+								onChange={onChangeName}
+								isError={isNameKeyMissing}
+							/>
+							<TranslationKeyPreview preview={namePreview} />
 						</label>
 						<label className={styles.field}>
 							<span className={styles.label}>{textLabel}</span>
-							<Input value={text} onChange={onChangeText} />
+							<Input
+								value={text}
+								onChange={onChangeText}
+								isError={isTextKeyMissing}
+							/>
+							<TranslationKeyPreview preview={textPreview} />
 						</label>
 					</div>
 
@@ -231,6 +268,7 @@ const AboutBlockItem: React.FC<Props> = memo(
 										key={`${block.id}-punkt-${index}`}
 										index={index}
 										value={punkt}
+										translations={translations}
 										onChangePunkt={onChangePunkt}
 										onRemovePunkt={onRemovePunkt}
 									/>

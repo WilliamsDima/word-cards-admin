@@ -125,7 +125,13 @@
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) auto;
 	gap: 10px;
-	align-items: center;
+	align-items: start;
+}
+
+.punktField {
+	display: grid;
+	gap: 6px;
+	min-width: 0;
 }
 
 .punktRemoveBtn {

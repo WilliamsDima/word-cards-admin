@@ -16,6 +16,7 @@ import {
 import { useToast } from "@shared/Toast/useToast"
 import type { IBlock } from "@shared/api/services/appConfig/types"
 import AboutBlockItem from "./AboutBlockItem"
+import { useTranslationDictionary } from "@shared/hooks/useTranslationDictionary"
 
 const AboutBlockList: React.FC = memo(() => {
 	const [autoOpenId, setAutoOpenId] = useState<number | null>(null)
@@ -24,6 +25,7 @@ const AboutBlockList: React.FC = memo(() => {
 	const { data, isLoading, isError } = useGetAppConfigQuery()
 	const [updateConfig, { isLoading: isSaving }] = useUpdateAppConfigMutation()
 	const toast = useToast()
+	const translations = useTranslationDictionary()
 
 	const serverBlocks = useMemo<IBlock[]>(
 		() => data?.about?.blocks ?? [],
@@ -156,6 +158,7 @@ const AboutBlockList: React.FC = memo(() => {
 								key={block.id}
 								block={block}
 								appConfig={data}
+								translations={translations}
 								autoOpen={block.id === autoOpenId}
 							/>
 						))}
