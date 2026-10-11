@@ -6,6 +6,8 @@ import type {
 	DeleteUserCardPayload,
 	GetUserCardsParams,
 	GetUserCardsResponse,
+	CardsImportReport,
+	ImportUserCardsPayload,
 	UpdateUserCardPayload,
 	UpdateUserCardStatusPayload,
 	UserCard,
@@ -55,6 +57,27 @@ export const cardsAPI = baseRTK.injectEndpoints({
 				{ type: "userCards", id: payload.userId },
 			],
 		}),
+		previewUserCardsImport: builder.mutation<
+			CardsImportReport,
+			ImportUserCardsPayload
+		>({
+			async queryFn(payload) {
+				return toRtkQueryResult(
+					await cardsService.importUserCards(payload, true),
+				)
+			},
+		}),
+		importUserCards: builder.mutation<CardsImportReport, ImportUserCardsPayload>(
+			{
+				async queryFn(payload) {
+					return toRtkQueryResult(
+						await cardsService.importUserCards(payload, false),
+					)
+				},
+				invalidatesTags: (_result, error, payload) =>
+					error ? [] : [{ type: "userCards", id: payload.userId }],
+			},
+		),
 	}),
 })
 
@@ -64,4 +87,6 @@ export const {
 	useUpdateUserCardMutation,
 	useDeleteUserCardMutation,
 	useUpdateUserCardStatusMutation,
+	usePreviewUserCardsImportMutation,
+	useImportUserCardsMutation,
 } = cardsAPI

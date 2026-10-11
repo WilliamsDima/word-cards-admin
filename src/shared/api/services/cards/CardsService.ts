@@ -4,10 +4,15 @@ import type {
 	DeleteUserCardPayload,
 	GetUserCardsParams,
 	GetUserCardsResponse,
+	CardsImportReport,
+	ImportUserCardsPayload,
 	UpdateUserCardPayload,
 	UpdateUserCardStatusPayload,
 	UserCard,
 } from "./types"
+
+// Файл до 10 МБ — общий таймаут http-клиента (15 с) для него слишком мал
+const CARDS_IMPORT_TIMEOUT_MS = 120_000
 
 const buildUserCardsQuery = (params: GetUserCardsParams) => {
 	const query = new URLSearchParams()
@@ -64,6 +69,25 @@ class CardsService {
 			method: "PUT",
 			json: { status },
 		})
+	}
+
+	/**
+	 * Импорт карточек из JSON-файла. Тело — сырое содержимое файла (не multipart).
+	 * dryRun=true — только проверка и отчёт, без записи.
+	 * Без dryRun при валидном файле ВСЕ карточки пользователя заменяются данными из файла.
+	 */
+	importUserCards(payload: ImportUserCardsPayload, dryRun: boolean) {
+		const { userId, fileContent } = payload
+		const query = dryRun ? "?dry_run=true" : ""
+		return request<CardsImportReport>(
+			`/admin/users/${userId}/cards/import${query}`,
+			{
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: fileContent,
+				timeout: CARDS_IMPORT_TIMEOUT_MS,
+			},
+		)
 	}
 }
 

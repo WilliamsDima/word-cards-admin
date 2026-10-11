@@ -85,3 +85,45 @@ export type UpdateUserCardStatusPayload = {
 	cardId: number
 	status: CardStatus
 }
+
+/** Лимит бэкенда на файл импорта карточек */
+export const CARDS_IMPORT_MAX_BYTES = 10 * 1024 * 1024
+
+export type CardsImportFormat = "envelope" | "legacy_array" | ""
+
+export type CardsImportError = {
+	/** Индекс карточки в файле; null — ошибка уровня файла */
+	index: number | null
+	field: string
+	message: string
+}
+
+export type CardsImportLanguage = {
+	code: string
+	cards: number
+}
+
+/** Отчёт POST /admin/users/{userId}/cards/import (и для 200, и для 400) */
+export type CardsImportReport = {
+	dry_run: boolean
+	imported: boolean
+	valid: boolean
+	format: CardsImportFormat
+	version: number
+	exported_at: string | null
+	total_in_file: number
+	cards_to_create: number
+	items_to_create: number
+	cards_to_delete: number
+	languages: CardsImportLanguage[]
+	statuses: Partial<Record<CardStatus, number>>
+	errors: CardsImportError[]
+	errors_total: number
+	error?: string
+}
+
+export type ImportUserCardsPayload = {
+	userId: number | string
+	/** Сырое содержимое JSON-файла — отправляется телом запроса как есть */
+	fileContent: string
+}
