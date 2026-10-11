@@ -52,6 +52,29 @@
 	color: colors.$color-text-secondary;
 }
 
+.socialIcon,
+.socialIconFallback {
+	width: 24px;
+	height: 24px;
+	flex-shrink: 0;
+	border-radius: 6px;
+}
+
+.socialIcon {
+	object-fit: contain;
+}
+
+.socialIconFallback {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: colors.$color-surface-3;
+	border: 1px solid colors.$color-border-soft;
+	color: colors.$color-text-secondary;
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
 .content {
 	max-height: 0;
 	overflow: hidden;

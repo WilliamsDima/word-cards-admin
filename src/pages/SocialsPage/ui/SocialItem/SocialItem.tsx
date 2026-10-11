@@ -5,6 +5,7 @@ import Input from "@shared/Input/Input"
 import { Icon } from "@assets/icons/Icon"
 import type { ISocial, SocialKeys } from "@shared/api/services/appConfig/types"
 import Accordion from "@shared/Accordion/Accordion"
+import SocialIcon from "./SocialIcon"
 
 type Props = {
 	item: ISocial
@@ -94,10 +95,11 @@ const SocialItem: FC<Props> = memo(
 						height={20}
 					/>
 					<p className={styles.index}>{index + 1}.</p>
+					<SocialIcon src={item.icon} name={title} />
 					<p className={styles.blockName}>{title}</p>
 				</div>
 			),
-			[index, onDeleteHandler, title],
+			[index, item.icon, onDeleteHandler, title],
 		)
 
 		return (
