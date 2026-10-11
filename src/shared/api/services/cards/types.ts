@@ -127,6 +127,20 @@ export type CardsImportReport = {
 	error?: string
 }
 
+/** Версия формата файла экспорта/импорта карточек (совпадает с мобильным экспортом) */
+export const CARDS_EXPORT_FORMAT_VERSION = 1
+
+/** Файл экспорта карточек — принимается импортом (формат "envelope") */
+export type CardsExportFile = {
+	version: number
+	exported_at: string
+	items: UserCard[]
+}
+
+export type ExportUserCardsPayload = {
+	userId: number | string
+}
+
 export type ImportUserCardsPayload = {
 	userId: number | string
 	/** Сырое содержимое JSON-файла — отправляется телом запроса как есть */

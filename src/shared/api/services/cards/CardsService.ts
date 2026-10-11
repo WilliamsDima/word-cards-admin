@@ -2,6 +2,7 @@ import { request } from "@shared/api/request"
 import type {
 	CreateUserCardPayload,
 	DeleteUserCardPayload,
+	ExportUserCardsPayload,
 	GetUserCardsParams,
 	GetUserCardsResponse,
 	CardsImportReport,
@@ -11,7 +12,8 @@ import type {
 	UserCard,
 } from "./types"
 
-// Файл до 10 МБ — общий таймаут http-клиента (15 с) для него слишком мал
+// Файл до 10 МБ — общий таймаут http-клиента (15 с) для него слишком мал.
+// Используется и для импорта, и для выгрузки всех карточек (экспорт)
 const CARDS_IMPORT_TIMEOUT_MS = 120_000
 
 const buildUserCardsQuery = (params: GetUserCardsParams) => {
@@ -34,6 +36,17 @@ class CardsService {
 		return request<GetUserCardsResponse>(
 			`/admin/users/${params.userId}/cards${query}`,
 			{ method: "GET" },
+		)
+	}
+
+	/**
+	 * Все карточки пользователя одним запросом (all=true, максимум 5000) — для экспорта.
+	 * Другие query-параметры не передаются. Если total > items.length, выгрузка неполная.
+	 */
+	getAllUserCards(payload: ExportUserCardsPayload) {
+		return request<GetUserCardsResponse>(
+			`/admin/users/${payload.userId}/cards?all=true`,
+			{ method: "GET", timeout: CARDS_IMPORT_TIMEOUT_MS },
 		)
 	}
 

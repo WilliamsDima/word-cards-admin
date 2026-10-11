@@ -4,6 +4,7 @@ import { cardsService } from "./CardsService"
 import type {
 	CreateUserCardPayload,
 	DeleteUserCardPayload,
+	ExportUserCardsPayload,
 	GetUserCardsParams,
 	GetUserCardsResponse,
 	CardsImportReport,
@@ -22,6 +23,15 @@ export const cardsAPI = baseRTK.injectEndpoints({
 			providesTags: (_result, _error, params) => [
 				{ type: "userCards", id: params.userId },
 			],
+		}),
+		// Мутация, а не query: выгрузка по клику, без кэша и подписки на до 5000 карточек
+		exportUserCards: builder.mutation<
+			GetUserCardsResponse,
+			ExportUserCardsPayload
+		>({
+			async queryFn(payload) {
+				return toRtkQueryResult(await cardsService.getAllUserCards(payload))
+			},
 		}),
 		createUserCard: builder.mutation<UserCard, CreateUserCardPayload>({
 			async queryFn(payload) {
@@ -83,6 +93,7 @@ export const cardsAPI = baseRTK.injectEndpoints({
 
 export const {
 	useGetUserCardsQuery,
+	useExportUserCardsMutation,
 	useCreateUserCardMutation,
 	useUpdateUserCardMutation,
 	useDeleteUserCardMutation,
