@@ -1,0 +1,36 @@
+@use "../../assets/styles/colors.scss" as colors;
+
+.preview {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 6px;
+	min-width: 0;
+	font-size: 1.2rem;
+	font-weight: 400;
+	line-height: 1.4;
+	color: colors.$color-text-secondary;
+}
+
+.lang {
+	flex-shrink: 0;
+	padding: 0 4px;
+	border-radius: 4px;
+	font-size: 1rem;
+	font-weight: 600;
+	background: colors.$color-surface-3;
+	border: 1px solid colors.$color-border-soft;
+	color: colors.$color-text-secondary;
+}
+
+.text {
+	overflow-wrap: anywhere;
+}
+
+.missing {
+	color: colors.$color-error;
+
+	.lang {
+		border-color: colors.$color-error;
+		color: colors.$color-error;
+	}
+}
