@@ -24,6 +24,15 @@ const LanguageListItemHeader: React.FC<Props> = memo(
 			return { label, isToday }
 		}, [language.updated_at])
 
+		// Emoji языка; если он не задан — фолбэк на код (RU, EN...)
+		const emojiLabel = useMemo(
+			() =>
+				localEmoji.trim() ||
+				language.emoji?.trim() ||
+				language.code.toUpperCase(),
+			[language.code, language.emoji, localEmoji],
+		)
+
 		const badgeLabel = useMemo(
 			() => (isDirty ? "Черновик" : "Синхронизировано"),
 			[isDirty],
@@ -43,9 +52,7 @@ const LanguageListItemHeader: React.FC<Props> = memo(
 		return (
 			<div className={styles.langHeaderContent}>
 				<div className={styles.langInfo}>
-					<span className={styles.langEmoji}>
-						{localEmoji || language.emoji}
-					</span>
+					<span className={styles.langEmoji}>{emojiLabel}</span>
 					<div className={styles.langText}>
 						<span className={styles.langName}>
 							{localName || language.name}
