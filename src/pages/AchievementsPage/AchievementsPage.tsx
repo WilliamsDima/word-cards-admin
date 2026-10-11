@@ -10,9 +10,11 @@ import type { Achievement } from "@shared/api/services/achievements/types"
 import AchievementsList from "./ui/AchievementsList"
 import AchievementModal from "./ui/AchievementModal"
 import AchievementDeleteModal from "./ui/AchievementDeleteModal"
+import { useTranslationDictionary } from "@shared/hooks/useTranslationDictionary"
 
 function AchievementsPage() {
 	const { data, isLoading, isError } = useGetAchievementsQuery()
+	const translations = useTranslationDictionary()
 
 	const [isCreateOpen, setIsCreateOpen] = useState(false)
 	const [editTarget, setEditTarget] = useState<Achievement | null>(null)
@@ -98,6 +100,7 @@ function AchievementsPage() {
 				{!isLoading && !isError ? (
 					<AchievementsList
 						achievements={achievements}
+						translations={translations}
 						onEdit={onOpenEdit}
 						onDelete={onOpenDelete}
 					/>
@@ -109,6 +112,7 @@ function AchievementsPage() {
 			<AchievementModal
 				open={isModalOpen}
 				achievement={editTarget}
+				translations={translations}
 				onClose={onCloseModal}
 			/>
 

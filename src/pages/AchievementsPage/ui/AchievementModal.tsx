@@ -24,6 +24,11 @@ import {
 	type AchievementMetric,
 	type AchievementPayload,
 } from "@shared/api/services/achievements/types"
+import TranslationKeyPreview from "@shared/TranslationKeyPreview/TranslationKeyPreview"
+import {
+	resolveTranslationPreview,
+	type TranslationDictionary,
+} from "@shared/lib/translationPreview"
 
 type MetricOption = {
 	label: string
@@ -77,10 +82,16 @@ const buildFormFromAchievement = (achievement: Achievement): FormState => ({
 type Props = {
 	open: boolean
 	achievement: Achievement | null
+	translations: TranslationDictionary | null
 	onClose: () => void
 }
 
-const AchievementModal: React.FC<Props> = ({ open, achievement, onClose }) => {
+const AchievementModal: React.FC<Props> = ({
+	open,
+	achievement,
+	translations,
+	onClose,
+}) => {
 	const [form, setForm] = useState<FormState>(emptyForm)
 
 	const [createAchievement] = useCreateAchievementMutation()
@@ -109,6 +120,35 @@ const AchievementModal: React.FC<Props> = ({ open, achievement, onClose }) => {
 			Number.isFinite(thresholdValue)
 		)
 	}, [form.code, form.threshold, form.title])
+
+	// {{count}} в превью = текущий порог достижения
+	const previewCount = useMemo(() => {
+		const value = Number(form.threshold)
+		return form.threshold.trim().length > 0 && Number.isFinite(value)
+			? value
+			: undefined
+	}, [form.threshold])
+
+	const titlePreview = useMemo(
+		() => resolveTranslationPreview(translations, form.title, previewCount),
+		[form.title, previewCount, translations],
+	)
+
+	const descriptionPreview = useMemo(
+		() =>
+			resolveTranslationPreview(translations, form.description, previewCount),
+		[form.description, previewCount, translations],
+	)
+
+	const isTitleKeyMissing = useMemo(
+		() => titlePreview?.status === "missing",
+		[titlePreview],
+	)
+
+	const isDescriptionKeyMissing = useMemo(
+		() => descriptionPreview?.status === "missing",
+		[descriptionPreview],
+	)
 
 	const [formError, submitAction, isPending] = useActionState(
 		async () => {
@@ -280,21 +320,25 @@ const AchievementModal: React.FC<Props> = ({ open, achievement, onClose }) => {
 				</label>
 
 				<label className={styles.field}>
-					<span className={styles.label}>Название</span>
+					<span className={styles.label}>Название (ключ для перевода)</span>
 					<Input
-						placeholder='Первые шаги'
+						placeholder='achievements.first_card.title'
 						value={form.title}
 						onChange={onChangeTitle}
+						isError={isTitleKeyMissing}
 					/>
+					<TranslationKeyPreview preview={titlePreview} />
 				</label>
 
 				<label className={styles.field}>
-					<span className={styles.label}>Описание</span>
+					<span className={styles.label}>Описание (ключ для перевода)</span>
 					<Input
-						placeholder='Создайте свою первую карточку'
+						placeholder='achievements.first_card.description'
 						value={form.description}
 						onChange={onChangeDescription}
+						isError={isDescriptionKeyMissing}
 					/>
+					<TranslationKeyPreview preview={descriptionPreview} />
 				</label>
 
 				<label className={styles.field}>

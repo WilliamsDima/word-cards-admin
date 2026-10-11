@@ -2,15 +2,18 @@ import React, { useMemo } from "react"
 import styles from "../AchievementsPage.module.scss"
 import AchievementItem from "./AchievementItem"
 import type { Achievement } from "@shared/api/services/achievements/types"
+import type { TranslationDictionary } from "@shared/lib/translationPreview"
 
 type Props = {
 	achievements: Achievement[]
+	translations: TranslationDictionary | null
 	onEdit: (achievement: Achievement) => void
 	onDelete: (achievement: Achievement) => void
 }
 
 const AchievementsList: React.FC<Props> = ({
 	achievements,
+	translations,
 	onEdit,
 	onDelete,
 }) => {
@@ -44,6 +47,7 @@ const AchievementsList: React.FC<Props> = ({
 						<AchievementItem
 							key={achievement.id}
 							achievement={achievement}
+							translations={translations}
 							onEdit={onEdit}
 							onDelete={onDelete}
 						/>

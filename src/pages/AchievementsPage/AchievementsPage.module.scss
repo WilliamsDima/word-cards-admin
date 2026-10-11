@@ -119,9 +119,20 @@
 }
 
 .colTitle {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 0;
 	font-weight: 600;
 	overflow-wrap: anywhere;
 }
+
+.titleKey {
+	font-size: 1.2rem;
+	font-family: monospace;
+	color: colors.$color-text-secondary;
+}
+
 
 .colMetric {
 	color: colors.$color-text-secondary;

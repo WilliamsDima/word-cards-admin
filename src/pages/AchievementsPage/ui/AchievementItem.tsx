@@ -8,14 +8,25 @@ import {
 	achievementMetricLabels,
 	type Achievement,
 } from "@shared/api/services/achievements/types"
+import TranslationKeyPreview from "@shared/TranslationKeyPreview/TranslationKeyPreview"
+import {
+	resolveTranslationPreview,
+	type TranslationDictionary,
+} from "@shared/lib/translationPreview"
 
 type Props = {
 	achievement: Achievement
+	translations: TranslationDictionary | null
 	onEdit: (achievement: Achievement) => void
 	onDelete: (achievement: Achievement) => void
 }
 
-const AchievementItem: React.FC<Props> = ({ achievement, onEdit, onDelete }) => {
+const AchievementItem: React.FC<Props> = ({
+	achievement,
+	translations,
+	onEdit,
+	onDelete,
+}) => {
 	const metricLabel = useMemo(
 		() => achievementMetricLabels[achievement.metric],
 		[achievement.metric],
@@ -32,6 +43,26 @@ const AchievementItem: React.FC<Props> = ({ achievement, onEdit, onDelete }) => 
 	)
 
 	const iconLabel = useMemo(() => achievement.icon || "🏆", [achievement.icon])
+
+	const titlePreview = useMemo(
+		() =>
+			resolveTranslationPreview(
+				translations,
+				achievement.title,
+				achievement.threshold,
+			),
+		[achievement.threshold, achievement.title, translations],
+	)
+
+	const descriptionPreview = useMemo(
+		() =>
+			resolveTranslationPreview(
+				translations,
+				achievement.description,
+				achievement.threshold,
+			),
+		[achievement.description, achievement.threshold, translations],
+	)
 
 	const editButtonClassName = useMemo(
 		() => cn(styles.iconButton, styles.iconButtonEdit),
@@ -54,7 +85,11 @@ const AchievementItem: React.FC<Props> = ({ achievement, onEdit, onDelete }) => 
 				<span className={styles.iconBadge}>{iconLabel}</span>
 			</span>
 			<span className={styles.colCode}>{achievement.code}</span>
-			<span className={styles.colTitle}>{achievement.title}</span>
+			<span className={styles.colTitle}>
+				<span className={styles.titleKey}>{achievement.title}</span>
+				<TranslationKeyPreview preview={titlePreview} />
+				<TranslationKeyPreview preview={descriptionPreview} />
+			</span>
 			<span className={styles.colMetric}>{metricLabel}</span>
 			<span className={styles.colThreshold}>{achievement.threshold}</span>
 			<span className={styles.colOrder}>{achievement.sort_order}</span>
