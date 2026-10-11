@@ -11,15 +11,21 @@ import type {
 	ShowVariantsOption,
 } from "@shared/api/services/appConfig/types"
 import ShowVariantDeleteModal from "./ShowVariantDeleteModal"
+import TranslationKeyPreview from "@shared/TranslationKeyPreview/TranslationKeyPreview"
+import {
+	resolveTranslationPreview,
+	type TranslationDictionary,
+} from "@shared/lib/translationPreview"
 
 type Props = {
 	variant: ShowVariantsOption
 	appConfig: IAplication | undefined
+	translations: TranslationDictionary | null
 	autoOpen: boolean
 }
 
 const ShowVariantItem: React.FC<Props> = memo(
-	({ variant, appConfig, autoOpen }) => {
+	({ variant, appConfig, translations, autoOpen }) => {
 		const [localValue, setLocalValue] = useState(variant.value)
 		const [localLabel, setLocalLabel] = useState(variant.label ?? "")
 		const [isOpen, setIsOpen] = useState(false)
@@ -36,6 +42,16 @@ const ShowVariantItem: React.FC<Props> = memo(
 		const isLabelInvalid = useMemo(
 			() => localLabel.trim().length === 0,
 			[localLabel],
+		)
+
+		const labelPreview = useMemo(
+			() => resolveTranslationPreview(translations, localLabel),
+			[localLabel, translations],
+		)
+
+		const isLabelKeyMissing = useMemo(
+			() => labelPreview?.status === "missing",
+			[labelPreview],
 		)
 
 		const isInvalid = useMemo(
@@ -180,6 +196,7 @@ const ShowVariantItem: React.FC<Props> = memo(
 						<div className={styles.headerContent}>
 							<div className={styles.titleBlock}>
 								<p className={styles.title}>{title}</p>
+								<TranslationKeyPreview preview={labelPreview} />
 								<p className={styles.meta}>{meta}</p>
 							</div>
 							<Badge label={badgeText} variant={badgeVariant} />
@@ -193,7 +210,12 @@ const ShowVariantItem: React.FC<Props> = memo(
 						</label>
 						<label className={styles.field}>
 							<span className={styles.label}>{labelLabel}</span>
-							<Input value={localLabel} onChange={onChangeLabel} />
+							<Input
+								value={localLabel}
+								onChange={onChangeLabel}
+								isError={isLabelKeyMissing}
+							/>
+							<TranslationKeyPreview preview={labelPreview} />
 						</label>
 					</div>
 

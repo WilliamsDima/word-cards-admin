@@ -9,6 +9,7 @@ import {
 import { useToast } from "@shared/Toast/useToast"
 import type { ShowVariantsOption } from "@shared/api/services/appConfig/types"
 import ShowVariantItem from "./ShowVariantItem"
+import { useTranslationDictionary } from "@shared/hooks/useTranslationDictionary"
 
 const ShowVariantsList: React.FC = memo(() => {
 	const [autoOpenIndex, setAutoOpenIndex] = useState<number | null>(null)
@@ -17,6 +18,7 @@ const ShowVariantsList: React.FC = memo(() => {
 	const [updateConfig, { isLoading: isSaving }] =
 		useUpdateAppConfigMutation()
 	const toast = useToast()
+	const translations = useTranslationDictionary()
 
 	const serverVariants = useMemo<ShowVariantsOption[]>(
 		() => data?.showVariantsList ?? [],
@@ -134,6 +136,7 @@ const ShowVariantsList: React.FC = memo(() => {
 								key={`${variant.value}-${variant.label}-${index}`}
 								variant={variant}
 								appConfig={data}
+								translations={translations}
 								autoOpen={index === autoOpenIndex}
 							/>
 						))}
