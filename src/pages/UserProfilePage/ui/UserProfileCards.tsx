@@ -13,6 +13,7 @@ import UserProfileCardsList from "./UserProfileCardsList"
 import UserProfileCardsPagination from "./UserProfileCardsPagination"
 import UserProfileCardModal from "./UserProfileCardModal"
 import UserProfileCardDeleteModal from "./UserProfileCardDeleteModal"
+import UserProfileCardsImport from "./UserProfileCardsImport"
 
 export type StatusFilter = CardStatus | undefined
 
@@ -142,6 +143,7 @@ const UserProfileCards: React.FC = () => {
 					</p>
 				</div>
 				<div className={styles.actionsRow}>
+					<UserProfileCardsImport userId={id ?? ""} disabled={!id} />
 					<Button
 						className={styles.primaryBtn}
 						onClick={onOpenCreate}

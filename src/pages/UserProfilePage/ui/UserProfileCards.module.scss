@@ -366,6 +366,103 @@
 	border-radius: 6px;
 }
 
+
+.hiddenInput {
+	display: none;
+}
+
+.btnSpinner {
+	width: 18px;
+	height: 18px;
+
+	circle {
+		stroke: colors.$color-white;
+	}
+}
+
+.importSpinner {
+	width: 24px;
+	height: 24px;
+}
+
+.importBody {
+	display: grid;
+	gap: 14px;
+}
+
+.importFile {
+	font-size: 13px;
+	color: colors.$color-text-primary;
+	overflow-wrap: anywhere;
+}
+
+.importReport {
+	display: grid;
+	gap: 14px;
+}
+
+.importStats {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	gap: 6px 16px;
+	font-size: 13px;
+	color: colors.$color-text-primary;
+}
+
+.importSection {
+	display: grid;
+	gap: 8px;
+}
+
+.importBadges {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.importErrors {
+	display: grid;
+	gap: 6px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	max-height: 240px;
+	overflow: auto;
+	@extend %scroll;
+}
+
+.importErrorRow {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 8px;
+	padding: 6px 10px;
+	border-radius: 8px;
+	border: 1px solid rgba(colors.$color-error, 0.4);
+	background: rgba(colors.$color-error, 0.08);
+	font-size: 12px;
+	color: colors.$color-text-primary;
+}
+
+.importErrorIndex {
+	font-weight: 600;
+	color: colors.$color-error;
+}
+
+.importErrorField {
+	font-size: 11px;
+	color: colors.$color-text-secondary;
+}
+
+.importWarning {
+	padding: 10px 12px;
+	border-radius: 10px;
+	border: 1px solid colors.$color-warning;
+	background: rgba(colors.$color-warning, 0.1);
+	color: colors.$color-warning;
+	font-size: 13px;
+}
+
 @media (max-width: 720px) {
 	.cardHeader {
 		flex-direction: column;
