@@ -1,4 +1,4 @@
-import React, { type FC, useEffect } from "react"
+import React, { type FC, useCallback, useEffect } from "react"
 import { createPortal } from "react-dom"
 import cn from "classnames"
 import styles from "./Modal.module.scss"
@@ -12,7 +12,12 @@ type Props = {
 	actions?: React.ReactNode
 	className?: string
 	contentClassName?: string
+	/** false — модалка закрывается только кнопками (без клика по оверлею и Escape) */
+	dismissible?: boolean
 }
+
+const stopPropagation = (event: React.MouseEvent<HTMLDivElement>) =>
+	event.stopPropagation()
 
 const Modal: FC<Props> = ({
 	open,
@@ -22,24 +27,26 @@ const Modal: FC<Props> = ({
 	actions,
 	className,
 	contentClassName,
+	dismissible = true,
 }) => {
+	const onBackdropClick = useCallback(() => {
+		if (dismissible) onClose()
+	}, [dismissible, onClose])
+
 	useEffect(() => {
-		if (!open) return
+		if (!open || !dismissible) return
 		const onKeyDown = (event: KeyboardEvent) => {
 			if (event.key === "Escape") onClose()
 		}
 		document.addEventListener("keydown", onKeyDown)
 		return () => document.removeEventListener("keydown", onKeyDown)
-	}, [open, onClose])
+	}, [open, dismissible, onClose])
 
 	if (!open) return null
 
 	return createPortal(
-		<div className={styles.backdrop} onClick={onClose}>
-			<Card
-				className={cn(styles.dialog, className)}
-				onClick={event => event.stopPropagation()}
-			>
+		<div className={styles.backdrop} onClick={onBackdropClick}>
+			<Card className={cn(styles.dialog, className)} onClick={stopPropagation}>
 				{title ? (
 					<div className={styles.header}>
 						<h3 className={styles.title}>{title}</h3>
