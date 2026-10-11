@@ -115,6 +115,11 @@ export type CardsImportReport = {
 	cards_to_create: number
 	items_to_create: number
 	cards_to_delete: number
+	/**
+	 * Сколько карточек будет засчитано (dry-run) / засчитано (imported) в метрику
+	 * «создано карточек» — только разница сверх уже учтённого. Для невалидного файла 0.
+	 */
+	cards_created_credited: number
 	languages: CardsImportLanguage[]
 	statuses: Partial<Record<CardStatus, number>>
 	errors: CardsImportError[]
