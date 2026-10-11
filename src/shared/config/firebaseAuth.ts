@@ -1,4 +1,9 @@
-import { GoogleAuthProvider, onIdTokenChanged, signInWithPopup } from "firebase/auth"
+import {
+	GoogleAuthProvider,
+	onIdTokenChanged,
+	signInWithPopup,
+	signOut,
+} from "firebase/auth"
 import { getFirebaseApp } from "./firebase"
 import { getAuthClient } from "./authClient"
 import { setAuthToken } from "../lib/authToken"
@@ -63,6 +68,18 @@ export const initFirebaseAuthTokenSync = () => {
 	}
 
 	return true
+}
+
+/**
+ * Ends the persisted Firebase session. Without this the session survives
+ * logout and is restored on the next page load.
+ */
+export const signOutFromFirebase = async () => {
+	try {
+		await signOut(getAuthClient())
+	} catch {
+		// ignore: local token is cleared by the caller anyway
+	}
 }
 
 export const signInWithGoogle = async () => {

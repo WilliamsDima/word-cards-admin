@@ -5,6 +5,7 @@ import {
 	useMeQuery,
 } from "@shared/api/services/auth/AuthQuery"
 import { clearAuthToken, getAuthToken } from "@shared/lib/authToken"
+import { signOutFromFirebase } from "@shared/config/firebaseAuth"
 import { useActions } from "@shared/hooks/useActions"
 import { useAppNavigate } from "@shared/hooks/useAppNavigate"
 import { AppRoutes, type RouteParams } from "@app/navigation/routes"
@@ -83,6 +84,7 @@ const Sidebar: React.FC = () => {
 		} catch {
 			// ignore network errors on logout
 		} finally {
+			await signOutFromFirebase()
 			clearAuthToken()
 			setIsAdmin(false)
 		}
