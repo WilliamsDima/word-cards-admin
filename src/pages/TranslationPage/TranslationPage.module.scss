@@ -231,6 +231,53 @@
 
 .jsonEditor {
 	height: 100%;
+
+	// Текстовый режим редактирования коллекции не должен растягиваться
+	// на весь JSON — иначе кнопки подтверждения уезжают вниз скролла
+	:global(.jer-collection-text-area) {
+		max-height: 280px;
+		overflow: auto;
+	}
+}
+
+.jsonToolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	flex-wrap: wrap;
+	padding: 10px 12px;
+	border-radius: 14px;
+	border: 1px solid colors.$color-warning;
+	background: colors.$color-surface-3;
+}
+
+.jsonToolbarText {
+	font-size: 1.3rem;
+	color: colors.$color-text-primary;
+}
+
+.jsonToolbarActions {
+	display: flex;
+	gap: 8px;
+}
+
+.smallBtn {
+	padding: 0.6rem 1.2rem;
+	font-size: 1.3rem;
+}
+
+.actionsRow {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.saveHint {
+	font-size: 1.2rem;
+	color: colors.$color-warning;
 }
 
 .actions {

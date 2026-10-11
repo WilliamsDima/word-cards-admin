@@ -1,6 +1,17 @@
-﻿import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
+﻿import React, {
+	memo,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react"
 import Button from "@shared/Button/Button"
-import { githubDarkTheme, JsonEditor } from "json-edit-react"
+import {
+	githubDarkTheme,
+	JsonEditor,
+	type OnEditEventFunction,
+} from "json-edit-react"
 import cn from "classnames"
 import styles from "../TranslationPage.module.scss"
 import { useUpdateLanguageMutation } from "@shared/api/services/languages/LanguagesQuery"
@@ -14,6 +25,30 @@ import { isTranslationKey } from "@shared/api/services/languages/types"
 import Accordion from "@shared/Accordion/Accordion"
 import LanguageListItemInputs from "./LanguageListItemInputs"
 import LanguageListItemHeader from "./LanguageListItemHeader"
+import LanguageJsonEditToolbar from "./LanguageJsonEditToolbar"
+
+// Внутренние кнопки подтверждения json-edit-react (✓ / ✕) у активного редактирования.
+// Внешние триггеры библиотеки не умеют подтверждать правку обычных значений,
+// поэтому кликаем по её собственным кнопкам — так сохраняется вся её валидация.
+const JSON_CONFIRM_BUTTONS_SELECTOR = ".jer-confirm-buttons > div"
+
+const clickJsonEditorButton = (
+	container: HTMLElement | null,
+	action: "ok" | "cancel",
+) => {
+	const buttons = container?.querySelectorAll<HTMLElement>(
+		JSON_CONFIRM_BUTTONS_SELECTOR,
+	)
+	if (!buttons?.length) return false
+	if (action === "ok") {
+		// Если библиотека спрятала «ок» (пустой новый ключ) — остаётся только «отмена»
+		if (buttons.length < 2) return true
+		buttons[0].click()
+		return true
+	}
+	buttons[buttons.length - 1].click()
+	return true
+}
 
 type Props = {
 	language: LanguageItem
@@ -43,6 +78,8 @@ const LanguageListItem: React.FC<Props> = memo(
 	}) => {
 		const [localName, setLocalName] = useState(language.name)
 		const [localEmoji, setLocalEmoji] = useState(language.emoji)
+		const [isEditingJson, setIsEditingJson] = useState(false)
+		const editorWrapRef = useRef<HTMLDivElement | null>(null)
 
 		const [updateLanguage, { isLoading: isSaving }] =
 			useUpdateLanguageMutation()
@@ -73,8 +110,25 @@ const LanguageListItem: React.FC<Props> = memo(
 		}, [localEmoji, localName])
 
 		const isSaveDisabled = useMemo(() => {
-			return (!isDirty && !metaDirty) || metaInvalid || isSaving || !isCodeAllowed
-		}, [isCodeAllowed, isDirty, metaDirty, metaInvalid, isSaving])
+			return (
+				(!isDirty && !metaDirty) ||
+				metaInvalid ||
+				isSaving ||
+				!isCodeAllowed ||
+				isEditingJson
+			)
+		}, [isCodeAllowed, isDirty, metaDirty, metaInvalid, isSaving, isEditingJson])
+
+		const saveHint = useMemo(() => {
+			if (isSaving) return null
+			if (isEditingJson) {
+				return "Сначала примените или отмените правку JSON (кнопки над редактором)"
+			}
+			if (!isCodeAllowed) return "Код языка не поддерживается"
+			if (metaInvalid) return "Заполните название и emoji"
+			if (!isDirty && !metaDirty) return "Нет изменений для сохранения"
+			return null
+		}, [isCodeAllowed, isDirty, isEditingJson, isSaving, metaDirty, metaInvalid])
 
 		const onSave = useCallback(
 			async (language: LanguageItem) => {
@@ -136,6 +190,22 @@ const LanguageListItem: React.FC<Props> = memo(
 			[language.code, onToggle],
 		)
 
+		const onJsonEditEvent = useCallback<OnEditEventFunction>(path => {
+			setIsEditingJson(path !== null)
+		}, [])
+
+		const onApplyJson = useCallback(() => {
+			if (!clickJsonEditorButton(editorWrapRef.current, "ok")) {
+				setIsEditingJson(false)
+			}
+		}, [])
+
+		const onCancelJson = useCallback(() => {
+			if (!clickJsonEditorButton(editorWrapRef.current, "cancel")) {
+				setIsEditingJson(false)
+			}
+		}, [])
+
 		const renderHeader = useCallback(
 			() => (
 				<LanguageListItemHeader
@@ -170,10 +240,20 @@ const LanguageListItem: React.FC<Props> = memo(
 					setLocalName={setLocalName}
 				/>
 
-				<div className={styles.editorWrap}>
+				{isEditingJson ? (
+					<LanguageJsonEditToolbar
+						onApply={onApplyJson}
+						onCancel={onCancelJson}
+					/>
+				) : (
+					<></>
+				)}
+
+				<div className={styles.editorWrap} ref={editorWrapRef}>
 					<JsonEditor
 						data={draft}
 						setData={onChangeJsonHandler}
+						onEditEvent={onJsonEditEvent}
 						rootName=''
 						showArrayIndices={false}
 						showCollectionCount={false}
@@ -184,24 +264,32 @@ const LanguageListItem: React.FC<Props> = memo(
 					/>
 				</div>
 
-				<div className={styles.actions}>
-					<Button
-						className={styles.primaryBtn}
-						disabled={isSaveDisabled}
-						onClick={onSaveHandler}
-					>
-						{isSaving ? "Сохранение..." : "Сохранить"}
-					</Button>
-					<Button
-						className={styles.ghostBtn}
-						onClick={onResetHandler}
-						disabled={isSaving}
-					>
-						Отменить
-					</Button>
-					<Button className={styles.dangerBtn} onClick={onDeleteHandler}>
-						Удалить
-					</Button>
+				<div className={styles.actionsRow}>
+					{saveHint ? (
+						<span className={styles.saveHint}>{saveHint}</span>
+					) : (
+						<></>
+					)}
+					<div className={styles.actions}>
+						<Button
+							className={styles.primaryBtn}
+							disabled={isSaveDisabled}
+							onClick={onSaveHandler}
+							title={saveHint ?? undefined}
+						>
+							{isSaving ? "Сохранение..." : "Сохранить"}
+						</Button>
+						<Button
+							className={styles.ghostBtn}
+							onClick={onResetHandler}
+							disabled={isSaving}
+						>
+							Отменить
+						</Button>
+						<Button className={styles.dangerBtn} onClick={onDeleteHandler}>
+							Удалить
+						</Button>
+					</div>
 				</div>
 			</Accordion>
 		)
