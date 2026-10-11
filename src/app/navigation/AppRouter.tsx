@@ -1,89 +1,97 @@
-﻿import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import { useEffect, useState } from "react"
-import LoginPage from "@pages/LoginPage/LoginPage"
-import { AppRoutes } from "./routes"
-import MainPage from "@pages/MainPage/MainPage"
-import NotFoundPage from "@pages/NotFoundPage/NotFoundPage"
-import UsersPage from "@pages/UsersPage/UsersPage"
-import AdminLayout from "@pages/AdminLayout/AdminLayout"
-import AplicationPage from "@pages/AplicationPage/AplicationPage"
-import ChatsPage from "@pages/ChatsPage/ChatsPage"
-import TranslationPage from "@pages/TranslationPage/TranslationPage"
-import { useActions } from "@shared/hooks/useActions"
-import { useAppSelector } from "@shared/hooks/useStore"
-import { useMeQuery } from "@shared/api/services/auth/AuthQuery"
-import { getAuthToken } from "@shared/lib/authToken"
-import SocialsPage from "@pages/SocialsPage/SocialsPage"
-import UserProfilePage from "@pages/UserProfilePage/UserProfilePage"
-import AppPreloader from "@shared/AppPreloader/AppPreloader"
-import AchievementsPage from "@pages/AchievementsPage/AchievementsPage"
+﻿import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import LoginPage from "@pages/LoginPage/LoginPage";
+import { AppRoutes } from "./routes";
+import MainPage from "@pages/MainPage/MainPage";
+import NotFoundPage from "@pages/NotFoundPage/NotFoundPage";
+import UsersPage from "@pages/UsersPage/UsersPage";
+import AdminLayout from "@pages/AdminLayout/AdminLayout";
+import AplicationPage from "@pages/AplicationPage/AplicationPage";
+import ChatsPage from "@pages/ChatsPage/ChatsPage";
+import TranslationPage from "@pages/TranslationPage/TranslationPage";
+import { useActions } from "@shared/hooks/useActions";
+import { useAppSelector } from "@shared/hooks/useStore";
+import { useMeQuery } from "@shared/api/services/auth/AuthQuery";
+import { getAuthToken } from "@shared/lib/authToken";
+import { restoreAuthSession } from "@shared/config/authClient";
+import SocialsPage from "@pages/SocialsPage/SocialsPage";
+import UserProfilePage from "@pages/UserProfilePage/UserProfilePage";
+import AppPreloader from "@shared/AppPreloader/AppPreloader";
+import AchievementsPage from "@pages/AchievementsPage/AchievementsPage";
 
 const AppRouter = () => {
-	const { setIsAdmin } = useActions()
-	const [loading, setLoading] = useState(true)
+  const { setIsAdmin } = useActions();
+  const [loading, setLoading] = useState(true);
+  const [authReady, setAuthReady] = useState(false);
 
-	const isAdmin = useAppSelector(store => store.app.isAdmin)
-	const token = getAuthToken()
-	const { data, isLoading, isError } = useMeQuery(undefined, {
-		skip: !token,
-	})
+  const isAdmin = useAppSelector((store) => store.app.isAdmin);
+  const token = authReady ? getAuthToken() : null;
+  const { data, isLoading, isError } = useMeQuery(undefined, {
+    skip: !authReady || !token,
+  });
 
-	useEffect(() => {
-		if (!token) {
-			setIsAdmin(false)
-			setLoading(false)
-			return
-		}
+  useEffect(() => {
+    restoreAuthSession().finally(() => setAuthReady(true));
+  }, []);
 
-		if (isLoading) return
+  useEffect(() => {
+    if (!authReady) return;
 
-		if (isError) {
-			setIsAdmin(false)
-			setLoading(false)
-			return
-		}
+    if (!token) {
+      setIsAdmin(false);
+      setLoading(false);
+      return;
+    }
 
-		setIsAdmin(true)
-		setLoading(false)
-	}, [token, isLoading, isError, data, setIsAdmin])
+    if (isLoading) return;
 
-	if (loading) return <AppPreloader />
+    if (isError) {
+      setIsAdmin(false);
+      setLoading(false);
+      return;
+    }
 
-	return (
-		<BrowserRouter>
-			<Routes>
-				<Route
-					path={AppRoutes.login}
-					element={
-						isAdmin ? <Navigate to={AppRoutes.main} replace /> : <LoginPage />
-					}
-				/>
+    setIsAdmin(true);
+    setLoading(false);
+  }, [authReady, token, isLoading, isError, data, setIsAdmin]);
 
-				{isAdmin ? (
-					<Route path={AppRoutes.main} element={<AdminLayout />}>
-						<Route index element={<MainPage />} />
-						<Route path={AppRoutes.users} element={<UsersPage />} />
-						<Route path={AppRoutes.userProfile} element={<UserProfilePage />} />
-						<Route path={AppRoutes.aplication} element={<AplicationPage />} />
-						<Route path={AppRoutes.translation} element={<TranslationPage />} />
-						<Route path={AppRoutes.socials} element={<SocialsPage />} />
-						<Route path={AppRoutes.chats} element={<ChatsPage />} />
-						<Route
-							path={AppRoutes.achievements}
-							element={<AchievementsPage />}
-						/>
+  if (loading) return <AppPreloader />;
 
-						<Route path={AppRoutes.notFount} element={<NotFoundPage />} />
-					</Route>
-				) : (
-					<Route
-						path={AppRoutes.notFount}
-						element={<Navigate to={AppRoutes.login} replace />}
-					/>
-				)}
-			</Routes>
-		</BrowserRouter>
-	)
-}
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path={AppRoutes.login}
+          element={
+            isAdmin ? <Navigate to={AppRoutes.main} replace /> : <LoginPage />
+          }
+        />
 
-export default AppRouter
+        {isAdmin ? (
+          <Route path={AppRoutes.main} element={<AdminLayout />}>
+            <Route index element={<MainPage />} />
+            <Route path={AppRoutes.users} element={<UsersPage />} />
+            <Route path={AppRoutes.userProfile} element={<UserProfilePage />} />
+            <Route path={AppRoutes.aplication} element={<AplicationPage />} />
+            <Route path={AppRoutes.translation} element={<TranslationPage />} />
+            <Route path={AppRoutes.socials} element={<SocialsPage />} />
+            <Route path={AppRoutes.chats} element={<ChatsPage />} />
+            <Route
+              path={AppRoutes.achievements}
+              element={<AchievementsPage />}
+            />
+
+            <Route path={AppRoutes.notFount} element={<NotFoundPage />} />
+          </Route>
+        ) : (
+          <Route
+            path={AppRoutes.notFount}
+            element={<Navigate to={AppRoutes.login} replace />}
+          />
+        )}
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default AppRouter;
