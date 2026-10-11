@@ -77,7 +77,7 @@ const UserProfileCardsImportModal: React.FC<Props> = ({
 			}).unwrap()
 			toast.success(
 				"Карточки импортированы",
-				`Создано карточек: ${result.cards_to_create}`,
+				`Создано карточек: ${result.cards_to_create}. Засчитано в достижение: ${result.cards_created_credited ?? 0}`,
 			)
 			onClose()
 		} catch (err) {

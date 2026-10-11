@@ -54,6 +54,24 @@ const UserProfileCardsImportReport: React.FC<Props> = memo(({ report }) => {
 		[report.statuses],
 	)
 
+	const creditedCount = useMemo(
+		() => report.cards_created_credited ?? 0,
+		[report.cards_created_credited],
+	)
+
+	const creditedLabel = useMemo(
+		() =>
+			report.imported
+				? `Засчитано: ${creditedCount}`
+				: `Будет засчитано в достижение «Создано карточек»: ${creditedCount}`,
+		[creditedCount, report.imported],
+	)
+
+	const isCreditedHintVisible = useMemo(
+		() => creditedCount === 0,
+		[creditedCount],
+	)
+
 	const languages = useMemo(() => report.languages ?? [], [report.languages])
 	const errors = useMemo(() => report.errors ?? [], [report.errors])
 
@@ -78,6 +96,22 @@ const UserProfileCardsImportReport: React.FC<Props> = memo(({ report }) => {
 				<span className={styles.label}>Будет удалено карточек</span>
 				<span>{report.cards_to_delete}</span>
 			</div>
+
+			{report.valid ? (
+				<div className={styles.importSection}>
+					<span className={styles.importCredited}>{creditedLabel}</span>
+					{isCreditedHintVisible ? (
+						<span className={styles.label}>
+							Эти карточки уже учтены в метрике (например, повторный импорт
+							того же файла) — достижение не изменится.
+						</span>
+					) : (
+						<></>
+					)}
+				</div>
+			) : (
+				<></>
+			)}
 
 			<div className={styles.importSection}>
 				<span className={styles.label}>Статусы</span>
