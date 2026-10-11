@@ -1,4 +1,5 @@
 import React, {
+	startTransition,
 	useActionState,
 	useCallback,
 	useEffect,
@@ -239,6 +240,11 @@ const AchievementModal: React.FC<Props> = ({ open, achievement, onClose }) => {
 		setForm(achievement ? buildFormFromAchievement(achievement) : emptyForm)
 	}, [achievement, open])
 
+	// Экшен useActionState нужно вызывать внутри transition — иначе isPending не обновляется
+	const onSubmit = useCallback(() => {
+		startTransition(submitAction)
+	}, [submitAction])
+
 	const isSubmitDisabled = !canSubmit || isPending
 
 	return (
@@ -255,7 +261,7 @@ const AchievementModal: React.FC<Props> = ({ open, achievement, onClose }) => {
 					</Button>
 					<Button
 						className={styles.primaryBtn}
-						onClick={submitAction}
+						onClick={onSubmit}
 						disabled={isSubmitDisabled}
 					>
 						{isPending ? "Сохранение..." : "Сохранить"}
