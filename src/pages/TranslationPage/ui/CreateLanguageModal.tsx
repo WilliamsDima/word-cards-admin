@@ -1,4 +1,10 @@
-﻿import React, { useActionState, useCallback, useMemo, useState } from "react"
+﻿import React, {
+	startTransition,
+	useActionState,
+	useCallback,
+	useMemo,
+	useState,
+} from "react"
 import Modal from "@shared/Modal/Modal"
 import Button from "@shared/Button/Button"
 import styles from "../TranslationPage.module.scss"
@@ -10,6 +16,7 @@ import {
 	TRANSLATION_KEYS,
 } from "@shared/api/services/languages/types"
 import Tooltip from "@shared/Tooltip/Tooltip"
+import Loading from "@shared/Loading/Loading"
 
 type Props = {
 	open: boolean
@@ -125,24 +132,45 @@ const CreateLanguageModal: React.FC<Props> = ({ open, setIsCreateOpen }) => {
 
 	const onClose = useCallback(() => setIsCreateOpen(false), [setIsCreateOpen])
 
-	const isCreateDisabled = !canCreate || isPending
+	// Экшен useActionState нужно вызывать внутри transition — иначе isPending не обновляется
+	const onCreate = useCallback(() => {
+		startTransition(createAction)
+	}, [createAction])
+
+	const isCreateDisabled = useMemo(
+		() => !canCreate || isPending,
+		[canCreate, isPending],
+	)
 
 	return (
 		<Modal
 			open={open}
 			onClose={onClose}
 			title='Добавить язык'
+			dismissible={false}
 			actions={
 				<>
-					<Button className={styles.ghostBtn} onClick={onClose}>
+					<Button
+						className={styles.ghostBtn}
+						onClick={onClose}
+						disabled={isPending}
+					>
 						Отмена
 					</Button>
 					<Button
 						className={styles.primaryBtn}
-						onClick={createAction}
+						onClick={onCreate}
 						disabled={isCreateDisabled}
+						aria-busy={isPending}
 					>
-						{isPending ? "Создание..." : "Создать"}
+						{isPending ? (
+							<>
+								<Loading className={styles.btnSpinner} />
+								Создание...
+							</>
+						) : (
+							"Создать"
+						)}
 					</Button>
 				</>
 			}

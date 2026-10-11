@@ -240,6 +240,15 @@
 	justify-content: flex-end;
 }
 
+.btnSpinner {
+	width: 18px;
+	height: 18px;
+
+	circle {
+		stroke: colors.$color-white;
+	}
+}
+
 .primaryBtn {
 	background-color: colors.$color-primary;
 }
