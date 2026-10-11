@@ -22,5 +22,13 @@
 			border-color: colors.$color-primary;
 			box-shadow: 0 0 0 3px rgba(31, 177, 65, 0.15);
 		}
+
+		&.inputError {
+			border-color: colors.$color-error;
+
+			&:focus {
+				box-shadow: 0 0 0 3px rgba(207, 102, 121, 0.2);
+			}
+		}
 	}
 }
