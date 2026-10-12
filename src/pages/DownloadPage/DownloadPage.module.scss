@@ -1,0 +1,294 @@
+@use "../../assets/styles/colors.scss" as colors;
+@use "../../assets/styles/globalStyles.scss" as global;
+
+// body в админке зафиксирован (overflow: hidden, height: 100vh), поэтому
+// страница сама является скролл-контейнером.
+.page {
+	height: 100vh;
+	height: 100dvh;
+	overflow-y: auto;
+	overflow-x: hidden;
+	-webkit-overflow-scrolling: touch;
+	background: colors.$gradient-app;
+	color: colors.$color-text-primary;
+	font-size: 15px;
+	line-height: 1.5;
+	@extend %scroll;
+}
+
+.content {
+	width: min(560px, 100%);
+	margin: 0 auto;
+	padding: 40px 20px 48px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.logo {
+	flex-shrink: 0;
+	width: 72px;
+	height: 72px;
+	border-radius: 18px;
+	overflow: hidden;
+	background: colors.$color-white;
+	box-shadow: 0 10px 30px colors.$color-shadow;
+
+	img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+.headerText {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 0;
+}
+
+.title {
+	margin: 0;
+	font-size: 30px;
+	font-weight: 700;
+	line-height: 1.15;
+	color: colors.$color-white;
+}
+
+.subtitle {
+	margin: 0;
+	color: colors.$color-text-secondary;
+	font-size: 14px;
+}
+
+.card,
+.guide {
+	@extend %glassCard;
+	padding: 24px;
+}
+
+// --- Состояния загрузки / пусто / ошибка / fallback ---
+
+.status {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+	text-align: center;
+	padding: 8px 0;
+}
+
+.statusTitle {
+	margin: 0;
+	font-size: 18px;
+	font-weight: 600;
+	color: colors.$color-white;
+}
+
+.statusText {
+	margin: 0;
+	color: colors.$color-text-secondary;
+	font-size: 14px;
+}
+
+.loader {
+	width: 40px;
+}
+
+.retryBtn {
+	min-width: 160px;
+	font-size: 15px;
+}
+
+// --- Релиз ---
+
+.release {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.meta {
+	margin: 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+	gap: 12px;
+}
+
+.metaItem {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding: 10px 12px;
+	border-radius: 12px;
+	background: colors.$color-surface-2;
+	border: 1px solid colors.$color-border-soft;
+}
+
+.metaLabel {
+	font-size: 12px;
+	color: colors.$color-text-secondary;
+}
+
+.metaValue {
+	margin: 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: colors.$color-white;
+	overflow-wrap: anywhere;
+}
+
+.downloadBtn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	min-height: 56px;
+	padding: 14px 20px;
+	border-radius: 16px;
+	background: linear-gradient(
+		135deg,
+		rgba(31, 177, 65, 0.9),
+		rgba(19, 130, 46, 0.95)
+	);
+	border: 1px solid colors.$color-border-soft;
+	box-shadow: 0 14px 30px rgba(31, 177, 65, 0.25);
+	color: colors.$color-white;
+	font-size: 18px;
+	font-weight: 700;
+	text-decoration: none;
+	transition:
+		transform 0.2s ease,
+		filter 0.2s ease;
+
+	&:hover {
+		filter: brightness(1.07);
+	}
+
+	&:active {
+		transform: translateY(2px);
+	}
+
+	&:focus-visible {
+		outline: 2px solid colors.$color-primary-light;
+		outline-offset: 3px;
+	}
+}
+
+.blockTitle {
+	margin: 0 0 8px;
+	font-size: 16px;
+	font-weight: 600;
+	color: colors.$color-white;
+}
+
+.changelog {
+	display: flex;
+	flex-direction: column;
+}
+
+.changelogText {
+	margin: 0;
+	white-space: pre-line;
+	overflow-wrap: anywhere;
+	color: colors.$color-text-primary;
+	font-size: 14px;
+}
+
+.checksum {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding-top: 16px;
+	border-top: 1px solid colors.$color-border-soft;
+}
+
+.checksumLabel {
+	margin: 0;
+	font-size: 12px;
+	color: colors.$color-text-secondary;
+}
+
+.checksumRow {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.checksumValue {
+	flex: 1;
+	min-width: 0;
+	font-family: ui-monospace, "SFMono-Regular", Consolas, "Roboto Mono", monospace;
+	font-size: 11px;
+	line-height: 1.4;
+	color: colors.$color-text-secondary;
+	word-break: break-all;
+	user-select: all;
+}
+
+.copyBtn {
+	flex-shrink: 0;
+	padding: 6px 12px;
+	border-radius: 10px;
+	border: 1px solid colors.$color-border;
+	background: colors.$color-surface-3;
+	color: colors.$color-text-primary;
+	font-size: 12px;
+	cursor: pointer;
+
+	&:hover {
+		border-color: colors.$color-primary;
+	}
+
+	&:active {
+		transform: translateY(1px);
+	}
+}
+
+// --- Инструкция ---
+
+.steps {
+	margin: 0;
+	padding-left: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	list-style: decimal;
+	color: colors.$color-text-primary;
+	font-size: 14px;
+
+	li::marker {
+		color: colors.$color-primary-light;
+		font-weight: 700;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.content {
+		padding: 24px 14px 36px;
+		gap: 16px;
+	}
+
+	.card,
+	.guide {
+		padding: 18px;
+	}
+
+	.logo {
+		width: 60px;
+		height: 60px;
+		border-radius: 16px;
+	}
+
+	.title {
+		font-size: 26px;
+	}
+}

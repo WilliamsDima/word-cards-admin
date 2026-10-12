@@ -18,6 +18,7 @@ import SocialsPage from "@pages/SocialsPage/SocialsPage";
 import UserProfilePage from "@pages/UserProfilePage/UserProfilePage";
 import AppPreloader from "@shared/AppPreloader/AppPreloader";
 import AchievementsPage from "@pages/AchievementsPage/AchievementsPage";
+import DownloadPage from "@pages/DownloadPage/DownloadPage";
 
 const AppRouter = () => {
   const { setIsAdmin } = useActions();
@@ -66,6 +67,11 @@ const AppRouter = () => {
             isAdmin ? <Navigate to={AppRoutes.main} replace /> : <LoginPage />
           }
         />
+
+        {/* Публичная страница: доступна при любом статусе входа. При полной
+            загрузке /download рендерится PublicRouter (см. App.tsx), а этот
+            маршрут нужен только для переходов внутри уже загруженной SPA. */}
+        <Route path={AppRoutes.download} element={<DownloadPage />} />
 
         {isAdmin ? (
           <Route path={AppRoutes.main} element={<AdminLayout />}>
