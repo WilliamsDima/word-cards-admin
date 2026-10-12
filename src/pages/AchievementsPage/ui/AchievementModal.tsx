@@ -27,6 +27,7 @@ import {
 import TranslationKeyPreview from "@shared/TranslationKeyPreview/TranslationKeyPreview"
 import {
 	resolveTranslationPreview,
+	resolveTranslationText,
 	type TranslationDictionary,
 } from "@shared/lib/translationPreview"
 
@@ -176,13 +177,17 @@ const AchievementModal: React.FC<Props> = ({
 				is_active: form.is_active,
 			}
 
+			const titleLabel =
+				resolveTranslationText(translations, titleValue, threshold) ??
+				titleValue
+
 			try {
 				if (mode === "create") {
 					await createAchievement(payload).unwrap()
-					toast.success("Достижение создано", titleValue)
+					toast.success("Достижение создано", titleLabel)
 				} else if (achievement) {
 					await updateAchievement({ id: achievement.id, payload }).unwrap()
-					toast.success("Достижение обновлено", titleValue)
+					toast.success("Достижение обновлено", titleLabel)
 				}
 				onClose()
 				return null

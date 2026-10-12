@@ -118,6 +118,7 @@ function AchievementsPage() {
 
 			<AchievementDeleteModal
 				achievement={deleteTarget}
+				translations={translations}
 				onClose={onCloseDelete}
 			/>
 		</div>

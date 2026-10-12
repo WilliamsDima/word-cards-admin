@@ -5,19 +5,33 @@ import styles from "../AchievementsPage.module.scss"
 import { useToast } from "@shared/Toast/useToast"
 import { useDeleteAchievementMutation } from "@shared/api/services/achievements/AchievementsQuery"
 import type { Achievement } from "@shared/api/services/achievements/types"
+import {
+	resolveTranslationText,
+	type TranslationDictionary,
+} from "@shared/lib/translationPreview"
 
 type Props = {
 	achievement: Achievement | null
+	translations: TranslationDictionary | null
 	onClose: () => void
 }
 
-const AchievementDeleteModal: React.FC<Props> = ({ achievement, onClose }) => {
+const AchievementDeleteModal: React.FC<Props> = ({
+	achievement,
+	translations,
+	onClose,
+}) => {
 	const [deleteAchievement, { isLoading }] = useDeleteAchievementMutation()
 	const toast = useToast()
 
 	const titleLabel = useMemo(
-		() => achievement?.title || "Без названия",
-		[achievement],
+		() =>
+			resolveTranslationText(
+				translations,
+				achievement?.title,
+				achievement?.threshold,
+			) ?? "Без названия",
+		[achievement, translations],
 	)
 
 	const onCloseModal = useCallback(() => onClose(), [onClose])
@@ -26,7 +40,7 @@ const AchievementDeleteModal: React.FC<Props> = ({ achievement, onClose }) => {
 		if (!achievement) return
 		try {
 			await deleteAchievement(achievement.id).unwrap()
-			toast.success("Достижение удалено", achievement.title)
+			toast.success("Достижение удалено", titleLabel)
 			onClose()
 		} catch (err) {
 			const serverError =
@@ -37,7 +51,7 @@ const AchievementDeleteModal: React.FC<Props> = ({ achievement, onClose }) => {
 				serverError || "Не удалось удалить достижение",
 			)
 		}
-	}, [achievement, deleteAchievement, onClose, toast])
+	}, [achievement, deleteAchievement, onClose, titleLabel, toast])
 
 	return (
 		<Modal
