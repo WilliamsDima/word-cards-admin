@@ -6,10 +6,11 @@ import { UserProfileGrids } from "./ui/UserProfileGrids"
 import UserProfileCards from "./ui/UserProfileCards"
 import UserProfileStats from "./ui/UserProfileStats"
 import UserProfileAchievements from "./ui/UserProfileAchievements"
+import UserProfileStreak from "./ui/UserProfileStreak"
 import Button from "@shared/Button/Button"
 import cn from "classnames"
 
-type ProfileTab = "cards" | "languages" | "stats" | "achievements"
+type ProfileTab = "cards" | "languages" | "stats" | "streak" | "achievements"
 
 const tabs: Record<ProfileTab, { label: string; component: ReactNode }> = {
 	cards: {
@@ -23,6 +24,10 @@ const tabs: Record<ProfileTab, { label: string; component: ReactNode }> = {
 	stats: {
 		label: "Статистика пользователя",
 		component: <UserProfileStats />,
+	},
+	streak: {
+		label: "Серия (стрик)",
+		component: <UserProfileStreak />,
 	},
 	achievements: {
 		label: "Достижения",

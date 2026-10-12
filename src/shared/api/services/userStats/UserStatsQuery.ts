@@ -11,6 +11,8 @@ export const userStatsAPI = baseRTK.injectEndpoints({
 			},
 			providesTags: (_result, _error, params) => [
 				{ type: "userStats", id: `${params.userId}-${params.year ?? "current"}` },
+				// общий тег пользователя: инвалидируется при правке стрика
+				{ type: "userStats", id: String(params.userId) },
 			],
 		}),
 	}),
