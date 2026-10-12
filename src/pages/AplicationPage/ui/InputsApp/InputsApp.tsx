@@ -127,7 +127,7 @@ const InputsApp = () => {
 				</div>
 			</div>
 
-			<p className={styles.subtitle}>О разработчике:</p>
+			<p className={styles.subtitle}>Скачивание приложения:</p>
 
 			<div className={styles.group}>
 				<div className={styles.subGroup}>
