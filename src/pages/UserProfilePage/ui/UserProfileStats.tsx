@@ -3,6 +3,10 @@ import { useParams } from "react-router-dom"
 import styles from "./UserProfileStats.module.scss"
 import Card from "@shared/Card/Card"
 import { useGetUserYearStatsQuery } from "@shared/api/services/userStats/UserStatsQuery"
+import {
+	USER_STATS_ALL_TIME,
+	type UserStatsYear,
+} from "@shared/api/services/userStats/types"
 import { dateService } from "@shared/lib/date"
 import UserProfileStatsHeader from "./UserProfileStatsHeader"
 import UserProfileStatsSection from "./UserProfileStatsSection"
@@ -11,12 +15,17 @@ import type { StatItem, YearOption } from "./UserProfileStats.types"
 
 const YEARS_RANGE = 5
 
+const ALL_TIME_OPTION: YearOption = {
+	label: "За всё время",
+	value: USER_STATS_ALL_TIME,
+}
+
 const formatNumber = (value: number | null | undefined) =>
 	value?.toLocaleString("ru-RU") || ""
 
 const UserProfileStats = () => {
 	const { id } = useParams()
-	const [selectedYear, setSelectedYear] = useState<number>(() =>
+	const [selectedYear, setSelectedYear] = useState<UserStatsYear>(() =>
 		dateService.getCurrentYear(),
 	)
 
@@ -30,13 +39,14 @@ const UserProfileStats = () => {
 
 	const yearOptions = useMemo<YearOption[]>(() => {
 		const currentYear = dateService.getCurrentYear()
-		return Array.from({ length: YEARS_RANGE }, (_value, index) => {
+		const years = Array.from({ length: YEARS_RANGE }, (_value, index) => {
 			const value = currentYear - index
 			return {
 				label: String(value),
 				value,
 			}
 		})
+		return [...years, ALL_TIME_OPTION]
 	}, [])
 
 	const selectedYearOption = useMemo<YearOption>(() => {
@@ -45,6 +55,11 @@ const UserProfileStats = () => {
 			yearOptions[0]
 		)
 	}, [selectedYear, yearOptions])
+
+	const isAllTime = useMemo(
+		() => selectedYear === USER_STATS_ALL_TIME,
+		[selectedYear],
+	)
 
 	const isBusy = useMemo(() => isLoading || isFetching, [isFetching, isLoading])
 
@@ -100,7 +115,9 @@ const UserProfileStats = () => {
 				id: "best_month",
 				label: "Лучший месяц",
 				value: bestMonthLabel,
-				hint: `Карточек создано: ${bestMonthCards}`,
+				hint: isAllTime
+					? `Карточек создано за все годы: ${bestMonthCards}`
+					: `Карточек создано: ${bestMonthCards}`,
 			},
 			{
 				id: "longest_streak",
@@ -109,7 +126,7 @@ const UserProfileStats = () => {
 				hint: "Дней подряд в приложении",
 			},
 		]
-	}, [bestMonthLabel, data])
+	}, [bestMonthLabel, data, isAllTime])
 
 	const errorMessage = useMemo(() => {
 		if (!error) return ""
@@ -122,6 +139,11 @@ const UserProfileStats = () => {
 		return "Не удалось загрузить статистику"
 	}, [error])
 
+	const emptyMessage = useMemo(
+		() => (isAllTime ? "Нет данных за всё время" : "Нет данных за выбранный год"),
+		[isAllTime],
+	)
+
 	const onYearSelect = useCallback((option: YearOption) => {
 		setSelectedYear(option.value)
 	}, [])
@@ -132,17 +154,22 @@ const UserProfileStats = () => {
 				yearOptions={yearOptions}
 				selectedYearOption={selectedYearOption}
 				onYearSelect={onYearSelect}
+				isAllTime={isAllTime}
 			/>
 
-			{isBusy && !data ? <UserProfileStatsSkeleton /> : null}
+			{isBusy && !data ? <UserProfileStatsSkeleton /> : <></>}
 
 			{errorMessage ? (
 				<div className={styles.errorState}>{errorMessage}</div>
-			) : null}
+			) : (
+				<></>
+			)}
 
 			{!data && !isBusy && !errorMessage ? (
-				<div className={styles.emptyState}>Нет данных за выбранный год</div>
-			) : null}
+				<div className={styles.emptyState}>{emptyMessage}</div>
+			) : (
+				<></>
+			)}
 
 			{data && !isBusy ? (
 				<div className={styles.statsBody}>
@@ -157,7 +184,9 @@ const UserProfileStats = () => {
 						variant='highlight'
 					/>
 				</div>
-			) : null}
+			) : (
+				<></>
+			)}
 		</Card>
 	)
 }

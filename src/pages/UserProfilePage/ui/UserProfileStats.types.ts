@@ -1,6 +1,8 @@
-﻿export type YearOption = {
+﻿import type { UserStatsYear } from "@shared/api/services/userStats/types"
+
+export type YearOption = {
 	label: string
-	value: number
+	value: UserStatsYear
 }
 
 export type StatItem = {

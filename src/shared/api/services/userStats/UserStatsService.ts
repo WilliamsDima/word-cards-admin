@@ -1,9 +1,15 @@
 ﻿import { request } from "@shared/api/request"
-import type { GetUserYearStatsParams, UserYearStats } from "./types"
+import {
+	USER_STATS_ALL_TIME,
+	type GetUserYearStatsParams,
+	type UserYearStats,
+} from "./types"
 
 const buildUserStatsQuery = (params: GetUserYearStatsParams) => {
 	const query = new URLSearchParams()
-	if (typeof params.year === "number") query.set("year", String(params.year))
+	if (typeof params.year === "number" || params.year === USER_STATS_ALL_TIME) {
+		query.set("year", String(params.year))
+	}
 
 	const queryString = query.toString()
 	return queryString ? `?${queryString}` : ""
