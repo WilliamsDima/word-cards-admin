@@ -5,6 +5,8 @@ import type {
 	GetUserAchievementsResponse,
 	ResetUserAchievementPayload,
 	ResetUserAchievementResponse,
+	ResetUserAchievementSeenPayload,
+	ResetUserAchievementSeenResponse,
 } from "./types"
 
 export const userAchievementsAPI = baseRTK.injectEndpoints({
@@ -35,8 +37,24 @@ export const userAchievementsAPI = baseRTK.injectEndpoints({
 				{ type: "userAchievements", id: payload.userId },
 			],
 		}),
+		resetUserAchievementSeen: builder.mutation<
+			ResetUserAchievementSeenResponse,
+			ResetUserAchievementSeenPayload
+		>({
+			async queryFn(payload) {
+				return toRtkQueryResult(
+					await userAchievementsService.resetUserAchievementSeen(payload),
+				)
+			},
+			invalidatesTags: (_result, _error, payload) => [
+				{ type: "userAchievements", id: payload.userId },
+			],
+		}),
 	}),
 })
 
-export const { useGetUserAchievementsQuery, useResetUserAchievementMutation } =
-	userAchievementsAPI
+export const {
+	useGetUserAchievementsQuery,
+	useResetUserAchievementMutation,
+	useResetUserAchievementSeenMutation,
+} = userAchievementsAPI

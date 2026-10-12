@@ -18,6 +18,8 @@ export type UserAchievement = {
 	progress_percent: number
 	unlocked: boolean
 	unlocked_at: string | null
+	/** Пользователь уже видел модалку разблокировки (для заблокированных всегда false) */
+	seen: boolean
 }
 
 export type GetUserAchievementsResponse = {
@@ -32,3 +34,8 @@ export type ResetUserAchievementPayload = {
 export type ResetUserAchievementResponse = {
 	reset: boolean
 }
+
+export type ResetUserAchievementSeenPayload = ResetUserAchievementPayload
+
+/** Тот же формат, что у GET списка достижений пользователя (с обновлённым seen) */
+export type ResetUserAchievementSeenResponse = GetUserAchievementsResponse

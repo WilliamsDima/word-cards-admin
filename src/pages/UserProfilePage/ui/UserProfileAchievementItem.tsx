@@ -14,12 +14,14 @@ type Props = {
 	achievement: UserAchievement
 	translations: TranslationDictionary | null
 	onReset: (achievement: UserAchievement) => void
+	onResetSeen: (achievement: UserAchievement) => void
 }
 
 const UserProfileAchievementItem: React.FC<Props> = ({
 	achievement,
 	translations,
 	onReset,
+	onResetSeen,
 }) => {
 	const metricLabel = useMemo(
 		() => achievementMetricLabels[achievement.metric],
@@ -46,6 +48,16 @@ const UserProfileAchievementItem: React.FC<Props> = ({
 		[achievement.unlocked],
 	)
 
+	const seenLabel = useMemo(() => {
+		if (!achievement.unlocked) return ""
+		return achievement.seen ? "Просмотрено" : "Не просмотрено"
+	}, [achievement.seen, achievement.unlocked])
+
+	const canResetSeen = useMemo(
+		() => achievement.unlocked && achievement.seen,
+		[achievement.seen, achievement.unlocked],
+	)
+
 	const iconLabel = useMemo(() => achievement.icon || "🏆", [achievement.icon])
 
 	const unlockedAtLabel = useMemo(() => {
@@ -68,6 +80,11 @@ const UserProfileAchievementItem: React.FC<Props> = ({
 		[achievement, onReset],
 	)
 
+	const onResetSeenClick = useCallback(
+		() => onResetSeen(achievement),
+		[achievement, onResetSeen],
+	)
+
 	return (
 		<div className={styles.row}>
 			<span className={styles.colIcon}>
@@ -81,9 +98,21 @@ const UserProfileAchievementItem: React.FC<Props> = ({
 			<span className={styles.colProgress}>{progressLabel}</span>
 			<span className={styles.colStatus}>
 				<Badge label={statusLabel} variant={statusVariant} />
+				{seenLabel ? (
+					<span className={styles.seenLabel}>{seenLabel}</span>
+				) : (
+					<></>
+				)}
 			</span>
 			<span className={styles.colDate}>{unlockedAtLabel}</span>
 			<span className={styles.colActions}>
+				{canResetSeen ? (
+					<Button className={styles.resetSeenBtn} onClick={onResetSeenClick}>
+						Сбросить просмотр
+					</Button>
+				) : (
+					<></>
+				)}
 				<Button
 					className={styles.resetBtn}
 					onClick={onResetClick}

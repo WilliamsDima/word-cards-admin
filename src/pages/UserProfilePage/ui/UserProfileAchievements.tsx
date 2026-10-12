@@ -7,12 +7,15 @@ import { useGetUserAchievementsQuery } from "@shared/api/services/userAchievemen
 import type { UserAchievement } from "@shared/api/services/userAchievements/types"
 import UserProfileAchievementItem from "./UserProfileAchievementItem"
 import UserProfileAchievementResetModal from "./UserProfileAchievementResetModal"
+import UserProfileAchievementSeenResetModal from "./UserProfileAchievementSeenResetModal"
 import { useTranslationDictionary } from "@shared/hooks/useTranslationDictionary"
 
 const UserProfileAchievements: React.FC = () => {
 	const { id } = useParams()
 
 	const [resetTarget, setResetTarget] = useState<UserAchievement | null>(null)
+	const [seenResetTarget, setSeenResetTarget] =
+		useState<UserAchievement | null>(null)
 
 	const { data, isLoading, isFetching } = useGetUserAchievementsQuery(
 		id ?? "",
@@ -40,6 +43,14 @@ const UserProfileAchievements: React.FC = () => {
 		setResetTarget(null)
 	}, [])
 
+	const onOpenSeenReset = useCallback((achievement: UserAchievement) => {
+		setSeenResetTarget(achievement)
+	}, [])
+
+	const onCloseSeenReset = useCallback(() => {
+		setSeenResetTarget(null)
+	}, [])
+
 	return (
 		<Card className={styles.achievementsCard}>
 			<div className={styles.header}>
@@ -51,12 +62,16 @@ const UserProfileAchievements: React.FC = () => {
 							а не по логу событий. Сброс лишь снимает флаг разблокировки:
 							если условия всё ещё выполняются, достижение тут же
 							разблокируется заново (с новой датой) при следующем обращении
-							мобильного приложения к списку достижений.
+							мобильного приложения к списку достижений. «Сбросить просмотр»
+							не трогает разблокировку: пользователь просто снова увидит
+							модалку получения достижения в мобильном приложении.
 						</Tooltip>
 					</span>
 					<p className={styles.hint}>
 						Каталог достижений с прогрессом этого пользователя. Кнопка
-						«Сбросить» доступна только для уже разблокированных достижений.
+						«Сбросить» доступна только для уже разблокированных достижений,
+						«Сбросить просмотр» — для разблокированных и уже показанных
+						пользователю.
 					</p>
 				</div>
 			</div>
@@ -86,6 +101,7 @@ const UserProfileAchievements: React.FC = () => {
 							achievement={achievement}
 							translations={translations}
 							onReset={onOpenReset}
+							onResetSeen={onOpenSeenReset}
 						/>
 					))}
 				</div>
@@ -97,6 +113,12 @@ const UserProfileAchievements: React.FC = () => {
 				achievement={resetTarget}
 				translations={translations}
 				onClose={onCloseReset}
+			/>
+
+			<UserProfileAchievementSeenResetModal
+				achievement={seenResetTarget}
+				translations={translations}
+				onClose={onCloseSeenReset}
 			/>
 		</Card>
 	)
