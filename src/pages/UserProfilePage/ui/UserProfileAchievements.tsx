@@ -7,6 +7,7 @@ import { useGetUserAchievementsQuery } from "@shared/api/services/userAchievemen
 import type { UserAchievement } from "@shared/api/services/userAchievements/types"
 import UserProfileAchievementItem from "./UserProfileAchievementItem"
 import UserProfileAchievementResetModal from "./UserProfileAchievementResetModal"
+import { useTranslationDictionary } from "@shared/hooks/useTranslationDictionary"
 
 const UserProfileAchievements: React.FC = () => {
 	const { id } = useParams()
@@ -17,6 +18,7 @@ const UserProfileAchievements: React.FC = () => {
 		id ?? "",
 		{ skip: !id },
 	)
+	const translations = useTranslationDictionary()
 
 	const achievements = useMemo(() => data?.items ?? [], [data])
 
@@ -82,6 +84,7 @@ const UserProfileAchievements: React.FC = () => {
 						<UserProfileAchievementItem
 							key={achievement.id}
 							achievement={achievement}
+							translations={translations}
 							onReset={onOpenReset}
 						/>
 					))}
@@ -92,6 +95,7 @@ const UserProfileAchievements: React.FC = () => {
 
 			<UserProfileAchievementResetModal
 				achievement={resetTarget}
+				translations={translations}
 				onClose={onCloseReset}
 			/>
 		</Card>

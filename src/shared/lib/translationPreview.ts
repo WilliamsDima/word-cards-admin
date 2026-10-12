@@ -66,3 +66,17 @@ export const resolveTranslationPreview = (
 
 	return { status: "missing" }
 }
+
+/**
+ * Готовый текст по ключу перевода (как в превью), а если перевода нет или
+ * словарь ещё не загружен — сам ключ. null — только для пустого ключа.
+ */
+export const resolveTranslationText = (
+	dictionary: TranslationDictionary | null,
+	rawKey: string | null | undefined,
+	count?: number,
+): string | null => {
+	const preview = resolveTranslationPreview(dictionary, rawKey, count)
+	if (preview?.status === "found") return preview.text
+	return rawKey?.trim() || null
+}

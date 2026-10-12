@@ -3,21 +3,37 @@ import styles from "./UserProfileAchievements.module.scss"
 import Badge from "@shared/Badge/Badge"
 import Button from "@shared/Button/Button"
 import { dateService } from "@shared/lib/date"
+import {
+	resolveTranslationText,
+	type TranslationDictionary,
+} from "@shared/lib/translationPreview"
 import { achievementMetricLabels } from "@shared/api/services/achievements/types"
 import type { UserAchievement } from "@shared/api/services/userAchievements/types"
 
 type Props = {
 	achievement: UserAchievement
+	translations: TranslationDictionary | null
 	onReset: (achievement: UserAchievement) => void
 }
 
 const UserProfileAchievementItem: React.FC<Props> = ({
 	achievement,
+	translations,
 	onReset,
 }) => {
 	const metricLabel = useMemo(
 		() => achievementMetricLabels[achievement.metric],
 		[achievement.metric],
+	)
+
+	const titleLabel = useMemo(
+		() =>
+			resolveTranslationText(
+				translations,
+				achievement.title,
+				achievement.threshold,
+			) ?? "Без названия",
+		[achievement.threshold, achievement.title, translations],
 	)
 
 	const statusLabel = useMemo(
@@ -58,7 +74,7 @@ const UserProfileAchievementItem: React.FC<Props> = ({
 				<span className={styles.iconBadge}>{iconLabel}</span>
 			</span>
 			<span className={styles.colTitle}>
-				<span className={styles.itemTitle}>{achievement.title}</span>
+				<span className={styles.itemTitle}>{titleLabel}</span>
 				<span className={styles.itemCode}>{achievement.code}</span>
 			</span>
 			<span className={styles.colMetric}>{metricLabel}</span>

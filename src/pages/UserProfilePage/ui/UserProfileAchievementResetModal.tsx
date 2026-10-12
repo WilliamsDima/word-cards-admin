@@ -6,14 +6,20 @@ import styles from "./UserProfileAchievements.module.scss"
 import { useToast } from "@shared/Toast/useToast"
 import { useResetUserAchievementMutation } from "@shared/api/services/userAchievements/UserAchievementsQuery"
 import type { UserAchievement } from "@shared/api/services/userAchievements/types"
+import {
+	resolveTranslationText,
+	type TranslationDictionary,
+} from "@shared/lib/translationPreview"
 
 type Props = {
 	achievement: UserAchievement | null
+	translations: TranslationDictionary | null
 	onClose: () => void
 }
 
 const UserProfileAchievementResetModal: React.FC<Props> = ({
 	achievement,
+	translations,
 	onClose,
 }) => {
 	const { id } = useParams()
@@ -23,8 +29,13 @@ const UserProfileAchievementResetModal: React.FC<Props> = ({
 	const toast = useToast()
 
 	const titleLabel = useMemo(
-		() => achievement?.title || "Без названия",
-		[achievement],
+		() =>
+			resolveTranslationText(
+				translations,
+				achievement?.title,
+				achievement?.threshold,
+			) ?? "Без названия",
+		[achievement, translations],
 	)
 
 	const onCloseModal = useCallback(() => onClose(), [onClose])
@@ -36,7 +47,7 @@ const UserProfileAchievementResetModal: React.FC<Props> = ({
 				userId: id,
 				achievementId: achievement.id,
 			}).unwrap()
-			toast.success("Достижение сброшено", achievement.title)
+			toast.success("Достижение сброшено", titleLabel)
 			onClose()
 		} catch (err) {
 			const serverError =
@@ -47,7 +58,7 @@ const UserProfileAchievementResetModal: React.FC<Props> = ({
 				serverError || "Не удалось сбросить достижение",
 			)
 		}
-	}, [achievement, id, onClose, resetUserAchievement, toast])
+	}, [achievement, id, onClose, resetUserAchievement, titleLabel, toast])
 
 	return (
 		<Modal
