@@ -5,6 +5,8 @@ import Loading from "@shared/Loading/Loading"
 import { INPUTS, useInputsApp } from "./useInputsApp"
 import { Icon } from "@assets/icons/Icon"
 
+const RECOMMENDED_DOWNLOAD_LINK = "https://wordcards-admin.duckdns.org/download"
+
 const InputsApp = () => {
 	const { inputData, onChangeHandler, onSaveHandler, isSaving, savingKey } =
 		useInputsApp()
@@ -14,10 +16,20 @@ const InputsApp = () => {
 			appName: isSaving && savingKey === INPUTS.appName,
 			privacyPolicy: isSaving && savingKey === INPUTS.privacyPolicy,
 			appVersion: isSaving && savingKey === INPUTS.appVersion,
-			googlePlayIcon: isSaving && savingKey === INPUTS.googlePlayIcon,
-			googlePlayLink: isSaving && savingKey === INPUTS.googlePlayLink,
+			developerIcon: isSaving && savingKey === INPUTS.developerIcon,
+			developerLink: isSaving && savingKey === INPUTS.developerLink,
 		}),
 		[isSaving, savingKey],
+	)
+
+	const saveVisible = useMemo(
+		() => ({
+			developerIcon:
+				inputData[INPUTS.developerIcon].change && !savingFlags.developerIcon,
+			developerLink:
+				inputData[INPUTS.developerLink].change && !savingFlags.developerLink,
+		}),
+		[inputData, savingFlags],
 	)
 
 	const changeHandlers = useMemo(
@@ -28,10 +40,10 @@ const InputsApp = () => {
 				onChangeHandler(INPUTS.privacyPolicy, e),
 			appVersion: (e: React.ChangeEvent<HTMLInputElement>) =>
 				onChangeHandler(INPUTS.appVersion, e),
-			googlePlayIcon: (e: React.ChangeEvent<HTMLInputElement>) =>
-				onChangeHandler(INPUTS.googlePlayIcon, e),
-			googlePlayLink: (e: React.ChangeEvent<HTMLInputElement>) =>
-				onChangeHandler(INPUTS.googlePlayLink, e),
+			developerIcon: (e: React.ChangeEvent<HTMLInputElement>) =>
+				onChangeHandler(INPUTS.developerIcon, e),
+			developerLink: (e: React.ChangeEvent<HTMLInputElement>) =>
+				onChangeHandler(INPUTS.developerLink, e),
 		}),
 		[onChangeHandler],
 	)
@@ -41,8 +53,8 @@ const InputsApp = () => {
 			appName: () => onSaveHandler(INPUTS.appName),
 			privacyPolicy: () => onSaveHandler(INPUTS.privacyPolicy),
 			appVersion: () => onSaveHandler(INPUTS.appVersion),
-			googlePlayIcon: () => onSaveHandler(INPUTS.googlePlayIcon),
-			googlePlayLink: () => onSaveHandler(INPUTS.googlePlayLink),
+			developerIcon: () => onSaveHandler(INPUTS.developerIcon),
+			developerLink: () => onSaveHandler(INPUTS.developerLink),
 		}),
 		[onSaveHandler],
 	)
@@ -119,51 +131,61 @@ const InputsApp = () => {
 
 			<div className={styles.group}>
 				<div className={styles.subGroup}>
-					<p className={styles.label}>Иконка гугл плей</p>
+					<p className={styles.label}>Иконка</p>
 					<div className={styles.inputWrapper}>
 						<Input
 							type='link'
-							value={inputData[INPUTS.googlePlayIcon].value}
-							onChange={changeHandlers.googlePlayIcon}
+							value={inputData[INPUTS.developerIcon].value}
+							onChange={changeHandlers.developerIcon}
 						/>
-						{inputData[INPUTS.googlePlayIcon].change &&
-							!savingFlags.googlePlayIcon && (
-								<Icon
-									kind='svg'
-									name='done-green-48'
-									onClick={saveHandlers.googlePlayIcon}
-									width={28}
-									height={28}
-								/>
-							)}
-						{savingFlags.googlePlayIcon && (
+						{saveVisible.developerIcon ? (
+							<Icon
+								kind='svg'
+								name='done-green-48'
+								onClick={saveHandlers.developerIcon}
+								width={28}
+								height={28}
+							/>
+						) : (
+							<></>
+						)}
+						{savingFlags.developerIcon ? (
 							<Loading className={styles.loader} />
+						) : (
+							<></>
 						)}
 					</div>
 				</div>
 
 				<div className={styles.subGroup}>
-					<p className={styles.label}>Ссылка на гугл плей</p>
+					<p className={styles.label}>Ссылка на скачивание приложения (APK)</p>
 					<div className={styles.inputWrapper}>
 						<Input
 							type='link'
-							value={inputData[INPUTS.googlePlayLink].value}
-							onChange={changeHandlers.googlePlayLink}
+							value={inputData[INPUTS.developerLink].value}
+							onChange={changeHandlers.developerLink}
 						/>
-						{inputData[INPUTS.googlePlayLink].change &&
-							!savingFlags.googlePlayLink && (
-								<Icon
-									kind='svg'
-									name='done-green-48'
-									onClick={saveHandlers.googlePlayLink}
-									width={28}
-									height={28}
-								/>
-							)}
-						{savingFlags.googlePlayLink && (
+						{saveVisible.developerLink ? (
+							<Icon
+								kind='svg'
+								name='done-green-48'
+								onClick={saveHandlers.developerLink}
+								width={28}
+								height={28}
+							/>
+						) : (
+							<></>
+						)}
+						{savingFlags.developerLink ? (
 							<Loading className={styles.loader} />
+						) : (
+							<></>
 						)}
 					</div>
+					<p className={styles.hint}>
+						Рекомендуется: {RECOMMENDED_DOWNLOAD_LINK} — публичная страница
+						скачивания APK.
+					</p>
 				</div>
 			</div>
 		</div>

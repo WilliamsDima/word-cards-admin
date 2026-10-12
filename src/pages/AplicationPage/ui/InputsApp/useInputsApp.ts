@@ -9,8 +9,8 @@ export const INPUTS = {
 	appName: "appName",
 	privacyPolicy: "privacyPolicy",
 	appVersion: "appVersion",
-	googlePlayIcon: "googlePlayIcon",
-	googlePlayLink: "googlePlayLink",
+	developerIcon: "developerIcon",
+	developerLink: "developerLink",
 } as const
 
 type INPUTSKeys = keyof typeof INPUTS
@@ -35,11 +35,11 @@ export const useInputsApp = () => {
 			value: "",
 			change: false,
 		},
-		[INPUTS.googlePlayIcon]: {
+		[INPUTS.developerIcon]: {
 			value: "",
 			change: false,
 		},
-		[INPUTS.googlePlayLink]: {
+		[INPUTS.developerLink]: {
 			value: "",
 			change: false,
 		},
@@ -72,8 +72,8 @@ export const useInputsApp = () => {
 				privacy_policy_link: inputData[INPUTS.privacyPolicy].value,
 				developer: {
 					...data.developer,
-					icon: inputData[INPUTS.googlePlayIcon].value,
-					link: inputData[INPUTS.googlePlayLink].value,
+					icon: inputData[INPUTS.developerIcon].value,
+					link: inputData[INPUTS.developerLink].value,
 				},
 			}
 
@@ -122,17 +122,17 @@ export const useInputsApp = () => {
 						: data?.version || "",
 					change: prev[INPUTS.appVersion].change,
 				},
-				[INPUTS.googlePlayIcon]: {
-					value: prev[INPUTS.googlePlayIcon].change
-						? prev[INPUTS.googlePlayIcon].value
+				[INPUTS.developerIcon]: {
+					value: prev[INPUTS.developerIcon].change
+						? prev[INPUTS.developerIcon].value
 						: data?.developer.icon || "",
-					change: prev[INPUTS.googlePlayIcon].change,
+					change: prev[INPUTS.developerIcon].change,
 				},
-				[INPUTS.googlePlayLink]: {
-					value: prev[INPUTS.googlePlayLink].change
-						? prev[INPUTS.googlePlayLink].value
+				[INPUTS.developerLink]: {
+					value: prev[INPUTS.developerLink].change
+						? prev[INPUTS.developerLink].value
 						: data?.developer.link || "",
-					change: prev[INPUTS.googlePlayLink].change,
+					change: prev[INPUTS.developerLink].change,
 				},
 			}
 		})

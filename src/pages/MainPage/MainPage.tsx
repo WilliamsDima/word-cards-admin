@@ -1,6 +1,7 @@
 import styles from "./MainPage.module.scss"
 import PageHeader from "@shared/PageHeader/PageHeader"
 import Card from "@shared/Card/Card"
+import { AppRoutes } from "@app/navigation/routes"
 
 function MainPage() {
 	return (
@@ -8,15 +9,16 @@ function MainPage() {
 			<Card className={styles.card}>
 				<PageHeader
 					title='Admin overview'
-					subtitle='Quick entry point for product resources and store links.'
+					subtitle='Quick entry point for product resources and download links.'
 				/>
+				{/* Полная загрузка страницы: /download рендерится публичным роутером без auth-гейта */}
 				<a
-					href='https://play.google.com/store/apps/details?id=com.williamsdev.wordcards'
+					href={AppRoutes.download}
 					target='_blank'
+					rel='noreferrer'
 					className={styles.link}
 				>
-					{/* <GooglePlay /> */}
-					приложение
+					Страница скачивания приложения (APK)
 				</a>
 			</Card>
 		</div>

@@ -27,6 +27,13 @@
 	font-size: 13px;
 }
 
+.hint {
+	margin: 0;
+	color: colors.$color-text-secondary;
+	font-size: 12px;
+	overflow-wrap: anywhere;
+}
+
 .subtitle {
 	margin: 0;
 	color: colors.$color-white;
