@@ -7,10 +7,17 @@ import UserProfileCards from "./ui/UserProfileCards"
 import UserProfileStats from "./ui/UserProfileStats"
 import UserProfileAchievements from "./ui/UserProfileAchievements"
 import UserProfileStreak from "./ui/UserProfileStreak"
+import UserProfileNotifications from "./ui/UserProfileNotifications"
 import Button from "@shared/Button/Button"
 import cn from "classnames"
 
-type ProfileTab = "cards" | "languages" | "stats" | "streak" | "achievements"
+type ProfileTab =
+	| "cards"
+	| "languages"
+	| "stats"
+	| "streak"
+	| "achievements"
+	| "notifications"
 
 const tabs: Record<ProfileTab, { label: string; component: ReactNode }> = {
 	cards: {
@@ -32,6 +39,10 @@ const tabs: Record<ProfileTab, { label: string; component: ReactNode }> = {
 	achievements: {
 		label: "Достижения",
 		component: <UserProfileAchievements />,
+	},
+	notifications: {
+		label: "Уведомления",
+		component: <UserProfileNotifications />,
 	},
 }
 
