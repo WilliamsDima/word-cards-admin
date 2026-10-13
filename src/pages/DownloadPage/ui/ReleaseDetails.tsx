@@ -3,6 +3,7 @@ import { dateService } from "@shared/lib/date"
 import styles from "../DownloadPage.module.scss"
 import type { LatestRelease } from "../model/types"
 import DownloadButton from "./DownloadButton"
+import ReleaseChangelog from "./ReleaseChangelog"
 import ReleaseChecksum from "./ReleaseChecksum"
 
 type Props = {
@@ -38,11 +39,6 @@ const ReleaseDetails: FC<Props> = memo(({ release }) => {
 		[release.size],
 	)
 
-	const hasChangelog = useMemo(
-		() => release.changelog.length > 0,
-		[release.changelog],
-	)
-
 	const hasChecksum = useMemo(() => release.sha256.length > 0, [release.sha256])
 
 	return (
@@ -72,14 +68,7 @@ const ReleaseDetails: FC<Props> = memo(({ release }) => {
 
 			<DownloadButton href={release.url} fileName={release.fileName} />
 
-			{hasChangelog ? (
-				<div className={styles.changelog}>
-					<p className={styles.blockTitle}>Что нового</p>
-					<p className={styles.changelogText}>{release.changelog}</p>
-				</div>
-			) : (
-				<></>
-			)}
+			<ReleaseChangelog changelog={release.changelog} />
 
 			{hasChecksum ? <ReleaseChecksum sha256={release.sha256} /> : <></>}
 		</div>
