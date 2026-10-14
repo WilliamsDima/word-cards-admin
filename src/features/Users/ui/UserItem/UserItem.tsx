@@ -27,6 +27,15 @@ export const UserItem: FC<Props> = memo(({ user }) => {
 		[user],
 	)
 
+	const lastActiveAt = useMemo(
+		() =>
+			user.last_active_at
+				? (dateService.format(user.last_active_at, { dateStyle: "medium" }) ??
+					"—")
+				: "—",
+		[user],
+	)
+
 	return (
 		<li
 			className={styles.item}
@@ -71,7 +80,7 @@ export const UserItem: FC<Props> = memo(({ user }) => {
 
 					<div className={styles.infoItem}>
 						<p>последняя активность: </p>
-						<h3 className={styles.name}>N/A</h3>
+						<h3 className={styles.name}>{lastActiveAt}</h3>
 					</div>
 				</div>
 			</div>

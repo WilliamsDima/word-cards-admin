@@ -70,7 +70,7 @@ export const UserProfileGrids = () => {
 			user?.last_active_at
 				? dateService.format(user.last_active_at, { dateStyle: "medium" }) ??
 					"—"
-				: "N/A",
+				: "—",
 		[user],
 	)
 
