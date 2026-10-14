@@ -9,6 +9,7 @@ import {
 	useGetUserNotificationSettingsQuery,
 	useUpdateUserNotificationSettingsMutation,
 } from "@shared/api/services/userNotificationSettings/UserNotificationSettingsQuery"
+import UserProfilePushForm from "./UserProfilePushForm"
 
 const UserProfileNotifications: React.FC = () => {
 	const { id } = useParams()
@@ -130,6 +131,8 @@ const UserProfileNotifications: React.FC = () => {
 					) : (
 						<></>
 					)}
+
+					<UserProfilePushForm />
 				</>
 			) : (
 				<></>

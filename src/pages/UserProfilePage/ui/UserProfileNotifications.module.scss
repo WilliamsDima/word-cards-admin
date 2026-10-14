@@ -81,3 +81,127 @@
 	font-size: 13px;
 	max-width: 680px;
 }
+
+.pushForm {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	max-width: 680px;
+	padding-top: 18px;
+	border-top: 1px solid colors.$color-border-soft;
+}
+
+.pushHeader {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.sectionTitle {
+	margin: 0;
+	font-size: 12px;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: colors.$color-text-secondary;
+}
+
+.field {
+	display: grid;
+	gap: 6px;
+	align-content: start;
+}
+
+.label {
+	font-size: 12px;
+	color: colors.$color-text-secondary;
+}
+
+.fieldHint {
+	font-size: 12px;
+	color: colors.$color-text-secondary;
+}
+
+.fieldError {
+	font-size: 12px;
+	color: colors.$color-error;
+}
+
+.textarea {
+	width: 100%;
+	min-height: 96px;
+	margin: 0;
+	padding: 10px 12px;
+	border: 1px solid colors.$color-border-soft;
+	background: rgba(255, 255, 255, 0.06);
+	border-radius: 12px;
+	color: colors.$color-text-primary;
+	font: inherit;
+	resize: vertical;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+	&:focus {
+		outline: none;
+		border-color: colors.$color-primary;
+		box-shadow: 0 0 0 3px rgba(31, 177, 65, 0.15);
+	}
+
+	&:disabled {
+		opacity: 0.6;
+	}
+}
+
+.textareaError {
+	border-color: colors.$color-error;
+
+	&:focus {
+		border-color: colors.$color-error;
+		box-shadow: 0 0 0 3px rgba(207, 102, 121, 0.2);
+	}
+}
+
+.actions {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.primaryBtn {
+	background-color: colors.$color-primary;
+}
+
+.pushResult {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 10px 12px;
+	border-radius: 12px;
+	border: 1px solid colors.$color-border-soft;
+	font-size: 13px;
+}
+
+.pushResultTitle {
+	font-weight: 600;
+}
+
+.pushResultMessage {
+	color: colors.$color-text-primary;
+	word-break: break-word;
+}
+
+.pushResultSuccess {
+	border-color: rgba(76, 175, 80, 0.4);
+	background: rgba(76, 175, 80, 0.08);
+	color: colors.$color-success;
+}
+
+.pushResultPartial {
+	border-color: rgba(255, 160, 0, 0.4);
+	background: rgba(255, 160, 0, 0.08);
+	color: colors.$color-warning;
+}
+
+.pushResultError {
+	border-color: rgba(255, 0, 47, 0.4);
+	background: rgba(255, 0, 47, 0.06);
+	color: colors.$color-red;
+}
