@@ -1,7 +1,12 @@
 import { baseRTK } from "@app/api/BaseRTK"
 import { toRtkQueryResult } from "@shared/api/RTK/rtk"
 import { userStreakService } from "./UserStreakService"
-import type { UpdateUserStreakPayload, UserStreak } from "./types"
+import type {
+	GrantStreakFreezesPayload,
+	GrantStreakFreezesResponse,
+	UpdateUserStreakPayload,
+	UserStreak,
+} from "./types"
 
 export const userStreakAPI = baseRTK.injectEndpoints({
 	endpoints: builder => ({
@@ -25,8 +30,26 @@ export const userStreakAPI = baseRTK.injectEndpoints({
 				{ type: "userAchievements", id: payload.userId },
 			],
 		}),
+		grantStreakFreezes: builder.mutation<
+			GrantStreakFreezesResponse,
+			GrantStreakFreezesPayload
+		>({
+			async queryFn(payload) {
+				return toRtkQueryResult(
+					await userStreakService.grantStreakFreezes(payload),
+				)
+			},
+			// Перезапрашиваем серию и после ошибки (например, 409 — значит,
+			// в кеше устаревшее число заморозок)
+			invalidatesTags: (_result, _error, payload) => [
+				{ type: "userStreak", id: String(payload.userId) },
+			],
+		}),
 	}),
 })
 
-export const { useGetUserStreakQuery, useUpdateUserStreakMutation } =
-	userStreakAPI
+export const {
+	useGetUserStreakQuery,
+	useUpdateUserStreakMutation,
+	useGrantStreakFreezesMutation,
+} = userStreakAPI

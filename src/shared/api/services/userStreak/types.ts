@@ -4,7 +4,25 @@ export type UserStreak = {
 	longest_streak: number
 	/** YYYY-MM-DD или null, если пользователь ещё не завершал ни одного дня */
 	last_completed_date: string | null
+	/** 0..max_freezes. Может отсутствовать, пока бэкенд не обновлён */
+	freezes_available?: number
+	/** Лимит заморозок (сейчас 3). Может отсутствовать, пока бэкенд не обновлён */
+	max_freezes?: number
 }
+
+export type GrantStreakFreezesPayload = {
+	userId: number | string
+	/** 1..MAX_STREAK_FREEZES, по умолчанию бэкенд выдаёт 1. Итог ограничен max_freezes */
+	count?: number
+}
+
+export type GrantStreakFreezesResponse = UserStreak & {
+	/** Сколько заморозок фактически добавлено (с учётом лимита) */
+	granted: number
+}
+
+/** Лимит заморозок на бэкенде — запасной вариант, если max_freezes не пришёл */
+export const MAX_STREAK_FREEZES = 3
 
 export type UpdateUserStreakPayload = {
 	userId: number | string

@@ -1,5 +1,10 @@
 import { request } from "@shared/api/request"
-import type { UpdateUserStreakPayload, UserStreak } from "./types"
+import type {
+	GrantStreakFreezesPayload,
+	GrantStreakFreezesResponse,
+	UpdateUserStreakPayload,
+	UserStreak,
+} from "./types"
 
 class UserStreakService {
 	getUserStreak(userId: number | string) {
@@ -14,6 +19,17 @@ class UserStreakService {
 			method: "PUT",
 			json: body,
 		})
+	}
+
+	grantStreakFreezes(payload: GrantStreakFreezesPayload) {
+		const { userId, ...body } = payload
+		return request<GrantStreakFreezesResponse>(
+			`/admin/users/${userId}/streak/freezes`,
+			{
+				method: "POST",
+				json: body,
+			},
+		)
 	}
 }
 
