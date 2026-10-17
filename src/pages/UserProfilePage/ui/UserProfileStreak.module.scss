@@ -146,6 +146,19 @@
 	background-color: colors.$color-primary;
 }
 
+.freezesRow {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.freezesValue {
+	font-size: 16px;
+	font-weight: 600;
+	color: colors.$color-text-primary;
+}
+
 .ghostBtn {
 	background: colors.$color-surface-3;
 	border: 1px solid colors.$color-border-soft;

@@ -6,6 +6,7 @@ import Tooltip from "@shared/Tooltip/Tooltip"
 import { dateService } from "@shared/lib/date"
 import { useGetUserStreakQuery } from "@shared/api/services/userStreak/UserStreakQuery"
 import UserProfileStreakForm from "./UserProfileStreakForm"
+import UserProfileStreakFreezes from "./UserProfileStreakFreezes"
 
 const formatNumber = (value: number) => value.toLocaleString("ru-RU")
 
@@ -96,6 +97,11 @@ const UserProfileStreak: React.FC = () => {
 								</div>
 							</div>
 						</div>
+					</div>
+
+					<div className={styles.section}>
+						<h3 className={styles.sectionTitle}>Заморозки серии</h3>
+						<UserProfileStreakFreezes streak={data} />
 					</div>
 
 					<div className={styles.section}>
