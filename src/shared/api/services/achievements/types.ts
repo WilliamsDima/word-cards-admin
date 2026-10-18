@@ -3,6 +3,7 @@ export type AchievementMetric =
 	| "CARDS_REVIEWED"
 	| "TRAININGS_COUNT"
 	| "CARDS_READY"
+	| "CARDS_MASTERED"
 	| "STREAK_LONGEST"
 	| "LANGUAGES_COUNT"
 
@@ -11,6 +12,7 @@ export const ACHIEVEMENT_METRICS: AchievementMetric[] = [
 	"CARDS_REVIEWED",
 	"TRAININGS_COUNT",
 	"CARDS_READY",
+	"CARDS_MASTERED",
 	"STREAK_LONGEST",
 	"LANGUAGES_COUNT",
 ]
@@ -20,6 +22,7 @@ export const achievementMetricLabels: Record<AchievementMetric, string> = {
 	CARDS_REVIEWED: "Повторено карточек",
 	TRAININGS_COUNT: "Количество тренировок",
 	CARDS_READY: "Карточек готово",
+	CARDS_MASTERED: "Карточек на последней ступени",
 	STREAK_LONGEST: "Самая длинная серия дней",
 	LANGUAGES_COUNT: "Количество языков",
 }
