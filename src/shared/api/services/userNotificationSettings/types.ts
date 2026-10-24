@@ -1,6 +1,8 @@
 /** Настройки push-уведомлений пользователя */
 export type UserNotificationSettings = {
 	daily_reminder_enabled: boolean
+	/** Пуш о выходе новой версии приложения */
+	app_update_enabled: boolean
 	/** HH:MM по часам устройства пользователя; серверная настройка, только чтение */
 	daily_reminder_time: string
 	/** Сколько устройств зарегистрировано для пушей */
@@ -9,10 +11,13 @@ export type UserNotificationSettings = {
 	last_reminder_date: string | null
 }
 
+/** Частичное обновление: нужно передать хотя бы одно поле, иначе сервер вернёт 400 */
 export type UpdateUserNotificationSettingsPayload = {
 	userId: number | string
-	daily_reminder_enabled: boolean
-}
+} & (
+	| { daily_reminder_enabled: boolean; app_update_enabled?: boolean }
+	| { daily_reminder_enabled?: boolean; app_update_enabled: boolean }
+)
 
 /** Лимиты бэкенда для ручного push-уведомления (в символах) */
 export const MAX_PUSH_TITLE_LENGTH = 100

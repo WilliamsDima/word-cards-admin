@@ -56,6 +56,19 @@ const UserProfileNotifications: React.FC = () => {
 		return "Не удалось загрузить настройки уведомлений"
 	}, [error])
 
+	const showUpdateError = useCallback(
+		(err: unknown) => {
+			const serverError =
+				(err as { data?: { data?: { error?: string } } })?.data?.data
+					?.error ?? null
+			toast.error(
+				"Ошибка сохранения",
+				serverError || "Не удалось обновить настройки уведомлений",
+			)
+		},
+		[toast],
+	)
+
 	const onToggleReminder = useCallback(
 		async (event: React.ChangeEvent<HTMLInputElement>) => {
 			const { checked } = event.target
@@ -69,16 +82,31 @@ const UserProfileNotifications: React.FC = () => {
 					checked ? "Напоминания включены" : "Напоминания отключены",
 				)
 			} catch (err) {
-				const serverError =
-					(err as { data?: { data?: { error?: string } } })?.data?.data
-						?.error ?? null
-				toast.error(
-					"Ошибка сохранения",
-					serverError || "Не удалось обновить настройки уведомлений",
-				)
+				showUpdateError(err)
 			}
 		},
-		[id, toast, updateSettings],
+		[id, showUpdateError, toast, updateSettings],
+	)
+
+	const onToggleAppUpdate = useCallback(
+		async (event: React.ChangeEvent<HTMLInputElement>) => {
+			const { checked } = event.target
+			if (!id) return
+			try {
+				await updateSettings({
+					userId: id,
+					app_update_enabled: checked,
+				}).unwrap()
+				toast.success(
+					checked
+						? "Пуш о новой версии включён"
+						: "Пуш о новой версии отключён",
+				)
+			} catch (err) {
+				showUpdateError(err)
+			}
+		},
+		[id, showUpdateError, toast, updateSettings],
 	)
 
 	return (
@@ -86,8 +114,8 @@ const UserProfileNotifications: React.FC = () => {
 			<div className={styles.header}>
 				<h2 className={styles.title}>Уведомления</h2>
 				<p className={styles.hint}>
-					Ежедневные push-напоминания пользователю. Пользователь может снова
-					включить напоминания в приложении.
+					Ежедневные push-напоминания и пуш о новой версии приложения.
+					Пользователь может снова включить их в приложении.
 				</p>
 			</div>
 
@@ -105,13 +133,22 @@ const UserProfileNotifications: React.FC = () => {
 
 			{data ? (
 				<>
-					<Checkbox
-						className={styles.toggle}
-						label={toggleLabel}
-						checked={data.daily_reminder_enabled}
-						onChange={onToggleReminder}
-						disabled={isToggleDisabled}
-					/>
+					<div className={styles.toggles}>
+						<Checkbox
+							className={styles.toggle}
+							label={toggleLabel}
+							checked={data.daily_reminder_enabled}
+							onChange={onToggleReminder}
+							disabled={isToggleDisabled}
+						/>
+						<Checkbox
+							className={styles.toggle}
+							label="Пуш о новой версии приложения"
+							checked={data.app_update_enabled}
+							onChange={onToggleAppUpdate}
+							disabled={isToggleDisabled}
+						/>
+					</div>
 
 					<div className={styles.valuesGrid}>
 						<div className={styles.valueCard}>

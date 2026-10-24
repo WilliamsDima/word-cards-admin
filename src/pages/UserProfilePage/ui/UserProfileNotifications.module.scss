@@ -25,6 +25,12 @@
 	max-width: 680px;
 }
 
+.toggles {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
 .toggle {
 	align-self: flex-start;
 }
