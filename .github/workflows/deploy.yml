@@ -17,6 +17,44 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
+      # Telegram: one message per run. Sent here, edited with the result in the
+      # last step. Never fails the build: no secrets -> skipped, errors ignored.
+      - name: Telegram notify (start)
+        continue-on-error: true
+        env:
+          TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TG_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+          EVENT_NAME: ${{ github.event_name }}
+          ACTOR: ${{ github.actor }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          echo "TG_STARTED_AT=$(date +%s)" >> "$GITHUB_ENV"
+          if [ -z "${TG_TOKEN:-}" ] || [ -z "${TG_CHAT:-}" ]; then
+            echo "Telegram secrets are not set, skipping notification"
+            exit 0
+          fi
+          html_escape() { sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g'; }
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] || [ -z "${COMMIT_MSG:-}" ]; then
+            commit="вручную"
+          else
+            commit="$(printf '%s\n' "$COMMIT_MSG" | head -n 1 | html_escape)"
+          fi
+          actor="$(printf '%s' "$ACTOR" | html_escape)"
+          body="<code>${GITHUB_SHA::7}</code> ${commit}"$'\n'"👤 ${actor}"$'\n'"<a href=\"${RUN_URL}\">Открыть запуск</a>"
+          delim="TG_EOF_$(date +%s%N)_$RANDOM"
+          { echo "TG_BODY<<$delim"; printf '%s\n' "$body"; echo "$delim"; } >> "$GITHUB_ENV"
+          payload="$(jq -n --arg chat "$TG_CHAT" --arg text "🟡 <b>Админка</b> · деплой начался"$'\n'"$body" \
+            '{chat_id: $chat, text: $text, parse_mode: "HTML", disable_web_page_preview: true}')"
+          resp="$(curl -sS --max-time 10 -H 'Content-Type: application/json' -d "$payload" \
+            "https://api.telegram.org/bot${TG_TOKEN}/sendMessage" || true)"
+          msg_id="$(printf '%s' "$resp" | jq -r '.result.message_id // empty' 2>/dev/null || true)"
+          if [ -n "$msg_id" ]; then
+            echo "TG_MESSAGE_ID=$msg_id" >> "$GITHUB_ENV"
+          else
+            echo "::warning::Telegram sendMessage failed: $(printf '%s' "$resp" | jq -r '.description // "no response"' 2>/dev/null || echo 'no response')"
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -122,4 +160,44 @@ jobs:
             echo "::warning::Served index.html does not reference the new bundle $asset"
           else
             echo "Site serves the new build ($asset)"
+          fi
+
+      - name: Telegram notify (finish)
+        if: always()
+        continue-on-error: true
+        env:
+          TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TG_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
+          JOB_STATUS: ${{ job.status }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "${TG_TOKEN:-}" ] || [ -z "${TG_CHAT:-}" ]; then
+            echo "Telegram secrets are not set, skipping notification"
+            exit 0
+          fi
+          case "$JOB_STATUS" in
+            success) head="✅ <b>Админка</b> · деплой прошёл" ;;
+            failure) head="❌ <b>Админка</b> · деплой упал" ;;
+            cancelled) head="⚪ <b>Админка</b> · деплой отменён" ;;
+            *) head="❔ <b>Админка</b> · деплой: $JOB_STATUS" ;;
+          esac
+          if [ -n "${TG_STARTED_AT:-}" ]; then
+            dur=$(( $(date +%s) - TG_STARTED_AT ))
+            head="$head за $((dur / 60)) мин $((dur % 60)) с"
+          fi
+          body="${TG_BODY:-<a href=\"${RUN_URL}\">Открыть запуск</a>}"
+          text="$head"$'\n'"$body"
+          if [ -n "${TG_MESSAGE_ID:-}" ]; then
+            method="editMessageText"
+            payload="$(jq -n --arg chat "$TG_CHAT" --argjson id "$TG_MESSAGE_ID" --arg text "$text" \
+              '{chat_id: $chat, message_id: $id, text: $text, parse_mode: "HTML", disable_web_page_preview: true}')"
+          else
+            method="sendMessage"
+            payload="$(jq -n --arg chat "$TG_CHAT" --arg text "$text" \
+              '{chat_id: $chat, text: $text, parse_mode: "HTML", disable_web_page_preview: true}')"
+          fi
+          resp="$(curl -sS --max-time 10 -H 'Content-Type: application/json' -d "$payload" \
+            "https://api.telegram.org/bot${TG_TOKEN}/${method}" || true)"
+          if [ "$(printf '%s' "$resp" | jq -r '.ok' 2>/dev/null || true)" != "true" ]; then
+            echo "::warning::Telegram $method failed: $(printf '%s' "$resp" | jq -r '.description // "no response"' 2>/dev/null || echo 'no response')"
           fi
