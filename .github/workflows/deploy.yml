@@ -41,7 +41,7 @@ jobs:
             commit="$(printf '%s\n' "$COMMIT_MSG" | head -n 1 | html_escape)"
           fi
           actor="$(printf '%s' "$ACTOR" | html_escape)"
-          body="<code>${GITHUB_SHA::7}</code> ${commit}"$'\n'"👤 ${actor}"$'\n'"<a href=\"${RUN_URL}\">Открыть запуск</a>"
+          body="<code>${GITHUB_SHA::7}</code> ${commit}"$'\n'"Автор: ${actor}"$'\n'"<a href=\"${RUN_URL}\">Открыть запуск</a>"
           delim="TG_EOF_$(date +%s%N)_$RANDOM"
           { echo "TG_BODY<<$delim"; printf '%s\n' "$body"; echo "$delim"; } >> "$GITHUB_ENV"
           payload="$(jq -n --arg chat "$TG_CHAT" --arg text "🟡 <b>Админка</b> · деплой начался"$'\n'"$body" \
