@@ -1,6 +1,5 @@
-/** Описание последнего релиза из `/apk/latest.json` (schemaVersion 1). */
-export type LatestRelease = {
-	schemaVersion: 1
+/** Поля релиза, общие для `/apk/latest.json` и записей `/apk/releases.json`. */
+export type ReleaseInfo = {
 	versionName: string
 	versionCode: number | null
 	fileName: string
@@ -11,6 +10,16 @@ export type LatestRelease = {
 	publishedAt: string
 	commit: string
 	changelog: string
+}
+
+/** Описание последнего релиза из `/apk/latest.json` (schemaVersion 1). */
+export type LatestRelease = ReleaseInfo & {
+	schemaVersion: 1
+}
+
+/** Запись из `/apk/releases.json`: без versionCode её не сравнить с текущей версией. */
+export type ListedRelease = ReleaseInfo & {
+	versionCode: number
 }
 
 export type LatestReleaseState =

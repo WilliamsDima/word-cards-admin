@@ -1,6 +1,10 @@
 import { type FC, memo, useMemo } from "react"
-import { dateService } from "@shared/lib/date"
 import styles from "../DownloadPage.module.scss"
+import {
+	formatReleaseDate,
+	formatReleaseSize,
+	formatReleaseVersion,
+} from "../model/format"
 import type { LatestRelease } from "../model/types"
 import DownloadButton from "./DownloadButton"
 import ReleaseChangelog from "./ReleaseChangelog"
@@ -10,34 +14,18 @@ type Props = {
 	release: LatestRelease
 }
 
-const BYTES_IN_MB = 1024 * 1024
-const DATE_FORMAT: Intl.DateTimeFormatOptions = { dateStyle: "long" }
-const SIZE_FORMAT: Intl.NumberFormatOptions = { maximumFractionDigits: 1 }
-
 const ReleaseDetails: FC<Props> = memo(({ release }) => {
 	const versionLabel = useMemo(
-		() =>
-			release.versionCode === null
-				? release.versionName
-				: `${release.versionName} (${release.versionCode})`,
+		() => formatReleaseVersion(release.versionName, release.versionCode),
 		[release.versionName, release.versionCode],
 	)
 
 	const dateLabel = useMemo(
-		() =>
-			release.publishedAt
-				? dateService.format(release.publishedAt, DATE_FORMAT)
-				: null,
+		() => formatReleaseDate(release.publishedAt),
 		[release.publishedAt],
 	)
 
-	const sizeLabel = useMemo(
-		() =>
-			release.size === null || release.size <= 0
-				? null
-				: `${(release.size / BYTES_IN_MB).toLocaleString("ru-RU", SIZE_FORMAT)} МБ`,
-		[release.size],
-	)
+	const sizeLabel = useMemo(() => formatReleaseSize(release.size), [release.size])
 
 	const hasChecksum = useMemo(() => release.sha256.length > 0, [release.sha256])
 

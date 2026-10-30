@@ -1,18 +1,24 @@
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import { Icon } from "@assets/icons/Icon"
 import styles from "./DownloadPage.module.scss"
 import { useLatestRelease } from "./model/useLatestRelease"
 import DownloadContent from "./ui/DownloadContent"
 import InstallGuide from "./ui/InstallGuide"
+import PreviousReleases from "./ui/PreviousReleases"
 
 const PAGE_TITLE = "Word Cards — скачать для Android"
 
 /**
  * Публичная страница скачивания APK. Работает без входа: не использует
- * защищённый API, только статический /apk/latest.json.
+ * защищённый API, только статические /apk/latest.json и /apk/releases.json.
  */
 function DownloadPage() {
 	const { state, retry } = useLatestRelease()
+
+	const latestVersionCode = useMemo(
+		() => (state.status === "ready" ? state.release.versionCode : null),
+		[state],
+	)
 
 	useEffect(() => {
 		const previousTitle = document.title
@@ -42,6 +48,8 @@ function DownloadPage() {
 				</section>
 
 				<InstallGuide />
+
+				<PreviousReleases latestVersionCode={latestVersionCode} />
 			</main>
 		</div>
 	)

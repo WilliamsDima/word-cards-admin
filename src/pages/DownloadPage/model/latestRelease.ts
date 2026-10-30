@@ -1,4 +1,4 @@
-import type { LatestRelease, LatestReleaseState } from "./types"
+import type { LatestRelease, LatestReleaseState, ReleaseInfo } from "./types"
 
 /**
  * Статический файл, который Caddy отдаёт с того же домена (no-store).
@@ -10,11 +10,11 @@ const LATEST_JSON_URL = "/apk/latest.json"
 /** Постоянная ссылка на последний APK — запасной вариант, если latest.json не разобрать. */
 export const FALLBACK_APK_URL = "/apk/word-cards-latest.apk"
 
-const SUPPORTED_SCHEMA_VERSION = 1
+export const SUPPORTED_SCHEMA_VERSION = 1
 
 type JsonRecord = Record<string, unknown>
 
-const isRecord = (value: unknown): value is JsonRecord =>
+export const isRecord = (value: unknown): value is JsonRecord =>
 	typeof value === "object" && value !== null && !Array.isArray(value)
 
 const readString = (source: JsonRecord, key: string): string => {
@@ -33,32 +33,36 @@ const toFallback = (source: JsonRecord | null): LatestReleaseState => ({
 		(source ? readString(source, "latestUrl") : "") || FALLBACK_APK_URL,
 })
 
+/** Читает поля релиза; обязательность `url`/`versionName` проверяет вызывающий код. */
+export const readReleaseInfo = (source: JsonRecord): ReleaseInfo => ({
+	versionName: readString(source, "versionName"),
+	versionCode: readNumber(source, "versionCode"),
+	fileName: readString(source, "fileName"),
+	url: readString(source, "url"),
+	latestUrl: readString(source, "latestUrl") || FALLBACK_APK_URL,
+	size: readNumber(source, "size"),
+	sha256: readString(source, "sha256"),
+	publishedAt: readString(source, "publishedAt"),
+	commit: readString(source, "commit"),
+	changelog: readString(source, "changelog"),
+})
+
 export const parseLatestRelease = (raw: unknown): LatestReleaseState => {
 	if (!isRecord(raw)) return toFallback(null)
 	if (raw.schemaVersion !== SUPPORTED_SCHEMA_VERSION) return toFallback(raw)
 
-	const url = readString(raw, "url")
-	const versionName = readString(raw, "versionName")
-	if (!url || !versionName) return toFallback(raw)
+	const info = readReleaseInfo(raw)
+	if (!info.url || !info.versionName) return toFallback(raw)
 
 	const release: LatestRelease = {
+		...info,
 		schemaVersion: SUPPORTED_SCHEMA_VERSION,
-		versionName,
-		versionCode: readNumber(raw, "versionCode"),
-		fileName: readString(raw, "fileName"),
-		url,
-		latestUrl: readString(raw, "latestUrl") || FALLBACK_APK_URL,
-		size: readNumber(raw, "size"),
-		sha256: readString(raw, "sha256"),
-		publishedAt: readString(raw, "publishedAt"),
-		commit: readString(raw, "commit"),
-		changelog: readString(raw, "changelog"),
 	}
 
 	return { status: "ready", release }
 }
 
-const isAbortError = (error: unknown) =>
+export const isAbortError = (error: unknown) =>
 	error instanceof DOMException && error.name === "AbortError"
 
 /**
