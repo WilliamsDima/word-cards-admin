@@ -5,6 +5,9 @@ export type AchievementMetric =
 	| "CARDS_READY"
 	| "CARDS_MASTERED"
 	| "PERFECT_DAILY_CHALLENGES"
+	| "PRACTICE_FLASHCARDS_SESSIONS"
+	| "PRACTICE_MATCHING_SESSIONS"
+	| "PRACTICE_LISTENING_SESSIONS"
 	| "STREAK_LONGEST"
 	| "LANGUAGES_COUNT"
 
@@ -15,6 +18,9 @@ export const ACHIEVEMENT_METRICS: AchievementMetric[] = [
 	"CARDS_READY",
 	"CARDS_MASTERED",
 	"PERFECT_DAILY_CHALLENGES",
+	"PRACTICE_FLASHCARDS_SESSIONS",
+	"PRACTICE_MATCHING_SESSIONS",
+	"PRACTICE_LISTENING_SESSIONS",
 	"STREAK_LONGEST",
 	"LANGUAGES_COUNT",
 ]
@@ -26,6 +32,9 @@ export const achievementMetricLabels: Record<AchievementMetric, string> = {
 	CARDS_READY: "Карточек готово",
 	CARDS_MASTERED: "Карточек на последней ступени",
 	PERFECT_DAILY_CHALLENGES: "Заданий дня без ошибок",
+	PRACTICE_FLASHCARDS_SESSIONS: "Сессий в режиме «Карточки»",
+	PRACTICE_MATCHING_SESSIONS: "Сессий в режиме «Найди пары»",
+	PRACTICE_LISTENING_SESSIONS: "Сессий в режиме «Прослушай и выбери»",
 	STREAK_LONGEST: "Самая длинная серия дней",
 	LANGUAGES_COUNT: "Количество языков",
 }
